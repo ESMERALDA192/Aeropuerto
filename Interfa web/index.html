@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyPort — Tablero de Vuelos</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="barra-superior">
+    <div class="marca">
+      <span class="marca-icono">✈</span>
+      <span class="marca-nombre">SkyPort</span>
+    </div>
+    <nav class="navegacion">
+      <a href="index.html" class="enlace-nav activo">Vuelos</a>
+      <a href="reservas.html" class="enlace-nav">Reservas</a>
+      <a href="catalogos.html" class="enlace-nav">Catálogos</a>
+      <a href="empleados.html" class="enlace-nav">Empleados</a>
+      <a href="tablero.html" class="enlace-nav">Tablero</a>
+    </nav>
+  </header>
+
+  <main class="contenedor">
+
+    <div class="encabezado-pagina">
+      <div>
+        <h1 class="titulo-pagina">Tablero de Vuelos</h1>
+        <p class="subtitulo-pagina">Salidas y llegadas en tiempo real</p>
+      </div>
+      <button class="boton boton-principal" id="btnNuevo">+ Nuevo vuelo</button>
+    </div>
+
+    <section class="filtros">
+      <div class="campo">
+        <label for="filtroEstado">Estado</label>
+        <select id="filtroEstado">
+          <option value="">Todos</option>
+          <option value="programado">Programado</option>
+          <option value="retrasado">Retrasado</option>
+          <option value="abordando">Abordando</option>
+          <option value="despegado">Despegado</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="filtroOrigen">Origen</label>
+        <input type="text" id="filtroOrigen" placeholder="GDL">
+      </div>
+      <div class="campo">
+        <label for="filtroDestino">Destino</label>
+        <input type="text" id="filtroDestino" placeholder="MEX">
+      </div>
+      <div class="campo">
+        <label for="filtroFecha">Fecha</label>
+        <input type="date" id="filtroFecha">
+      </div>
+      <button class="boton boton-fantasma" id="btnLimpiar">Limpiar</button>
+    </section>
+
+    <section class="contenedor-tabla">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Vuelo</th>
+            <th>Aerolínea</th>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Salida</th>
+            <th>Llegada</th>
+            <th>Estado</th>
+            <th class="columna-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTablaVuelos">
+          <!-- Filas generadas por JS -->
+        </tbody>
+      </table>
+
+      <div class="mensaje-vacio oculto" id="mensajeVacio">
+        No hay vuelos que coincidan con los filtros.
+      </div>
+    </section>
+
+    <!-- ===== Modal con formulario ===== -->
+    <div class="fondo-modal oculto" id="fondoModal">
+      <div class="modal">
+
+        <div class="encabezado-modal">
+          <h2 class="titulo-modal" id="tituloModal">Nuevo vuelo</h2>
+          <button type="button" class="cerrar-modal" id="btnCerrar">&times;</button>
+        </div>
+
+        <form id="formularioVuelo" novalidate>
+
+          <div class="cuerpo-modal">
+            <div class="rejilla-formulario">
+
+              <div class="campo campo-completo">
+                <label for="campoNumero">Número de vuelo *</label>
+                <input type="text" id="campoNumero" name="numeroVuelo" placeholder="AM452" required>
+              </div>
+
+              <div class="campo campo-completo">
+                <label for="campoAerolinea">Aerolínea *</label>
+                <select id="campoAerolinea" name="aerolinea" required></select>
+              </div>
+
+              <div class="campo">
+                <label for="campoOrigen">Origen *</label>
+                <select id="campoOrigen" name="origen" required></select>
+              </div>
+
+              <div class="campo">
+                <label for="campoDestino">Destino *</label>
+                <select id="campoDestino" name="destino" required></select>
+              </div>
+
+              <div class="campo">
+                <label for="campoSalida">Hora de salida *</label>
+                <input type="datetime-local" id="campoSalida" name="horaSalida" required>
+              </div>
+
+              <div class="campo">
+                <label for="campoLlegada">Hora de llegada *</label>
+                <input type="datetime-local" id="campoLlegada" name="horaLlegada" required>
+              </div>
+
+              <div class="campo campo-completo">
+                <label for="campoEstado">Estado *</label>
+                <select id="campoEstado" name="estado" required>
+                  <option value="programado">Programado</option>
+                  <option value="retrasado">Retrasado</option>
+                  <option value="abordando">Abordando</option>
+                  <option value="despegado">Despegado</option>
+                  <option value="cancelado">Cancelado</option>
+                </select>
+              </div>
+
+            </div>
+
+            <p class="error-formulario oculto" id="errorFormulario"></p>
+          </div>
+
+          <div class="pie-modal">
+            <button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button>
+            <button type="submit" class="boton boton-principal">Guardar</button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/vuelos.js"></script>
+</body>
+</html>

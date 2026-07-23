@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyPort — Empleados</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="barra-superior">
+    <div class="marca">
+      <span class="marca-icono">✈</span>
+      <span class="marca-nombre">SkyPort</span>
+    </div>
+    <nav class="navegacion">
+      <a href="index.html" class="enlace-nav">Vuelos</a>
+      <a href="reservas.html" class="enlace-nav">Reservas</a>
+      <a href="catalogos.html" class="enlace-nav">Catálogos</a>
+      <a href="empleados.html" class="enlace-nav activo">Empleados</a>
+      <a href="tablero.html" class="enlace-nav">Tablero</a>
+    </nav>
+  </header>
+
+  <main class="contenedor">
+
+    <div class="encabezado-pagina">
+      <div>
+        <h1 class="titulo-pagina">Empleados</h1>
+        <p class="subtitulo-pagina">Personal de vuelo y operaciones en tierra</p>
+      </div>
+      <button class="boton boton-principal" id="btnNuevo">+ Nuevo empleado</button>
+    </div>
+
+    <section class="filtros">
+      <div class="campo">
+        <label for="filtroNombre">Nombre</label>
+        <input type="text" id="filtroNombre" placeholder="Nombre o apellido">
+      </div>
+      <div class="campo">
+        <label for="filtroNumero">N° empleado</label>
+        <input type="text" id="filtroNumero" placeholder="EMP001">
+      </div>
+      <div class="campo">
+        <label for="filtroPuesto">Puesto</label>
+        <select id="filtroPuesto">
+          <option value="">Todos</option>
+          <option value="piloto">Piloto</option>
+          <option value="copiloto">Copiloto</option>
+          <option value="sobrecargo">Sobrecargo</option>
+          <option value="personal_tierra">Personal de tierra</option>
+          <option value="seguridad">Seguridad</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="filtroAerolinea">Aerolínea</label>
+        <select id="filtroAerolinea">
+          <option value="">Todas</option>
+          <option value="Aeroméxico">Aeroméxico</option>
+          <option value="Volaris">Volaris</option>
+          <option value="Viva Aerobus">Viva Aerobus</option>
+          <option value="sin">Sin aerolínea</option>
+        </select>
+      </div>
+      <button class="boton boton-fantasma" id="btnLimpiar">Limpiar</button>
+    </section>
+
+    <section class="contenedor-tabla">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>N° empleado</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Puesto</th>
+            <th>Aerolínea</th>
+            <th class="columna-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTablaEmpleados"></tbody>
+      </table>
+
+      <div class="mensaje-vacio oculto" id="mensajeVacio">
+        No hay empleados que coincidan con los filtros.
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/empleados.js"></script>
+</body>
+</html>

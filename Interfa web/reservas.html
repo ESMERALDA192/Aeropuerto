@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyPort — Reservas</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="barra-superior">
+    <div class="marca">
+      <span class="marca-icono">✈</span>
+      <span class="marca-nombre">SkyPort</span>
+    </div>
+    <nav class="navegacion">
+      <a href="index.html" class="enlace-nav">Vuelos</a>
+      <a href="reservas.html" class="enlace-nav activo">Reservas</a>
+      <a href="catalogos.html" class="enlace-nav">Catálogos</a>
+      <a href="empleados.html" class="enlace-nav">Empleados</a>
+      <a href="tablero.html" class="enlace-nav">Tablero</a>
+    </nav>
+  </header>
+
+  <main class="contenedor">
+
+    <div class="encabezado-pagina">
+      <div>
+        <h1 class="titulo-pagina">Reservas</h1>
+        <p class="subtitulo-pagina">Gestión de reservas y registro de pasajeros</p>
+      </div>
+      <button class="boton boton-principal" id="btnNueva">+ Nueva reserva</button>
+    </div>
+
+    <section class="filtros">
+      <div class="campo">
+        <label for="filtroVuelo">Vuelo</label>
+        <input type="text" id="filtroVuelo" placeholder="AM452">
+      </div>
+      <div class="campo">
+        <label for="filtroPasajero">Pasajero</label>
+        <input type="text" id="filtroPasajero" placeholder="Nombre o documento">
+      </div>
+      <div class="campo">
+        <label for="filtroClase">Clase</label>
+        <select id="filtroClase">
+          <option value="">Todas</option>
+          <option value="economica">Económica</option>
+          <option value="ejecutiva">Ejecutiva</option>
+          <option value="primera">Primera</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="filtroRegistrado">Check-in</label>
+        <select id="filtroRegistrado">
+          <option value="">Todos</option>
+          <option value="true">Registrado</option>
+          <option value="false">Pendiente</option>
+        </select>
+      </div>
+      <button class="boton boton-fantasma" id="btnLimpiar">Limpiar</button>
+    </section>
+
+    <section class="contenedor-tabla">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Pasajero</th>
+            <th>Documento</th>
+            <th>Vuelo</th>
+            <th>Salida</th>
+            <th>Asiento</th>
+            <th>Clase</th>
+            <th>Check-in</th>
+            <th class="columna-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTablaReservas"></tbody>
+      </table>
+
+      <div class="mensaje-vacio oculto" id="mensajeVacio">
+        No hay reservas que coincidan con los filtros.
+      </div>
+    </section>
+
+    <!-- ===== Modal con formulario ===== -->
+    <div class="fondo-modal oculto" id="fondoModal">
+      <div class="modal">
+
+        <div class="encabezado-modal">
+          <h2 class="titulo-modal" id="tituloModal">Nueva reserva</h2>
+          <button type="button" class="cerrar-modal" id="btnCerrar">&times;</button>
+        </div>
+
+        <form id="formularioReserva" novalidate>
+
+          <div class="cuerpo-modal">
+            <div class="rejilla-formulario">
+
+              <div class="campo campo-completo">
+                <label for="campoPasajero">Pasajero *</label>
+                <select id="campoPasajero" name="pasajero" required></select>
+              </div>
+
+              <div class="campo campo-completo">
+                <label for="campoVuelo">Vuelo *</label>
+                <select id="campoVuelo" name="vuelo" required></select>
+              </div>
+
+              <div class="campo">
+                <label for="campoAsiento">Asiento *</label>
+                <input type="text" id="campoAsiento" name="asiento" placeholder="12A" required>
+              </div>
+
+              <div class="campo">
+                <label for="campoClase">Clase *</label>
+                <select id="campoClase" name="clase" required>
+                  <option value="economica">Económica</option>
+                  <option value="ejecutiva">Ejecutiva</option>
+                  <option value="primera">Primera</option>
+                </select>
+              </div>
+
+              <div class="campo campo-completo">
+                <label for="campoRegistrado">Estado de check-in</label>
+                <select id="campoRegistrado" name="registrado">
+                  <option value="false">Pendiente</option>
+                  <option value="true">Registrado</option>
+                </select>
+              </div>
+
+            </div>
+
+            <p class="error-formulario oculto" id="errorFormulario"></p>
+          </div>
+
+          <div class="pie-modal">
+            <button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button>
+            <button type="submit" class="boton boton-principal">Guardar</button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/reservas.js"></script>
+</body>
+</html>

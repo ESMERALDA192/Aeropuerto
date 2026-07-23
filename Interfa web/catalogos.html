@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyPort — Catálogos</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="barra-superior">
+    <div class="marca">
+      <span class="marca-icono">✈</span>
+      <span class="marca-nombre">SkyPort</span>
+    </div>
+    <nav class="navegacion">
+      <a href="index.html" class="enlace-nav">Vuelos</a>
+      <a href="reservas.html" class="enlace-nav">Reservas</a>
+      <a href="catalogos.html" class="enlace-nav activo">Catálogos</a>
+      <a href="empleados.html" class="enlace-nav">Empleados</a>
+      <a href="tablero.html" class="enlace-nav">Tablero</a>
+    </nav>
+  </header>
+
+  <main class="contenedor">
+
+    <div class="encabezado-pagina">
+      <div>
+        <h1 class="titulo-pagina">Catálogos</h1>
+        <p class="subtitulo-pagina">Aerolíneas, aeropuertos y puertas de embarque</p>
+      </div>
+      <button class="boton boton-principal" id="btnNuevo">+ Nuevo registro</button>
+    </div>
+
+    <nav class="pestanas">
+      <button class="pestana activa" data-catalogo="aerolineas">Aerolíneas</button>
+      <button class="pestana" data-catalogo="aeropuertos">Aeropuertos</button>
+      <button class="pestana" data-catalogo="puertas">Puertas</button>
+    </nav>
+
+    <section class="filtros">
+      <div class="campo">
+        <label for="filtroBusqueda">Buscar</label>
+        <input type="text" id="filtroBusqueda" placeholder="Nombre o código">
+      </div>
+      <button class="boton boton-fantasma" id="btnLimpiar">Limpiar</button>
+    </section>
+
+    <section class="contenedor-tabla">
+      <table class="tabla">
+        <thead id="encabezadoTabla"></thead>
+        <tbody id="cuerpoTablaCatalogo"></tbody>
+      </table>
+
+      <div class="mensaje-vacio oculto" id="mensajeVacio">
+        No hay registros que coincidan con la búsqueda.
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/catalogos.js"></script>
+</body>
+</html>

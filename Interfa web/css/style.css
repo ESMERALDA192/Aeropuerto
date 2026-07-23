@@ -1,0 +1,704 @@
+/* ===== Variables ===== */
+:root {
+  /* Paleta base */
+  --azul-noche:   #0A1931;
+  --azul-marino:  #1A3D63;
+  --azul-medio:   #4A7FA7;
+  --azul-claro:   #B3CFE5;
+  --blanco-hueso: #F6FAFD;
+
+  /* Roles de UI */
+  --fondo:        #F6FAFD;
+  --superficie:   #FFFFFF;
+  --superficie-2: #EDF3F9;
+  --borde:        #D4E2EE;
+  --texto:        #0A1931;
+  --texto-tenue:  #5A7A9B;
+  --acento:       #1A3D63;
+  --acento-2:     #4A7FA7;
+
+  /* Estados */
+  --programado: #2C6394;
+  --retrasado:  #B07A16;
+  --abordando:  #1F7A55;
+  --despegado:  #6E8CA8;
+  --cancelado:  #B03A24;
+
+  --radio: 8px;
+  --sombra: 0 1px 3px rgba(10, 25, 49, .08);
+}
+
+/* ===== Reset ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  min-height: 100vh;
+}
+
+.oculto { display: none !important; }
+
+/* ===== Barra superior ===== */
+.barra-superior {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 0 32px;
+  height: 64px;
+  background: var(--azul-noche);
+  box-shadow: var(--sombra);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.marca-icono {
+  color: var(--azul-claro);
+  font-size: 22px;
+}
+
+.marca-nombre { color: var(--blanco-hueso); }
+
+.navegacion {
+  display: flex;
+  gap: 4px;
+}
+
+.enlace-nav {
+  padding: 8px 16px;
+  color: var(--azul-claro);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radio);
+  transition: background .15s, color .15s;
+}
+
+.enlace-nav:hover {
+  background: rgba(255, 255, 255, .1);
+  color: #FFFFFF;
+}
+
+.enlace-nav.activo {
+  background: var(--azul-claro);
+  color: var(--azul-noche);
+}
+
+/* ===== Contenedor ===== */
+.contenedor {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+/* ===== Encabezado de página ===== */
+.encabezado-pagina {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+
+.titulo-pagina {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--azul-noche);
+}
+
+.subtitulo-pagina {
+  color: var(--texto-tenue);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* ===== Pestañas ===== */
+.pestanas {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--borde);
+}
+
+.pestana {
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  color: var(--texto-tenue);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+
+.pestana:hover { color: var(--acento); }
+
+.pestana.activa {
+  color: var(--azul-marino);
+  border-bottom-color: var(--azul-marino);
+}
+
+/* ===== Botones ===== */
+.boton {
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  border-radius: var(--radio);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+  font-family: inherit;
+}
+
+.boton-principal {
+  background: var(--azul-marino);
+  color: var(--blanco-hueso);
+}
+
+.boton-principal:hover { background: var(--azul-noche); }
+
+.boton-fantasma {
+  background: var(--superficie);
+  color: var(--texto-tenue);
+  border-color: var(--borde);
+}
+
+.boton-fantasma:hover {
+  border-color: var(--acento-2);
+  color: var(--acento);
+}
+
+.boton-icono {
+  background: transparent;
+  border: 1px solid var(--borde);
+  color: var(--texto-tenue);
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all .15s;
+}
+
+.boton-icono:hover {
+  border-color: var(--acento-2);
+  color: var(--acento);
+  background: var(--superficie-2);
+}
+
+.boton-icono.peligro:hover {
+  border-color: var(--cancelado);
+  color: var(--cancelado);
+  background: rgba(176, 58, 36, .06);
+}
+
+/* ===== Filtros ===== */
+.filtros {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  padding: 20px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  margin-bottom: 20px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--texto-tenue);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.campo input,
+.campo select {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  padding: 9px 12px;
+  color: var(--texto);
+  font-size: 14px;
+  font-family: inherit;
+  min-width: 150px;
+}
+
+.campo input:focus,
+.campo select:focus {
+  outline: none;
+  border-color: var(--acento-2);
+  box-shadow: 0 0 0 3px rgba(74, 127, 167, .15);
+}
+
+.campo input::placeholder { color: #9DB4CA; }
+
+/* ===== Tabla ===== */
+.contenedor-tabla {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla thead th {
+  text-align: left;
+  padding: 14px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--azul-marino);
+  background: var(--superficie-2);
+  border-bottom: 1px solid var(--borde);
+}
+
+.tabla tbody td {
+  padding: 14px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--borde);
+}
+
+.tabla tbody tr:last-child td { border-bottom: none; }
+
+.tabla tbody tr {
+  border-left: 3px solid transparent;
+  transition: background .12s, border-color .12s;
+}
+
+.tabla tbody tr:hover {
+  background: var(--superficie-2);
+  border-left-color: var(--acento-2);
+}
+
+.numero-vuelo {
+  font-family: "SF Mono", Consolas, monospace;
+  font-weight: 700;
+  color: var(--azul-marino);
+  letter-spacing: 0.5px;
+}
+
+.codigo-iata {
+  font-family: "SF Mono", Consolas, monospace;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--texto);
+}
+
+.ciudad {
+  display: block;
+  font-size: 12px;
+  color: var(--texto-tenue);
+  margin-top: 2px;
+}
+
+.hora {
+  font-family: "SF Mono", Consolas, monospace;
+  font-size: 15px;
+}
+
+.columna-acciones { text-align: right; }
+
+.tabla td.columna-acciones {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.columna-acciones .boton-icono + .boton-icono { margin-left: 6px; }
+
+/* ===== Etiquetas ===== */
+.etiqueta-estado {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid;
+}
+
+/* Estados de vuelo */
+.estado-programado {
+  color: var(--programado);
+  border-color: var(--programado);
+  background: rgba(44, 99, 148, .10);
+}
+
+.estado-retrasado {
+  color: var(--retrasado);
+  border-color: var(--retrasado);
+  background: rgba(176, 122, 22, .12);
+}
+
+.estado-abordando {
+  color: var(--abordando);
+  border-color: var(--abordando);
+  background: rgba(31, 122, 85, .10);
+}
+
+.estado-despegado {
+  color: var(--despegado);
+  border-color: var(--despegado);
+  background: rgba(110, 140, 168, .12);
+}
+
+.estado-cancelado {
+  color: var(--cancelado);
+  border-color: var(--cancelado);
+  background: rgba(176, 58, 36, .10);
+}
+
+/* Clases de reserva */
+.clase-economica {
+  color: var(--despegado);
+  border-color: var(--despegado);
+  background: rgba(110, 140, 168, .12);
+}
+
+.clase-ejecutiva {
+  color: var(--programado);
+  border-color: var(--programado);
+  background: rgba(44, 99, 148, .10);
+}
+
+.clase-primera {
+  color: var(--retrasado);
+  border-color: var(--retrasado);
+  background: rgba(176, 122, 22, .12);
+}
+
+/* Estados de puerta */
+.puerta-disponible {
+  color: var(--abordando);
+  border-color: var(--abordando);
+  background: rgba(31, 122, 85, .10);
+}
+
+.puerta-ocupada {
+  color: var(--programado);
+  border-color: var(--programado);
+  background: rgba(44, 99, 148, .10);
+}
+
+.puerta-mantenimiento {
+  color: var(--retrasado);
+  border-color: var(--retrasado);
+  background: rgba(176, 122, 22, .12);
+}
+
+/* Puestos de empleado */
+.puesto-piloto {
+  color: var(--programado);
+  border-color: var(--programado);
+  background: rgba(44, 99, 148, .10);
+}
+
+.puesto-copiloto {
+  color: var(--acento-2);
+  border-color: var(--acento-2);
+  background: rgba(74, 127, 167, .10);
+}
+
+.puesto-sobrecargo {
+  color: var(--abordando);
+  border-color: var(--abordando);
+  background: rgba(31, 122, 85, .10);
+}
+
+.puesto-personal_tierra {
+  color: var(--retrasado);
+  border-color: var(--retrasado);
+  background: rgba(176, 122, 22, .12);
+}
+
+.puesto-seguridad {
+  color: var(--despegado);
+  border-color: var(--despegado);
+  background: rgba(110, 140, 168, .12);
+}
+
+/* ===== Mensaje vacío ===== */
+.mensaje-vacio {
+  padding: 48px 20px;
+  text-align: center;
+  color: var(--texto-tenue);
+  font-size: 14px;
+}
+
+/* ===== Modal ===== */
+.fondo-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 25, 49, .55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+}
+
+.modal {
+  background: var(--superficie);
+  border-radius: var(--radio);
+  box-shadow: 0 12px 32px rgba(10, 25, 49, .25);
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.encabezado-modal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--borde);
+}
+
+.titulo-modal {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--azul-noche);
+}
+
+.cerrar-modal {
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--texto-tenue);
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.cerrar-modal:hover { color: var(--cancelado); }
+
+.cuerpo-modal {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.rejilla-formulario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.campo-completo { grid-column: 1 / -1; }
+
+.rejilla-formulario .campo input,
+.rejilla-formulario .campo select {
+  min-width: 0;
+  width: 100%;
+}
+
+.error-formulario {
+  margin-top: 16px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--cancelado);
+  background: rgba(176, 58, 36, .08);
+  border: 1px solid var(--cancelado);
+}
+
+.pie-modal {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--borde);
+}
+
+/* ===== Tarjetas de resumen ===== */
+.rejilla-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.tarjeta {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--acento-2);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 20px;
+}
+
+.tarjeta-alerta { border-left-color: var(--retrasado); }
+
+.tarjeta-etiqueta {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--texto-tenue);
+}
+
+.tarjeta-valor {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--azul-noche);
+  line-height: 1.1;
+  margin: 8px 0 4px;
+  font-family: "SF Mono", Consolas, monospace;
+}
+
+.tarjeta-detalle {
+  font-size: 13px;
+  color: var(--texto-tenue);
+}
+
+/* ===== Paneles ===== */
+.rejilla-paneles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.panel {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 24px;
+}
+
+.titulo-panel {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--azul-marino);
+  margin-bottom: 20px;
+}
+
+/* ===== Gráfica de barras ===== */
+.grafica-barras {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fila-barra {
+  display: grid;
+  grid-template-columns: 140px 1fr 44px;
+  align-items: center;
+  gap: 12px;
+}
+
+.barra-etiqueta {
+  font-size: 13px;
+  color: var(--texto-tenue);
+  text-transform: capitalize;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barra-pista {
+  height: 22px;
+  background: var(--superficie-2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.barra-relleno {
+  height: 100%;
+  background: var(--acento-2);
+  border-radius: 4px;
+  transition: width .4s ease;
+}
+
+.barra-valor {
+  font-family: "SF Mono", Consolas, monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--azul-marino);
+  text-align: right;
+}
+
+.barra-programado { background: var(--programado); }
+.barra-abordando  { background: var(--abordando); }
+.barra-retrasado  { background: var(--retrasado); }
+.barra-despegado  { background: var(--despegado); }
+.barra-cancelado  { background: var(--cancelado); }
+
+/* ===== Lista de salidas ===== */
+.lista-salidas {
+  display: flex;
+  flex-direction: column;
+}
+
+.fila-salida {
+  display: grid;
+  grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--borde);
+}
+
+.fila-salida:last-child { border-bottom: none; }
+
+.salida-vuelo,
+.salida-destino,
+.salida-hora,
+.salida-puerta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ===== Responsivo ===== */
+@media (max-width: 900px) {
+  .barra-superior {
+    flex-direction: column;
+    height: auto;
+    padding: 16px;
+    gap: 12px;
+  }
+  .navegacion { flex-wrap: wrap; justify-content: center; }
+  .contenedor { padding: 20px 16px; }
+  .encabezado-pagina { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .pestanas { overflow-x: auto; }
+  .contenedor-tabla { overflow-x: auto; }
+  .tabla { min-width: 900px; }
+  .rejilla-paneles { grid-template-columns: 1fr; }
+  .fila-salida { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .fila-barra { grid-template-columns: 100px 1fr 40px; }
+}
+
+@media (max-width: 600px) {
+  .rejilla-formulario { grid-template-columns: 1fr; }
+}

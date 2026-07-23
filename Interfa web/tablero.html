@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyPort — Tablero</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="barra-superior">
+    <div class="marca">
+      <span class="marca-icono">✈</span>
+      <span class="marca-nombre">SkyPort</span>
+    </div>
+    <nav class="navegacion">
+      <a href="index.html" class="enlace-nav">Vuelos</a>
+      <a href="reservas.html" class="enlace-nav">Reservas</a>
+      <a href="catalogos.html" class="enlace-nav">Catálogos</a>
+      <a href="empleados.html" class="enlace-nav">Empleados</a>
+      <a href="tablero.html" class="enlace-nav activo">Tablero</a>
+    </nav>
+  </header>
+
+  <main class="contenedor">
+
+    <div class="encabezado-pagina">
+      <div>
+        <h1 class="titulo-pagina">Tablero general</h1>
+        <p class="subtitulo-pagina">Resumen de operaciones del día</p>
+      </div>
+    </div>
+
+    <!-- Tarjetas de resumen -->
+    <section class="rejilla-tarjetas" id="rejillaTarjetas"></section>
+
+    <!-- Gráficas -->
+    <section class="rejilla-paneles">
+
+      <div class="panel">
+        <h2 class="titulo-panel">Vuelos por estado</h2>
+        <div class="grafica-barras" id="graficaEstados"></div>
+      </div>
+
+      <div class="panel">
+        <h2 class="titulo-panel">Reservas por aerolínea</h2>
+        <div class="grafica-barras" id="graficaAerolineas"></div>
+      </div>
+
+    </section>
+
+    <!-- Próximas salidas -->
+    <section class="panel">
+      <h2 class="titulo-panel">Próximas salidas</h2>
+      <div class="lista-salidas" id="listaSalidas"></div>
+    </section>
+
+  </main>
+
+  <script src="js/tablero.js"></script>
+</body>
+</html>

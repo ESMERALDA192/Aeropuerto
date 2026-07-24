@@ -2,9 +2,10 @@
   "name": "api-aeropuerto",
   "version": "1.0.0",
   "description": "API REST para Gestión de Aeropuerto - MongoDB Atlas",
-  "main": "index.js",
+  "main": "backend/index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node backend/index.js",
+    "dev": "nodemon backend/index.js"
   },
   "keywords": [],
   "author": "",

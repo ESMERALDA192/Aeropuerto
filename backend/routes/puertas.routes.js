@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 const Puerta = require("../models/Puerta");
 const Aeropuerto = require("../models/Aeropuerto");
+const { verificarToken, verificarRol } = require("../middlewares/auth");
 
 const ESTADOS_VALIDOS = ["disponible", "ocupada", "mantenimiento"];
 
-// GET /puertas
-router.get("/", async (req, res, next) => {
+// GET /puertas — cualquiera con sesión iniciada puede ver
+router.get("/", verificarToken, async (req, res, next) => {
     try {
         const puertas = await Puerta.find();
         res.json(puertas);
@@ -15,8 +16,8 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-// GET /puertas/:id
-router.get("/:id", async (req, res, next) => {
+// GET /puertas/:id — cualquiera con sesión iniciada puede ver
+router.get("/:id", verificarToken, async (req, res, next) => {
     try {
         const puerta = await Puerta.findById(req.params.id);
         if (!puerta) return res.status(404).json({ mensaje: "Puerta no encontrada" });
@@ -26,8 +27,8 @@ router.get("/:id", async (req, res, next) => {
     }
 });
 
-// POST /puertas
-router.post("/", async (req, res, next) => {
+// POST /puertas — solo administrador
+router.post("/", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
         const { numero, terminal, aeropuertoId, estado } = req.body;
 
@@ -57,8 +58,8 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-// PUT /puertas/:id
-router.put("/:id", async (req, res, next) => {
+// PUT /puertas/:id — administrador o agente (puede cambiar el estado operativo)
+router.put("/:id", verificarToken, verificarRol("administrador", "agente"), async (req, res, next) => {
     try {
         const { numero, terminal, aeropuertoId, estado } = req.body;
 
@@ -92,8 +93,8 @@ router.put("/:id", async (req, res, next) => {
     }
 });
 
-// DELETE /puertas/:id
-router.delete("/:id", async (req, res, next) => {
+// DELETE /puertas/:id — solo administrador
+router.delete("/:id", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
         const puertaEliminada = await Puerta.findByIdAndDelete(req.params.id);
         if (!puertaEliminada) return res.status(404).json({ mensaje: "Puerta no encontrada" });

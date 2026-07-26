@@ -3,6 +3,7 @@ const router = express.Router();
 const Reserva = require("../models/Reserva");
 const Pasajero = require("../models/Pasajero");
 const Vuelo = require("../models/Vuelo");
+const { verificarToken, verificarRol } = require("../middlewares/auth");
 
 const CLASES_VALIDAS = ["economica", "ejecutiva", "primera"];
 
@@ -44,8 +45,8 @@ async function construirDatosReserva(body) {
     };
 }
 
-// GET /reservas
-router.get("/", async (req, res, next) => {
+// GET /reservas — cualquiera con sesión iniciada puede ver
+router.get("/", verificarToken, async (req, res, next) => {
     try {
         const reservas = await Reserva.find();
         res.json(reservas);
@@ -54,8 +55,8 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-// GET /reservas/:id
-router.get("/:id", async (req, res, next) => {
+// GET /reservas/:id — cualquiera con sesión iniciada puede ver
+router.get("/:id", verificarToken, async (req, res, next) => {
     try {
         const reserva = await Reserva.findById(req.params.id);
         if (!reserva) return res.status(404).json({ mensaje: "Reserva no encontrada" });
@@ -65,8 +66,8 @@ router.get("/:id", async (req, res, next) => {
     }
 });
 
-// POST /reservas
-router.post("/", async (req, res, next) => {
+// POST /reservas — pasajero, agente o administrador
+router.post("/", verificarToken, verificarRol("pasajero", "agente", "administrador"), async (req, res, next) => {
     try {
         const { error, datos } = await construirDatosReserva(req.body);
         if (error) return res.status(400).json({ mensaje: error });
@@ -89,8 +90,8 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-// PUT /reservas/:id
-router.put("/:id", async (req, res, next) => {
+// PUT /reservas/:id — solo agente o administrador (check-in, cambios de asiento, etc.)
+router.put("/:id", verificarToken, verificarRol("agente", "administrador"), async (req, res, next) => {
     try {
         const { error, datos } = await construirDatosReserva(req.body);
         if (error) return res.status(400).json({ mensaje: error });
@@ -118,8 +119,8 @@ router.put("/:id", async (req, res, next) => {
     }
 });
 
-// DELETE /reservas/:id
-router.delete("/:id", async (req, res, next) => {
+// DELETE /reservas/:id — solo agente o administrador (cancelación)
+router.delete("/:id", verificarToken, verificarRol("agente", "administrador"), async (req, res, next) => {
     try {
         const reservaEliminada = await Reserva.findByIdAndDelete(req.params.id);
         if (!reservaEliminada) return res.status(404).json({ mensaje: "Reserva no encontrada" });

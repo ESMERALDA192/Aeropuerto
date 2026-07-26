@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Aeropuerto = require("../models/Aeropuerto");
+const { verificarToken, verificarRol } = require("../middlewares/auth");
 
-// GET /aeropuertos
-router.get("/", async (req, res, next) => {
+// GET /aeropuertos — cualquiera con sesión iniciada puede ver
+router.get("/", verificarToken, async (req, res, next) => {
     try {
         const aeropuertos = await Aeropuerto.find();
         res.json(aeropuertos);
@@ -12,8 +13,8 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-// GET /aeropuertos/:id
-router.get("/:id", async (req, res, next) => {
+// GET /aeropuertos/:id — cualquiera con sesión iniciada puede ver
+router.get("/:id", verificarToken, async (req, res, next) => {
     try {
         const aeropuerto = await Aeropuerto.findById(req.params.id);
         if (!aeropuerto) return res.status(404).json({ mensaje: "Aeropuerto no encontrado" });
@@ -23,8 +24,8 @@ router.get("/:id", async (req, res, next) => {
     }
 });
 
-// POST /aeropuertos
-router.post("/", async (req, res, next) => {
+// POST /aeropuertos — solo administrador
+router.post("/", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
         const { nombre, codigoIata, ciudad, pais, terminales } = req.body;
 
@@ -41,8 +42,8 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-// PUT /aeropuertos/:id
-router.put("/:id", async (req, res, next) => {
+// PUT /aeropuertos/:id — solo administrador
+router.put("/:id", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
         const { nombre, codigoIata, ciudad, pais, terminales } = req.body;
 
@@ -64,8 +65,8 @@ router.put("/:id", async (req, res, next) => {
     }
 });
 
-// DELETE /aeropuertos/:id
-router.delete("/:id", async (req, res, next) => {
+// DELETE /aeropuertos/:id — solo administrador
+router.delete("/:id", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
         const aeropuertoEliminado = await Aeropuerto.findByIdAndDelete(req.params.id);
         if (!aeropuertoEliminado) return res.status(404).json({ mensaje: "Aeropuerto no encontrado" });

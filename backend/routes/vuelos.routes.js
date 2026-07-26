@@ -3,6 +3,7 @@ const router = express.Router();
 const Vuelo = require("../models/Vuelo");
 const Aerolinea = require("../models/Aerolinea");
 const Aeropuerto = require("../models/Aeropuerto");
+const { verificarToken, verificarRol } = require("../middlewares/auth");
 
 const ESTADOS_VALIDOS = ["programado", "retrasado", "abordando", "despegado", "cancelado"];
 
@@ -45,8 +46,8 @@ async function construirDatosVuelo(body) {
     };
 }
 
-// GET /vuelos
-router.get("/", async (req, res, next) => {
+// GET /vuelos — cualquiera con sesión iniciada puede ver
+router.get("/", verificarToken, async (req, res, next) => {
     try {
         const vuelos = await Vuelo.find();
         res.json(vuelos);
@@ -55,8 +56,8 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-// GET /vuelos/:id
-router.get("/:id", async (req, res, next) => {
+// GET /vuelos/:id — cualquiera con sesión iniciada puede ver
+router.get("/:id", verificarToken, async (req, res, next) => {
     try {
         const vuelo = await Vuelo.findById(req.params.id);
         if (!vuelo) return res.status(404).json({ mensaje: "Vuelo no encontrado" });
@@ -66,8 +67,8 @@ router.get("/:id", async (req, res, next) => {
     }
 });
 
-// POST /vuelos
-router.post("/", async (req, res, next) => {
+// POST /vuelos — solo administrador
+router.post("/", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
         const { error, datos } = await construirDatosVuelo(req.body);
         if (error) return res.status(400).json({ mensaje: error });
@@ -81,8 +82,8 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-// PUT /vuelos/:id
-router.put("/:id", async (req, res, next) => {
+// PUT /vuelos/:id — administrador o agente (actualizar estado del vuelo)
+router.put("/:id", verificarToken, verificarRol("administrador", "agente"), async (req, res, next) => {
     try {
         const { error, datos } = await construirDatosVuelo(req.body);
         if (error) return res.status(400).json({ mensaje: error });
@@ -101,8 +102,8 @@ router.put("/:id", async (req, res, next) => {
     }
 });
 
-// DELETE /vuelos/:id
-router.delete("/:id", async (req, res, next) => {
+// DELETE /vuelos/:id — solo administrador
+router.delete("/:id", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
         const vueloEliminado = await Vuelo.findByIdAndDelete(req.params.id);
         if (!vueloEliminado) return res.status(404).json({ mensaje: "Vuelo no encontrado" });

@@ -1,11 +1,16 @@
 require("dotenv").config();
+console.log("JWT_SECRET cargado:", process.env.JWT_SECRET);
 
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 
+console.log("PASO 1: paquetes base cargados");
+
 const conectarDB = require("./config/db");
 const { rutaNoEncontrada, manejadorErrores } = require("./middlewares/errorHandler");
+
+console.log("PASO 2: config y middlewares cargados");
 
 const aerolineasRoutes = require("./routes/aerolineas.routes");
 const aeropuertosRoutes = require("./routes/aeropuertos.routes");
@@ -15,15 +20,19 @@ const puertasRoutes = require("./routes/puertas.routes");
 const reservasRoutes = require("./routes/reservas.routes");
 const vuelosRoutes = require("./routes/vuelos.routes");
 
+console.log("PASO 3: 7 rutas de recursos cargadas");
+
+const authRoutes = require("./routes/auth.routes");
+
+console.log("PASO 4: authRoutes cargado, tipo:", typeof authRoutes);
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// MIDDLEWARES GLOBALES 
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-// Se asegura de tener conexión a Mongo antes de procesar cualquier request
 app.use(async (req, res, next) => {
     try {
         await conectarDB();
@@ -33,16 +42,10 @@ app.use(async (req, res, next) => {
     }
 });
 
-//  RUTA RAÍZ 
 app.get("/", (req, res) => {
     res.send("API de Aeropuerto funcionando");
 });
 
-
-
-// RUTAS REST 
-// Se definen las rutas de cada recurso (aerolineas, aeropuertos, empleados, pasajeros, puertas, reservas, vuelos)
-// En el archivo correspondiente dentro de la carpeta "routes". Cada ruta tiene su propio router y controlador.
 app.use("/aerolineas", aerolineasRoutes);
 app.use("/aeropuertos", aeropuertosRoutes);
 app.use("/empleados", empleadosRoutes);
@@ -51,11 +54,13 @@ app.use("/puertas", puertasRoutes);
 app.use("/reservas", reservasRoutes);
 app.use("/vuelos", vuelosRoutes);
 
-//  MANEJO DE ERRORES siempre al final
+console.log("PASO 5: a punto de montar /auth");
+app.use("/auth", authRoutes);
+console.log("PASO 6: /auth montado correctamente");
+
 app.use(rutaNoEncontrada);
 app.use(manejadorErrores);
 
-// para correr en local 
 if (require.main === module) {
     conectarDB()
         .then(() => {
@@ -70,4 +75,3 @@ if (require.main === module) {
 }
 
 module.exports = app;
-

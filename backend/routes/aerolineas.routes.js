@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Aerolinea = require("../models/Aerolinea");
+const { verificarToken, verificarRol } = require("../middlewares/auth");
 
-// GET /aerolineas
-router.get("/", async (req, res, next) => {
+// GET /aerolineas — cualquiera con sesión iniciada puede ver
+router.get("/", verificarToken, async (req, res, next) => {
     try {
         const aerolineas = await Aerolinea.find();
         res.json(aerolineas);
@@ -12,8 +13,8 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-// GET /aerolineas/:id
-router.get("/:id", async (req, res, next) => {
+// GET /aerolineas/:id — cualquiera con sesión iniciada puede ver
+router.get("/:id", verificarToken, async (req, res, next) => {
     try {
         const aerolinea = await Aerolinea.findById(req.params.id);
         if (!aerolinea) return res.status(404).json({ mensaje: "Aerolínea no encontrada" });
@@ -23,8 +24,8 @@ router.get("/:id", async (req, res, next) => {
     }
 });
 
-// POST /aerolineas
-router.post("/", async (req, res, next) => {
+// POST /aerolineas — solo administrador
+router.post("/", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
         const { nombre, codigoIata, pais } = req.body;
 
@@ -41,8 +42,8 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-// PUT /aerolineas/:id
-router.put("/:id", async (req, res, next) => {
+// PUT /aerolineas/:id — solo administrador
+router.put("/:id", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
         const { nombre, codigoIata, pais } = req.body;
 
@@ -64,8 +65,8 @@ router.put("/:id", async (req, res, next) => {
     }
 });
 
-// DELETE /aerolineas/:id
-router.delete("/:id", async (req, res, next) => {
+// DELETE /aerolineas/:id — solo administrador
+router.delete("/:id", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
         const aerolineaEliminada = await Aerolinea.findByIdAndDelete(req.params.id);
         if (!aerolineaEliminada) return res.status(404).json({ mensaje: "Aerolínea no encontrada" });

@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 const Empleado = require("../models/Empleado");
 const Aerolinea = require("../models/Aerolinea");
+const { verificarToken, verificarRol } = require("../middlewares/auth");
 
 const PUESTOS_VALIDOS = ["piloto", "copiloto", "sobrecargo", "personal_tierra", "seguridad"];
 
-// GET /empleados
-router.get("/", async (req, res, next) => {
+// GET /empleados — cualquiera con sesión iniciada puede ver
+router.get("/", verificarToken, async (req, res, next) => {
     try {
         const empleados = await Empleado.find();
         res.json(empleados);
@@ -15,8 +16,8 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-// GET /empleados/:id
-router.get("/:id", async (req, res, next) => {
+// GET /empleados/:id — cualquiera con sesión iniciada puede ver
+router.get("/:id", verificarToken, async (req, res, next) => {
     try {
         const empleado = await Empleado.findById(req.params.id);
         if (!empleado) return res.status(404).json({ mensaje: "Empleado no encontrado" });
@@ -26,8 +27,8 @@ router.get("/:id", async (req, res, next) => {
     }
 });
 
-// POST /empleados
-router.post("/", async (req, res, next) => {
+// POST /empleados — solo administrador
+router.post("/", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
         const { nombre, apellido, puesto, numeroEmpleado, aerolineaId } = req.body;
 
@@ -41,7 +42,6 @@ router.post("/", async (req, res, next) => {
 
         const datosEmpleado = { nombre, apellido, puesto, numeroEmpleado };
 
-        // La aerolínea es opcional (personal de tierra/seguridad puede no tener una)
         if (aerolineaId) {
             const aerolinea = await Aerolinea.findById(aerolineaId);
             if (!aerolinea) return res.status(400).json({ mensaje: "La aerolineaId proporcionada no existe" });
@@ -57,8 +57,8 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-// PUT /empleados/:id
-router.put("/:id", async (req, res, next) => {
+// PUT /empleados/:id — solo administrador
+router.put("/:id", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
         const { nombre, apellido, puesto, numeroEmpleado, aerolineaId } = req.body;
 
@@ -92,8 +92,8 @@ router.put("/:id", async (req, res, next) => {
     }
 });
 
-// DELETE /empleados/:id
-router.delete("/:id", async (req, res, next) => {
+// DELETE /empleados/:id — solo administrador
+router.delete("/:id", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
         const empleadoEliminado = await Empleado.findByIdAndDelete(req.params.id);
         if (!empleadoEliminado) return res.status(404).json({ mensaje: "Empleado no encontrado" });

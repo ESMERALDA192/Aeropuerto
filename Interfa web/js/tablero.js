@@ -3,7 +3,26 @@ let vuelos = [];
 let reservas = [];
 let puertas = [];
 
+// ===== Seguridad y sesión =====
+const token = localStorage.getItem("token");
+const rol = localStorage.getItem("rol");
 
+if (!token) {
+  window.location.href = "login.html";
+}
+
+const usuarioSesion = document.getElementById("usuarioSesion");
+const btnSalir = document.getElementById("btnSalir");
+
+if (usuarioSesion) {
+  usuarioSesion.textContent = localStorage.getItem("nombre") || rol || "";
+}
+if (btnSalir) {
+  btnSalir.addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "login.html";
+  });
+}
 // ===== Utilidades =====
 function formatearHora(iso) {
   return new Date(iso).toLocaleTimeString("es-MX", {
@@ -76,18 +95,17 @@ function renderTarjetas() {
   ).length;
 
 
-
-  const tarjetas = [
+const tarjetas = [
 
     {
-      etiqueta:"Vuelos programados hoy",
+      etiqueta:"Total de vuelos",
       valor:vuelosHoy,
       detalle:`${retrasados} con retraso`
     },
 
 
     {
-      etiqueta:"Pasajeros del día",
+      etiqueta:"Reservas totales",
       valor:pasajerosHoy,
       detalle:`${registrados} con check-in`
     },
@@ -108,7 +126,6 @@ function renderTarjetas() {
     }
 
   ];
-
 
 
   document.getElementById("rejillaTarjetas").innerHTML =

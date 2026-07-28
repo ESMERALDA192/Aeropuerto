@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SkyPort — Empleados</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -19,6 +18,8 @@
       <a href="catalogos.html" class="enlace-nav">Catálogos</a>
       <a href="empleados.html" class="enlace-nav activo">Empleados</a>
       <a href="tablero.html" class="enlace-nav">Tablero</a>
+      <span class="usuario-sesion" id="usuarioSesion"></span>
+      <button class="boton-salir" id="btnSalir">Salir</button>
     </nav>
   </header>
 
@@ -56,10 +57,6 @@
         <label for="filtroAerolinea">Aerolínea</label>
         <select id="filtroAerolinea">
           <option value="">Todas</option>
-          <option value="Aeroméxico">Aeroméxico</option>
-          <option value="Volaris">Volaris</option>
-          <option value="Viva Aerobus">Viva Aerobus</option>
-          <option value="sin">Sin aerolínea</option>
         </select>
       </div>
       <button class="boton boton-fantasma" id="btnLimpiar">Limpiar</button>
@@ -85,9 +82,69 @@
       </div>
     </section>
 
+    <!-- ===== Modal ===== -->
+    <div class="fondo-modal oculto" id="fondoModal">
+      <div class="modal">
+
+        <div class="encabezado-modal">
+          <h2 class="titulo-modal" id="tituloModal">Nuevo empleado</h2>
+          <button type="button" class="cerrar-modal" id="btnCerrar">&times;</button>
+        </div>
+
+        <form id="formularioEmpleado" novalidate>
+          <div class="cuerpo-modal">
+            <div class="rejilla-formulario">
+
+              <div class="campo">
+                <label for="campoNumero">N° empleado *</label>
+                <input type="text" id="campoNumero" placeholder="EMP001" required>
+              </div>
+
+              <div class="campo">
+                <label for="campoPuesto">Puesto *</label>
+                <select id="campoPuesto" required>
+                  <option value="piloto">Piloto</option>
+                  <option value="copiloto">Copiloto</option>
+                  <option value="sobrecargo">Sobrecargo</option>
+                  <option value="personal_tierra">Personal de tierra</option>
+                  <option value="seguridad">Seguridad</option>
+                </select>
+              </div>
+
+              <div class="campo">
+                <label for="campoNombre">Nombre *</label>
+                <input type="text" id="campoNombre" placeholder="Carlos" required>
+              </div>
+
+              <div class="campo">
+                <label for="campoApellido">Apellido *</label>
+                <input type="text" id="campoApellido" placeholder="Ramírez" required>
+              </div>
+
+              <div class="campo campo-completo">
+                <label for="campoAerolinea">Aerolínea</label>
+                <select id="campoAerolinea">
+                  <option value="">Sin aerolínea</option>
+                </select>
+              </div>
+
+            </div>
+
+            <p class="error-formulario oculto" id="errorFormulario"></p>
+          </div>
+
+          <div class="pie-modal">
+            <button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button>
+            <button type="submit" class="boton boton-principal">Guardar</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
   </main>
 
- <script src="js/api.js"></script>
-<script src="js/empleados.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/empleados.js"></script>
 </body>
 </html>

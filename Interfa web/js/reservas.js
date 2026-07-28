@@ -343,7 +343,13 @@ async function manejarAccion(e) {
 
   if (boton.dataset.accion === "checkin") {
     try {
-      await actualizarReserva(id, { registrado: !reserva.registrado });
+      await actualizarReserva(id, {
+        pasajeroId: reserva.pasajero.id,
+        vueloId:    reserva.vuelo.id,
+        asiento:    reserva.asiento,
+        clase:      reserva.clase,
+        registrado: !reserva.registrado
+      });
       await cargarReservas();
     } catch(error) {
       alert("No se pudo actualizar el check-in: " + error.message);

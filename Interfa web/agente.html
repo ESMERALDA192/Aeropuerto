@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SkyPort — Check-in de pasajeros</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="barra-superior">
+    <div class="marca">
+      <span class="marca-icono">✈</span>
+      <span class="marca-nombre">SkyPort</span>
+    </div>
+    <nav class="navegacion">
+      <span class="usuario-sesion" id="usuarioSesion"></span>
+      <button class="boton-salir" id="btnSalir">Salir</button>
+    </nav>
+  </header>
+
+  <main class="contenedor">
+
+    <div class="encabezado-pagina">
+      <div>
+        <h1 class="titulo-pagina">Check-in de pasajeros</h1>
+        <p class="subtitulo-pagina">Registra el check-in de las reservas</p>
+      </div>
+    </div>
+
+    <section class="filtros">
+      <div class="campo">
+        <label for="filtroVuelo">Vuelo</label>
+        <input type="text" id="filtroVuelo" placeholder="AM452">
+      </div>
+      <div class="campo">
+        <label for="filtroPasajero">Pasajero</label>
+        <input type="text" id="filtroPasajero" placeholder="Nombre o documento">
+      </div>
+      <div class="campo">
+        <label for="filtroRegistrado">Check-in</label>
+        <select id="filtroRegistrado">
+          <option value="">Todos</option>
+          <option value="true">Registrado</option>
+          <option value="false">Pendiente</option>
+        </select>
+      </div>
+      <button class="boton boton-fantasma" id="btnLimpiar">Limpiar</button>
+    </section>
+
+    <section class="contenedor-tabla">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Pasajero</th>
+            <th>Documento</th>
+            <th>Vuelo</th>
+            <th>Salida</th>
+            <th>Asiento</th>
+            <th>Clase</th>
+            <th>Check-in</th>
+            <th class="columna-acciones">Acción</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTablaReservas"></tbody>
+      </table>
+
+      <div class="mensaje-vacio oculto" id="mensajeVacio">
+        No hay reservas que coincidan con los filtros.
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/agente.js"></script>
+</body>
+</html>

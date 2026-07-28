@@ -14,7 +14,7 @@ function redirigirSegunRol(rol) {
   if (rol === "pasajero") {
     window.location.href = "pasajero.html";
   } else if (rol === "agente") {
-    window.location.href = "reservas.html";
+  window.location.href = "agente.html";
   } else {
     window.location.href = "index.html";
   }

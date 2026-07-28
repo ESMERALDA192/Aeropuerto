@@ -1,69 +1,16 @@
-// ===== Datos de prueba =====
-const reservas = [
-  {
-    _id: "r1",
-    pasajero: { nombreCompleto: "Ana Torres Ruiz", documento: "GARA980112" },
-    vuelo: { numeroVuelo: "AM452", horaSalida: "2026-07-24T14:30:00" },
-    asiento: "12A", clase: "economica", registrado: true
-  },
-  {
-    _id: "r2",
-    pasajero: { nombreCompleto: "Luis Hernández Mora", documento: "HEML011203" },
-    vuelo: { numeroVuelo: "AM452", horaSalida: "2026-07-24T14:30:00" },
-    asiento: "3C", clase: "ejecutiva", registrado: false
-  },
-  {
-    _id: "r3",
-    pasajero: { nombreCompleto: "María Fernanda Díaz", documento: "DIMF950720" },
-    vuelo: { numeroVuelo: "VB1203", horaSalida: "2026-07-24T09:15:00" },
-    asiento: "18F", clase: "economica", registrado: true
-  },
-  {
-    _id: "r4",
-    pasajero: { nombreCompleto: "Carlos Peña Vargas", documento: "PEVC880405" },
-    vuelo: { numeroVuelo: "Y4780", horaSalida: "2026-07-24T18:00:00" },
-    asiento: "1A", clase: "primera", registrado: false
-  },
-  {
-    _id: "r5",
-    pasajero: { nombreCompleto: "Sofía Ramírez León", documento: "RALS021118" },
-    vuelo: { numeroVuelo: "VB1203", horaSalida: "2026-07-24T09:15:00" },
-    asiento: "22B", clase: "economica", registrado: false
-  },
-  {
-    _id: "r6",
-    pasajero: { nombreCompleto: "Jorge Aguilar Nava", documento: "AUNJ760930" },
-    vuelo: { numeroVuelo: "AM118", horaSalida: "2026-07-24T07:00:00" },
-    asiento: "8D", clase: "ejecutiva", registrado: true
-  },
-  {
-    _id: "r7",
-    pasajero: { nombreCompleto: "Valeria Ortiz Campos", documento: "OICV991214" },
-    vuelo: { numeroVuelo: "Y4212", horaSalida: "2026-07-25T06:45:00" },
-    asiento: "15E", clase: "economica", registrado: false
-  }
-];
+// ===== Configuración =====
+const API = "http://localhost:3001";
+const token = localStorage.getItem("token");
+const rol   = localStorage.getItem("rol");
 
-// ===== Catálogos para los selects =====
-const listaPasajeros = [
-  { documento: "GARA980112", nombreCompleto: "Ana Torres Ruiz" },
-  { documento: "HEML011203", nombreCompleto: "Luis Hernández Mora" },
-  { documento: "DIMF950720", nombreCompleto: "María Fernanda Díaz" },
-  { documento: "PEVC880405", nombreCompleto: "Carlos Peña Vargas" },
-  { documento: "RALS021118", nombreCompleto: "Sofía Ramírez León" },
-  { documento: "AUNJ760930", nombreCompleto: "Jorge Aguilar Nava" },
-  { documento: "OICV991214", nombreCompleto: "Valeria Ortiz Campos" },
-  { documento: "MEGR950818", nombreCompleto: "Roberto Mendoza Gil" }
-];
+if (!token) {
+  window.location.href = "login.html";
+}
 
-const listaVuelos = [
-  { numeroVuelo: "AM452",  horaSalida: "2026-07-24T14:30:00" },
-  { numeroVuelo: "VB1203", horaSalida: "2026-07-24T09:15:00" },
-  { numeroVuelo: "Y4780",  horaSalida: "2026-07-24T18:00:00" },
-  { numeroVuelo: "AM118",  horaSalida: "2026-07-24T07:00:00" },
-  { numeroVuelo: "VB905",  horaSalida: "2026-07-24T22:10:00" },
-  { numeroVuelo: "Y4212",  horaSalida: "2026-07-25T06:45:00" }
-];
+// ===== Estado =====
+let reservas = [];
+let listaPasajeros = [];
+let listaVuelos = [];
 
 // ===== Referencias del DOM =====
 const cuerpoTabla       = document.getElementById("cuerpoTablaReservas");
@@ -74,6 +21,9 @@ const filtroClase       = document.getElementById("filtroClase");
 const filtroRegistrado  = document.getElementById("filtroRegistrado");
 const btnLimpiar        = document.getElementById("btnLimpiar");
 const btnNueva          = document.getElementById("btnNueva");
+
+const usuarioSesion     = document.getElementById("usuarioSesion");
+const btnSalir          = document.getElementById("btnSalir");
 
 // ===== Referencias del modal / formulario =====
 const fondoModal         = document.getElementById("fondoModal");
@@ -90,6 +40,41 @@ const campoClase      = document.getElementById("campoClase");
 const campoRegistrado = document.getElementById("campoRegistrado");
 
 let idEditando = null;
+
+// ===== Sesión =====
+if (usuarioSesion) {
+  usuarioSesion.textContent = localStorage.getItem("nombre") || rol || "";
+}
+if (btnSalir) {
+  btnSalir.addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "login.html";
+  });
+}
+
+// ===== Helper de peticiones =====
+async function pedir(ruta, opciones = {}) {
+  const respuesta = await fetch(`${API}${ruta}`, {
+    ...opciones,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+      ...(opciones.headers || {})
+    }
+  });
+
+  if (respuesta.status === 401) {
+    localStorage.clear();
+    window.location.href = "login.html";
+    throw new Error("Sesión expirada");
+  }
+
+  const datos = await respuesta.json().catch(() => ({}));
+  if (!respuesta.ok) {
+    throw new Error(datos.mensaje || "Error en la petición");
+  }
+  return datos;
+}
 
 // ===== Utilidades =====
 function formatearHora(iso) {
@@ -110,12 +95,36 @@ const nombresClase = {
   primera:   "Primera"
 };
 
+// ===== Cargar reservas del backend =====
+async function cargarReservas() {
+  try {
+    reservas = await pedir("/reservas");
+    aplicarFiltros();
+  } catch (error) {
+    cuerpoTabla.innerHTML = "";
+    mensajeVacio.classList.remove("oculto");
+    mensajeVacio.textContent = "Error al cargar reservas: " + error.message;
+  }
+}
+
+// ===== Cargar catálogos para el formulario =====
+async function cargarCatalogos() {
+  try {
+    listaPasajeros = await pedir("/pasajeros");
+    listaVuelos    = await pedir("/vuelos");
+    llenarSelects();
+  } catch (error) {
+    console.error("No se pudieron cargar catálogos:", error.message);
+  }
+}
+
 // ===== Pintar tabla =====
 function renderTabla(lista) {
   cuerpoTabla.innerHTML = "";
 
   if (lista.length === 0) {
     mensajeVacio.classList.remove("oculto");
+    mensajeVacio.textContent = "No hay reservas que coincidan con los filtros.";
     return;
   }
   mensajeVacio.classList.add("oculto");
@@ -180,14 +189,14 @@ function limpiarFiltros() {
   renderTabla(reservas);
 }
 
-// ===== Llenar selects del formulario =====
+// ===== Llenar selects =====
 function llenarSelects() {
   campoPasajero.innerHTML = listaPasajeros
-    .map(p => `<option value="${p.documento}">${p.nombreCompleto} — ${p.documento}</option>`)
+    .map(p => `<option value="${p._id}">${p.nombre} ${p.apellido} — ${p.documento}</option>`)
     .join("");
 
   campoVuelo.innerHTML = listaVuelos
-    .map(v => `<option value="${v.numeroVuelo}">${v.numeroVuelo} — ${formatearFecha(v.horaSalida)} ${formatearHora(v.horaSalida)}</option>`)
+    .map(v => `<option value="${v._id}">${v.numeroVuelo} — ${formatearFecha(v.horaSalida)} ${formatearHora(v.horaSalida)}</option>`)
     .join("");
 }
 
@@ -198,8 +207,8 @@ function abrirModal(reserva) {
   if (reserva) {
     idEditando = reserva._id;
     tituloModal.textContent = `Editar reserva — ${reserva.pasajero.nombreCompleto}`;
-    campoPasajero.value   = reserva.pasajero.documento;
-    campoVuelo.value      = reserva.vuelo.numeroVuelo;
+    campoPasajero.value   = reserva.pasajero.id;
+    campoVuelo.value      = reserva.vuelo.id;
     campoAsiento.value    = reserva.asiento;
     campoClase.value      = reserva.clase;
     campoRegistrado.value = String(reserva.registrado);
@@ -207,8 +216,8 @@ function abrirModal(reserva) {
     idEditando = null;
     tituloModal.textContent = "Nueva reserva";
     formularioReserva.reset();
-    campoPasajero.value   = listaPasajeros[0].documento;
-    campoVuelo.value      = listaVuelos[0].numeroVuelo;
+    if (listaPasajeros[0]) campoPasajero.value = listaPasajeros[0]._id;
+    if (listaVuelos[0])    campoVuelo.value    = listaVuelos[0]._id;
     campoClase.value      = "economica";
     campoRegistrado.value = "false";
   }
@@ -228,7 +237,7 @@ function mostrarError(mensaje) {
 }
 
 // ===== Guardar (crear o actualizar) =====
-function guardar(evento) {
+async function guardar(evento) {
   evento.preventDefault();
 
   const asiento = campoAsiento.value.trim().toUpperCase();
@@ -239,48 +248,35 @@ function guardar(evento) {
     return mostrarError("Formato de asiento inválido. Usa por ejemplo 12A.");
   }
 
-  const ocupado = reservas.find(r =>
-    r.vuelo.numeroVuelo === campoVuelo.value &&
-    r.asiento.toUpperCase() === asiento &&
-    r._id !== idEditando
-  );
-  if (ocupado) {
-    return mostrarError(`El asiento ${asiento} ya está ocupado en el vuelo ${campoVuelo.value}.`);
-  }
-
-  const duplicado = reservas.find(r =>
-    r.pasajero.documento === campoPasajero.value &&
-    r.vuelo.numeroVuelo === campoVuelo.value &&
-    r._id !== idEditando
-  );
-  if (duplicado) {
-    return mostrarError("Ese pasajero ya tiene una reserva en este vuelo.");
-  }
-
-  const pasajero = listaPasajeros.find(p => p.documento === campoPasajero.value);
-  const vuelo    = listaVuelos.find(v => v.numeroVuelo === campoVuelo.value);
-
-  const datos = {
-    pasajero:   { nombreCompleto: pasajero.nombreCompleto, documento: pasajero.documento },
-    vuelo:      { numeroVuelo: vuelo.numeroVuelo, horaSalida: vuelo.horaSalida },
+  const cuerpo = {
+    pasajeroId: campoPasajero.value,
+    vueloId:    campoVuelo.value,
     asiento:    asiento,
     clase:      campoClase.value,
     registrado: campoRegistrado.value === "true"
   };
 
-  if (idEditando) {
-    const i = reservas.findIndex(r => r._id === idEditando);
-    reservas[i] = { ...reservas[i], ...datos };
-  } else {
-    reservas.push({ _id: "r" + Date.now(), ...datos });
+  try {
+    if (idEditando) {
+      await pedir(`/reservas/${idEditando}`, {
+        method: "PUT",
+        body: JSON.stringify(cuerpo)
+      });
+    } else {
+      await pedir("/reservas", {
+        method: "POST",
+        body: JSON.stringify(cuerpo)
+      });
+    }
+    cerrarModal();
+    await cargarReservas();
+  } catch (error) {
+    mostrarError(error.message);
   }
-
-  cerrarModal();
-  aplicarFiltros();
 }
 
 // ===== Acciones de fila =====
-function manejarAccion(e) {
+async function manejarAccion(e) {
   const boton = e.target.closest("[data-accion]");
   if (!boton) return;
 
@@ -289,8 +285,15 @@ function manejarAccion(e) {
   const reserva = reservas.find(r => r._id === id);
 
   if (accion === "checkin") {
-    reserva.registrado = !reserva.registrado;
-    aplicarFiltros();
+    try {
+      await pedir(`/reservas/${id}`, {
+        method: "PUT",
+        body: JSON.stringify({ registrado: !reserva.registrado })
+      });
+      await cargarReservas();
+    } catch (error) {
+      alert("No se pudo actualizar el check-in: " + error.message);
+    }
   }
 
   if (accion === "editar") {
@@ -299,8 +302,12 @@ function manejarAccion(e) {
 
   if (accion === "eliminar") {
     if (confirm(`¿Eliminar la reserva de ${reserva.pasajero.nombreCompleto}?`)) {
-      reservas.splice(reservas.findIndex(r => r._id === id), 1);
-      aplicarFiltros();
+      try {
+        await pedir(`/reservas/${id}`, { method: "DELETE" });
+        await cargarReservas();
+      } catch (error) {
+        alert("No se pudo eliminar: " + error.message);
+      }
     }
   }
 }
@@ -328,5 +335,5 @@ document.addEventListener("keydown", e => {
 });
 
 // ===== Inicio =====
-llenarSelects();
-renderTabla(reservas);
+cargarCatalogos();
+cargarReservas();

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SkyPort — Mis vuelos</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="barra-superior">
+    <div class="marca">
+      <span class="marca-icono">✈</span>
+      <span class="marca-nombre">SkyPort</span>
+    </div>
+    <nav class="navegacion">
+      <span class="usuario-sesion" id="usuarioSesion"></span>
+      <button class="boton-salir" id="btnSalir">Salir</button>
+    </nav>
+  </header>
+
+  <main class="contenedor">
+
+    <div class="encabezado-pagina">
+      <div>
+        <h1 class="titulo-pagina">Buscar y reservar vuelos</h1>
+        <p class="subtitulo-pagina">Encuentra tu próximo vuelo</p>
+      </div>
+    </div>
+
+    <!-- ===== Panel: completar perfil (solo la primera vez) ===== -->
+ <section class="filtros" id="panelPerfil">
+      <div style="flex-basis:100%; margin-bottom:4px;">
+        <strong>Antes de reservar, completa tus datos de pasajero:</strong>
+      </div>
+
+      <div class="campo">
+        <label for="perfilNombre">Nombre</label>
+        <input type="text" id="perfilNombre" placeholder="Ana">
+      </div>
+      <div class="campo">
+        <label for="perfilApellido">Apellido</label>
+        <input type="text" id="perfilApellido" placeholder="López">
+      </div>
+      <div class="campo">
+        <label for="perfilDocumento">Documento</label>
+        <input type="text" id="perfilDocumento" placeholder="A12345678">
+      </div>
+      <div class="campo">
+        <label for="perfilTelefono">Teléfono</label>
+        <input type="text" id="perfilTelefono" placeholder="3121234567">
+      </div>
+
+      <button class="boton boton-principal" id="btnGuardarPerfil">Guardar mis datos</button>
+
+      <p class="error-formulario oculto" id="errorPerfil" style="flex-basis:100%;"></p>
+    </section>
+
+    <!-- ===== Buscar vuelos ===== -->
+    <section class="filtros oculto" id="panelBusqueda">
+      <div class="campo">
+        <label for="filtroOrigen">Origen</label>
+        <input type="text" id="filtroOrigen" placeholder="GDL">
+      </div>
+      <div class="campo">
+        <label for="filtroDestino">Destino</label>
+        <input type="text" id="filtroDestino" placeholder="MEX">
+      </div>
+      <div class="campo">
+        <label for="filtroFecha">Fecha</label>
+        <input type="date" id="filtroFecha">
+      </div>
+      <button class="boton boton-fantasma" id="btnLimpiar">Limpiar</button>
+    </section>
+
+    <section class="contenedor-tabla oculto" id="panelResultados">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Vuelo</th>
+            <th>Aerolínea</th>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Salida</th>
+            <th>Llegada</th>
+            <th>Estado</th>
+            <th class="columna-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTablaVuelos"></tbody>
+      </table>
+
+      <div class="mensaje-vacio oculto" id="mensajeVacioVuelos">
+        No hay vuelos que coincidan con la búsqueda.
+      </div>
+    </section>
+
+    <!-- ===== Mis reservas ===== -->
+    <div class="encabezado-pagina" style="margin-top:32px;">
+      <div>
+        <h2 class="titulo-pagina" style="font-size:20px;">Mis reservas</h2>
+      </div>
+    </div>
+
+    <section class="contenedor-tabla">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Vuelo</th>
+            <th>Salida</th>
+            <th>Asiento</th>
+            <th>Clase</th>
+            <th>Check-in</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTablaReservas"></tbody>
+      </table>
+
+      <div class="mensaje-vacio oculto" id="mensajeVacioReservas">
+        Aún no tienes reservas.
+      </div>
+    </section>
+
+    <!-- ===== Modal reservar ===== -->
+    <div class="fondo-modal oculto" id="fondoModal">
+      <div class="modal">
+
+        <div class="encabezado-modal">
+          <h2 class="titulo-modal" id="tituloModal">Reservar vuelo</h2>
+          <button type="button" class="cerrar-modal" id="btnCerrar">&times;</button>
+        </div>
+
+        <form id="formularioReserva" novalidate>
+          <div class="cuerpo-modal">
+            <div class="rejilla-formulario">
+
+              <div class="campo campo-completo">
+                <label for="campoAsiento">Asiento *</label>
+                <input type="text" id="campoAsiento" placeholder="12A" required>
+              </div>
+
+              <div class="campo campo-completo">
+                <label for="campoClase">Clase *</label>
+                <select id="campoClase" required>
+                  <option value="economica">Económica</option>
+                  <option value="ejecutiva">Ejecutiva</option>
+                  <option value="primera">Primera</option>
+                </select>
+              </div>
+
+            </div>
+
+            <p class="error-formulario oculto" id="errorFormulario"></p>
+          </div>
+
+          <div class="pie-modal">
+            <button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button>
+            <button type="submit" class="boton boton-principal">Confirmar reserva</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/pasajero.js"></script>
+</body>
+</html>

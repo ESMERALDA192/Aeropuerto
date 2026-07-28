@@ -19,6 +19,8 @@
       <a href="catalogos.html" class="enlace-nav activo">Catálogos</a>
       <a href="empleados.html" class="enlace-nav">Empleados</a>
       <a href="tablero.html" class="enlace-nav">Tablero</a>
+      <span class="usuario-sesion" id="usuarioSesion"></span>
+      <button class="boton-salir" id="btnSalir">Salir</button>
     </nav>
   </header>
 
@@ -57,8 +59,34 @@
       </div>
     </section>
 
+    <!-- ===== Modal ===== -->
+    <div class="fondo-modal oculto" id="fondoModal">
+      <div class="modal">
+
+        <div class="encabezado-modal">
+          <h2 class="titulo-modal" id="tituloModal">Nuevo registro</h2>
+          <button type="button" class="cerrar-modal" id="btnCerrar">&times;</button>
+        </div>
+
+        <form id="formularioCatalogo" novalidate>
+          <div class="cuerpo-modal">
+            <!-- Los campos se generan según la pestaña activa -->
+            <div class="rejilla-formulario" id="camposFormulario"></div>
+            <p class="error-formulario oculto" id="errorFormulario"></p>
+          </div>
+
+          <div class="pie-modal">
+            <button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button>
+            <button type="submit" class="boton boton-principal">Guardar</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
   </main>
 
-  <script src="js/catalogos.js"></script>
+  <script src="js/api.js"></script>
+<script src="js/catalogos.js"></script>
 </body>
 </html>

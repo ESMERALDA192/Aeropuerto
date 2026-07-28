@@ -1,149 +1,372 @@
-// ===== Datos de prueba =====
-// Cuando exista el backend: fetch a GET /api/stats/dashboard
-const resumen = {
-  vuelosHoy:        24,
-  pasajerosHoy:     318,
-  registrados:      197,
-  puertasOcupadas:  5,
-  puertasTotales:   12,
-  vuelosRetrasados: 3
-};
+// ===== Estado =====
+let vuelos = [];
+let reservas = [];
+let puertas = [];
 
-const vuelosPorEstado = [
-  { estado: "programado", cantidad: 12 },
-  { estado: "abordando",  cantidad: 4  },
-  { estado: "retrasado",  cantidad: 3  },
-  { estado: "despegado",  cantidad: 4  },
-  { estado: "cancelado",  cantidad: 1  }
-];
-
-const reservasPorAerolinea = [
-  { aerolinea: "Aeroméxico",       cantidad: 128 },
-  { aerolinea: "Volaris",          cantidad: 96  },
-  { aerolinea: "Viva Aerobus",     cantidad: 74  },
-  { aerolinea: "American Airlines", cantidad: 20 }
-];
-
-const proximasSalidas = [
-  { numeroVuelo: "AM452",  aerolinea: "Aeroméxico",   destino: { codigoIata: "MEX", ciudad: "Ciudad de México" }, horaSalida: "2026-07-24T14:30:00", puerta: "A1",  estado: "programado" },
-  { numeroVuelo: "Y4780",  aerolinea: "Volaris",      destino: { codigoIata: "TIJ", ciudad: "Tijuana" },          horaSalida: "2026-07-24T18:00:00", puerta: "B5",  estado: "retrasado"  },
-  { numeroVuelo: "VB905",  aerolinea: "Viva Aerobus", destino: { codigoIata: "GDL", ciudad: "Guadalajara" },      horaSalida: "2026-07-24T22:10:00", puerta: "C12", estado: "programado" },
-  { numeroVuelo: "AM118",  aerolinea: "Aeroméxico",   destino: { codigoIata: "GDL", ciudad: "Guadalajara" },      horaSalida: "2026-07-25T07:00:00", puerta: "A2",  estado: "abordando"  },
-  { numeroVuelo: "Y4212",  aerolinea: "Volaris",      destino: { codigoIata: "MEX", ciudad: "Ciudad de México" }, horaSalida: "2026-07-25T06:45:00", puerta: "D3",  estado: "programado" }
-];
 
 // ===== Utilidades =====
 function formatearHora(iso) {
   return new Date(iso).toLocaleTimeString("es-MX", {
-    hour: "2-digit", minute: "2-digit", hour12: false
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
   });
 }
 
 function formatearFecha(iso) {
   return new Date(iso).toLocaleDateString("es-MX", {
-    day: "2-digit", month: "short"
+    day: "2-digit",
+    month: "short"
   });
 }
 
-// ===== Tarjetas de resumen =====
+
+// ===== Cargar datos del backend =====
+async function cargarTablero() {
+  try {
+
+    [
+      vuelos,
+      reservas,
+      puertas
+    ] = await Promise.all([
+      obtenerVuelos(),
+      obtenerReservas(),
+      obtenerPuertas()
+    ]);
+
+
+    renderTarjetas();
+    renderEstados();
+    renderAerolineas();
+    renderSalidas();
+
+
+  } catch(error) {
+
+    console.error("Error cargando tablero:", error);
+
+  }
+}
+
+
+
+// ===== Tarjetas superiores =====
 function renderTarjetas() {
-  const porcentajeCheckin = Math.round(
-    (resumen.registrados / resumen.pasajerosHoy) * 100
-  );
+
+
+  const vuelosHoy = vuelos.length;
+
+
+  const pasajerosHoy = reservas.length;
+
+
+  const registrados = reservas.filter(
+    r => r.registrado
+  ).length;
+
+
+  const puertasOcupadas = puertas.filter(
+    p => p.estado === "ocupada"
+  ).length;
+
+
+  const retrasados = vuelos.filter(
+    v => v.estado === "retrasado"
+  ).length;
+
+
 
   const tarjetas = [
+
     {
-      etiqueta: "Vuelos programados hoy",
-      valor: resumen.vuelosHoy,
-      detalle: `${resumen.vuelosRetrasados} con retraso`
+      etiqueta:"Vuelos programados hoy",
+      valor:vuelosHoy,
+      detalle:`${retrasados} con retraso`
     },
+
+
     {
-      etiqueta: "Pasajeros del día",
-      valor: resumen.pasajerosHoy,
-      detalle: `${resumen.registrados} con check-in (${porcentajeCheckin}%)`
+      etiqueta:"Pasajeros del día",
+      valor:pasajerosHoy,
+      detalle:`${registrados} con check-in`
     },
+
+
     {
-      etiqueta: "Puertas ocupadas",
-      valor: `${resumen.puertasOcupadas}/${resumen.puertasTotales}`,
-      detalle: `${resumen.puertasTotales - resumen.puertasOcupadas} disponibles`
+      etiqueta:"Puertas ocupadas",
+      valor:`${puertasOcupadas}/${puertas.length}`,
+      detalle:"Estado actual"
     },
+
+
     {
-      etiqueta: "Vuelos retrasados",
-      valor: resumen.vuelosRetrasados,
-      detalle: "Requieren seguimiento",
-      alerta: true
+      etiqueta:"Vuelos retrasados",
+      valor:retrasados,
+      detalle:"Requieren seguimiento",
+      alerta:true
     }
+
   ];
 
-  document.getElementById("rejillaTarjetas").innerHTML = tarjetas.map(t => `
-    <article class="tarjeta ${t.alerta ? 'tarjeta-alerta' : ''}">
-      <p class="tarjeta-etiqueta">${t.etiqueta}</p>
-      <p class="tarjeta-valor">${t.valor}</p>
-      <p class="tarjeta-detalle">${t.detalle}</p>
+
+
+  document.getElementById("rejillaTarjetas").innerHTML =
+  tarjetas.map(t => `
+
+    <article class="tarjeta ${t.alerta ? "tarjeta-alerta":""}">
+
+      <p class="tarjeta-etiqueta">
+        ${t.etiqueta}
+      </p>
+
+      <p class="tarjeta-valor">
+        ${t.valor}
+      </p>
+
+      <p class="tarjeta-detalle">
+        ${t.detalle}
+      </p>
+
     </article>
+
   `).join("");
+
 }
 
-// ===== Gráfica de barras genérica =====
-function renderBarras(contenedorId, datos, opciones) {
-  const maximo = Math.max(...datos.map(opciones.valor));
 
-  document.getElementById(contenedorId).innerHTML = datos.map(d => {
-    const cantidad = opciones.valor(d);
-    const ancho = (cantidad / maximo) * 100;
-    const clase = opciones.clase ? opciones.clase(d) : "";
 
-    return `
-      <div class="fila-barra">
-        <span class="barra-etiqueta">${opciones.etiqueta(d)}</span>
-        <div class="barra-pista">
-          <div class="barra-relleno ${clase}" style="width: ${ancho}%"></div>
-        </div>
-        <span class="barra-valor">${cantidad}</span>
-      </div>
-    `;
-  }).join("");
+// ===== Estados de vuelos =====
+function renderEstados(){
+
+
+  const estados = {};
+
+  vuelos.forEach(v => {
+
+    estados[v.estado] =
+    (estados[v.estado] || 0) + 1;
+
+  });
+
+
+  const datos = Object.keys(estados)
+  .map(e => ({
+    estado:e,
+    cantidad:estados[e]
+  }));
+
+
+  renderBarras(
+    "graficaEstados",
+    datos,
+    {
+      etiqueta:d=>d.estado,
+      valor:d=>d.cantidad,
+      clase:d=>`barra-${d.estado}`
+    }
+  );
+
 }
+
+
+
+// ===== Reservas por aerolinea =====
+function renderAerolineas(){
+
+
+ let lista = {};
+
+
+ reservas.forEach(r=>{
+
+
+   const nombre =
+   r.vuelo?.aerolinea?.nombre || "Sin aerolínea";
+
+
+   lista[nombre] =
+   (lista[nombre] || 0) + 1;
+
+
+ });
+
+
+
+ const datos = Object.keys(lista)
+ .map(a=>({
+
+    aerolinea:a,
+    cantidad:lista[a]
+
+ }));
+
+
+ renderBarras(
+   "graficaAerolineas",
+   datos,
+   {
+     etiqueta:d=>d.aerolinea,
+     valor:d=>d.cantidad
+   }
+ );
+
+}
+
+
+
+// ===== Barras =====
+function renderBarras(id, datos, opciones){
+
+
+ const max =
+ Math.max(...datos.map(opciones.valor),1);
+
+
+ document.getElementById(id).innerHTML =
+
+ datos.map(d=>{
+
+
+ const cantidad =
+ opciones.valor(d);
+
+
+ const ancho =
+ (cantidad/max)*100;
+
+
+
+ return `
+
+ <div class="fila-barra">
+
+
+ <span class="barra-etiqueta">
+ ${opciones.etiqueta(d)}
+ </span>
+
+
+ <div class="barra-pista">
+
+ <div 
+ class="barra-relleno ${opciones.clase ? opciones.clase(d):""}"
+ style="width:${ancho}%">
+ </div>
+
+ </div>
+
+
+ <span class="barra-valor">
+ ${cantidad}
+ </span>
+
+
+ </div>
+
+
+ `;
+
+
+ }).join("");
+
+}
+
+
+
 
 // ===== Próximas salidas =====
-function renderSalidas() {
-  document.getElementById("listaSalidas").innerHTML = proximasSalidas.map(s => `
-    <div class="fila-salida">
-      <div class="salida-vuelo">
-        <span class="numero-vuelo">${s.numeroVuelo}</span>
-        <span class="ciudad">${s.aerolinea}</span>
-      </div>
-      <div class="salida-destino">
-        <span class="codigo-iata">${s.destino.codigoIata}</span>
-        <span class="ciudad">${s.destino.ciudad}</span>
-      </div>
-      <div class="salida-hora">
-        <span class="hora">${formatearHora(s.horaSalida)}</span>
-        <span class="ciudad">${formatearFecha(s.horaSalida)}</span>
-      </div>
-      <div class="salida-puerta">
-        <span class="ciudad">Puerta</span>
-        <span class="codigo-iata">${s.puerta}</span>
-      </div>
-      <div>
-        <span class="etiqueta-estado estado-${s.estado}">${s.estado}</span>
-      </div>
-    </div>
-  `).join("");
+function renderSalidas(){
+
+
+ const lista =
+ vuelos
+ .sort((a,b)=>
+ new Date(a.horaSalida)-new Date(b.horaSalida)
+ )
+ .slice(0,5);
+
+
+
+ document.getElementById("listaSalidas").innerHTML =
+
+
+ lista.map(v=>`
+
+ <div class="fila-salida">
+
+
+ <div>
+ <span class="numero-vuelo">
+ ${v.numeroVuelo}
+ </span>
+
+ <span class="ciudad">
+ ${v.aerolinea.nombre}
+ </span>
+ </div>
+
+
+
+ <div>
+
+ <span class="codigo-iata">
+ ${v.destino.codigoIata}
+ </span>
+
+ <span class="ciudad">
+ ${v.destino.ciudad}
+ </span>
+
+ </div>
+
+
+
+ <div>
+
+ <span class="hora">
+ ${formatearHora(v.horaSalida)}
+ </span>
+
+ <span class="ciudad">
+ ${formatearFecha(v.horaSalida)}
+ </span>
+
+ </div>
+
+
+
+ <div>
+
+ <span class="ciudad">
+ Puerta
+ </span>
+
+ <span class="codigo-iata">
+ ${v.puerta || "N/A"}
+ </span>
+
+ </div>
+
+
+
+ <div>
+
+ <span class="etiqueta-estado estado-${v.estado}">
+ ${v.estado}
+ </span>
+
+ </div>
+
+
+ </div>
+
+
+ `).join("");
+
 }
 
+
+
 // ===== Inicio =====
-renderTarjetas();
-
-renderBarras("graficaEstados", vuelosPorEstado, {
-  etiqueta: d => d.estado,
-  valor:    d => d.cantidad,
-  clase:    d => `barra-${d.estado}`
-});
-
-renderBarras("graficaAerolineas", reservasPorAerolinea, {
-  etiqueta: d => d.aerolinea,
-  valor:    d => d.cantidad
-});
-
-renderSalidas();
+cargarTablero();

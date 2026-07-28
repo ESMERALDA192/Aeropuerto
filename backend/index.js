@@ -6,7 +6,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 
 console.log("PASO 1: paquetes base cargados");
-
+    
 const conectarDB = require("./config/db");
 const { rutaNoEncontrada, manejadorErrores } = require("./middlewares/errorHandler");
 
@@ -16,7 +16,7 @@ const aerolineasRoutes = require("./routes/aerolineas.routes");
 const aeropuertosRoutes = require("./routes/aeropuertos.routes");
 const empleadosRoutes = require("./routes/empleados.routes");
 const pasajerosRoutes = require("./routes/pasajeros.routes");
-const puertasRoutes = require("./routes/puertas.routes");
+const puertasRoutes = require("./routes/puertas.routes");   
 const reservasRoutes = require("./routes/reservas.routes");
 const vuelosRoutes = require("./routes/vuelos.routes");
 

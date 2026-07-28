@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SkyPort — Iniciar sesión</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="cuerpo-login">
+
+  <div class="tarjeta-login">
+    <div class="marca-login">
+      <span class="marca-icono">✈</span>
+      <span class="marca-nombre">SkyPort</span>
+    </div>
+    <p class="subtitulo-login">Sistema de gestión aeroportuaria</p>
+
+    <form id="formularioLogin" novalidate>
+      <div class="campo">
+        <label for="campoCorreo">Correo</label>
+        <input type="email" id="campoCorreo" placeholder="admin@aeropuerto.com" required>
+      </div>
+
+      <div class="campo">
+        <label for="campoPassword">Contraseña</label>
+        <input type="password" id="campoPassword" placeholder="••••••••" required>
+      </div>
+
+      <p class="error-formulario oculto" id="errorLogin"></p>
+
+      <button type="submit" class="boton boton-principal boton-login" id="btnEntrar">
+        Iniciar sesión
+      </button>
+    </form>
+  </div>
+
+  <script src="js/login.js"></script>
+</body>
+</html>

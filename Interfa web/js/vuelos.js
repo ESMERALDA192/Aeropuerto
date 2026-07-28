@@ -1,87 +1,15 @@
-// ===== Datos de prueba =====
-// Cuando el backend esté listo, esto se reemplaza por: await obtenerVuelos()
-const vuelos = [
-  {
-    _id: "1",
-    numeroVuelo: "AM452",
-    aerolinea: { nombre: "Aeroméxico", codigoIata: "AM" },
-    origen:  { codigoIata: "GDL", ciudad: "Guadalajara" },
-    destino: { codigoIata: "MEX", ciudad: "Ciudad de México" },
-    horaSalida:  "2026-07-24T14:30:00",
-    horaLlegada: "2026-07-24T15:45:00",
-    estado: "programado"
-  },
-  {
-    _id: "2",
-    numeroVuelo: "VB1203",
-    aerolinea: { nombre: "Viva Aerobus", codigoIata: "VB" },
-    origen:  { codigoIata: "MEX", ciudad: "Ciudad de México" },
-    destino: { codigoIata: "CUN", ciudad: "Cancún" },
-    horaSalida:  "2026-07-24T09:15:00",
-    horaLlegada: "2026-07-24T11:50:00",
-    estado: "abordando"
-  },
-  {
-    _id: "3",
-    numeroVuelo: "Y4780",
-    aerolinea: { nombre: "Volaris", codigoIata: "Y4" },
-    origen:  { codigoIata: "GDL", ciudad: "Guadalajara" },
-    destino: { codigoIata: "TIJ", ciudad: "Tijuana" },
-    horaSalida:  "2026-07-24T18:00:00",
-    horaLlegada: "2026-07-24T19:40:00",
-    estado: "retrasado"
-  },
-  {
-    _id: "4",
-    numeroVuelo: "AM118",
-    aerolinea: { nombre: "Aeroméxico", codigoIata: "AM" },
-    origen:  { codigoIata: "MTY", ciudad: "Monterrey" },
-    destino: { codigoIata: "GDL", ciudad: "Guadalajara" },
-    horaSalida:  "2026-07-24T07:00:00",
-    horaLlegada: "2026-07-24T08:20:00",
-    estado: "despegado"
-  },
-  {
-    _id: "5",
-    numeroVuelo: "VB905",
-    aerolinea: { nombre: "Viva Aerobus", codigoIata: "VB" },
-    origen:  { codigoIata: "CUN", ciudad: "Cancún" },
-    destino: { codigoIata: "GDL", ciudad: "Guadalajara" },
-    horaSalida:  "2026-07-24T22:10:00",
-    horaLlegada: "2026-07-25T00:35:00",
-    estado: "cancelado"
-  },
-  {
-    _id: "6",
-    numeroVuelo: "Y4212",
-    aerolinea: { nombre: "Volaris", codigoIata: "Y4" },
-    origen:  { codigoIata: "TIJ", ciudad: "Tijuana" },
-    destino: { codigoIata: "MEX", ciudad: "Ciudad de México" },
-    horaSalida:  "2026-07-25T06:45:00",
-    horaLlegada: "2026-07-25T10:15:00",
-    estado: "programado"
-  }
-];
+// ===== Configuración =====
+const API = "http://localhost:3001";
+const token = localStorage.getItem("token");
+const rol   = localStorage.getItem("rol");
 
-// ===== Catálogos para los selects del formulario =====
-const listaAerolineas = [
-  { nombre: "Aeroméxico",        codigoIata: "AM" },
-  { nombre: "Volaris",           codigoIata: "Y4" },
-  { nombre: "Viva Aerobus",      codigoIata: "VB" },
-  { nombre: "American Airlines", codigoIata: "AA" },
-  { nombre: "Copa Airlines",     codigoIata: "CM" }
-];
+// Si no hay sesión, regresar al login
+if (!token) {
+  window.location.href = "login.html";
+}
 
-const listaAeropuertos = [
-  { codigoIata: "GDL", ciudad: "Guadalajara" },
-  { codigoIata: "MEX", ciudad: "Ciudad de México" },
-  { codigoIata: "CUN", ciudad: "Cancún" },
-  { codigoIata: "MTY", ciudad: "Monterrey" },
-  { codigoIata: "TIJ", ciudad: "Tijuana" },
-  { codigoIata: "PVR", ciudad: "Puerto Vallarta" },
-  { codigoIata: "TPQ", ciudad: "Tepic" },
-  { codigoIata: "LAX", ciudad: "Los Ángeles" }
-];
+// ===== Estado =====
+let vuelos = [];
 
 // ===== Referencias del DOM =====
 const cuerpoTabla    = document.getElementById("cuerpoTablaVuelos");
@@ -92,6 +20,9 @@ const filtroDestino  = document.getElementById("filtroDestino");
 const filtroFecha    = document.getElementById("filtroFecha");
 const btnLimpiar     = document.getElementById("btnLimpiar");
 const btnNuevo       = document.getElementById("btnNuevo");
+
+const usuarioSesion  = document.getElementById("usuarioSesion");
+const btnSalir       = document.getElementById("btnSalir");
 
 // ===== Referencias del modal / formulario =====
 const fondoModal       = document.getElementById("fondoModal");
@@ -110,6 +41,45 @@ const campoLlegada   = document.getElementById("campoLlegada");
 const campoEstado    = document.getElementById("campoEstado");
 
 let idEditando = null;
+let listaAerolineas  = [];
+let listaAeropuertos = [];
+
+// ===== Sesión =====
+if (usuarioSesion) {
+  usuarioSesion.textContent = localStorage.getItem("nombre") || rol || "";
+}
+if (btnSalir) {
+  btnSalir.addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "login.html";
+  });
+}
+
+// ===== Helper para peticiones con token =====
+async function pedir(ruta, opciones = {}) {
+  const respuesta = await fetch(`${API}${ruta}`, {
+    ...opciones,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+      ...(opciones.headers || {})
+    }
+  });
+
+  if (respuesta.status === 401) {
+    localStorage.clear();
+    window.location.href = "login.html";
+    throw new Error("Sesión expirada");
+  }
+
+  const datos = await respuesta.json().catch(() => ({}));
+
+  if (!respuesta.ok) {
+    throw new Error(datos.mensaje || "Error en la petición");
+  }
+
+  return datos;
+}
 
 // ===== Utilidades =====
 function formatearHora(iso) {
@@ -126,12 +96,36 @@ function soloFecha(iso) {
   return iso.slice(0, 10);
 }
 
+// ===== Cargar vuelos del backend =====
+async function cargarVuelos() {
+  try {
+    vuelos = await pedir("/vuelos");
+    aplicarFiltros();
+  } catch (error) {
+    cuerpoTabla.innerHTML = "";
+    mensajeVacio.classList.remove("oculto");
+    mensajeVacio.textContent = "Error al cargar vuelos: " + error.message;
+  }
+}
+
+// ===== Cargar catálogos para el formulario =====
+async function cargarCatalogos() {
+  try {
+    listaAerolineas  = await pedir("/aerolineas");
+    listaAeropuertos = await pedir("/aeropuertos");
+    llenarSelects();
+  } catch (error) {
+    console.error("No se pudieron cargar catálogos:", error.message);
+  }
+}
+
 // ===== Pintar tabla =====
 function renderTabla(lista) {
   cuerpoTabla.innerHTML = "";
 
   if (lista.length === 0) {
     mensajeVacio.classList.remove("oculto");
+    mensajeVacio.textContent = "No hay vuelos que coincidan con los filtros.";
     return;
   }
   mensajeVacio.classList.add("oculto");
@@ -211,11 +205,11 @@ function limpiarFiltros() {
 // ===== Llenar selects del formulario =====
 function llenarSelects() {
   campoAerolinea.innerHTML = listaAerolineas
-    .map(a => `<option value="${a.codigoIata}">${a.nombre} (${a.codigoIata})</option>`)
+    .map(a => `<option value="${a._id}">${a.nombre} (${a.codigoIata})</option>`)
     .join("");
 
   const opcionesAeropuerto = listaAeropuertos
-    .map(p => `<option value="${p.codigoIata}">${p.codigoIata} — ${p.ciudad}</option>`)
+    .map(p => `<option value="${p._id}">${p.codigoIata} — ${p.ciudad}</option>`)
     .join("");
 
   campoOrigen.innerHTML  = opcionesAeropuerto;
@@ -230,9 +224,9 @@ function abrirModal(vuelo) {
     idEditando = vuelo._id;
     tituloModal.textContent = `Editar vuelo ${vuelo.numeroVuelo}`;
     campoNumero.value    = vuelo.numeroVuelo;
-    campoAerolinea.value = vuelo.aerolinea.codigoIata;
-    campoOrigen.value    = vuelo.origen.codigoIata;
-    campoDestino.value   = vuelo.destino.codigoIata;
+    campoAerolinea.value = vuelo.aerolinea.id;
+    campoOrigen.value    = vuelo.origen.id;
+    campoDestino.value   = vuelo.destino.id;
     campoSalida.value    = vuelo.horaSalida.slice(0, 16);
     campoLlegada.value   = vuelo.horaLlegada.slice(0, 16);
     campoEstado.value    = vuelo.estado;
@@ -240,9 +234,9 @@ function abrirModal(vuelo) {
     idEditando = null;
     tituloModal.textContent = "Nuevo vuelo";
     formularioVuelo.reset();
-    campoAerolinea.value = listaAerolineas[0].codigoIata;
-    campoOrigen.value    = listaAeropuertos[0].codigoIata;
-    campoDestino.value   = listaAeropuertos[1].codigoIata;
+    if (listaAerolineas[0])  campoAerolinea.value = listaAerolineas[0]._id;
+    if (listaAeropuertos[0]) campoOrigen.value    = listaAeropuertos[0]._id;
+    if (listaAeropuertos[1]) campoDestino.value   = listaAeropuertos[1]._id;
     campoEstado.value    = "programado";
   }
 
@@ -261,7 +255,7 @@ function mostrarError(mensaje) {
 }
 
 // ===== Guardar (crear o actualizar) =====
-function guardar(evento) {
+async function guardar(evento) {
   evento.preventDefault();
 
   const numero = campoNumero.value.trim().toUpperCase();
@@ -278,38 +272,37 @@ function guardar(evento) {
     return mostrarError("La llegada debe ser posterior a la salida.");
   }
 
-  const duplicado = vuelos.find(v =>
-    v.numeroVuelo.toUpperCase() === numero && v._id !== idEditando
-  );
-  if (duplicado) return mostrarError(`Ya existe un vuelo con el número ${numero}.`);
-
-  const aerolinea = listaAerolineas.find(a => a.codigoIata === campoAerolinea.value);
-  const origen    = listaAeropuertos.find(p => p.codigoIata === campoOrigen.value);
-  const destino   = listaAeropuertos.find(p => p.codigoIata === campoDestino.value);
-
-  const datos = {
+  const cuerpo = {
     numeroVuelo: numero,
-    aerolinea:   { nombre: aerolinea.nombre, codigoIata: aerolinea.codigoIata },
-    origen:      { codigoIata: origen.codigoIata,  ciudad: origen.ciudad },
-    destino:     { codigoIata: destino.codigoIata, ciudad: destino.ciudad },
+    aerolineaId: campoAerolinea.value,
+    origenId:    campoOrigen.value,
+    destinoId:   campoDestino.value,
     horaSalida:  campoSalida.value,
     horaLlegada: campoLlegada.value,
     estado:      campoEstado.value
   };
 
-  if (idEditando) {
-    const i = vuelos.findIndex(v => v._id === idEditando);
-    vuelos[i] = { ...vuelos[i], ...datos };
-  } else {
-    vuelos.push({ _id: "v" + Date.now(), ...datos });
+  try {
+    if (idEditando) {
+      await pedir(`/vuelos/${idEditando}`, {
+        method: "PUT",
+        body: JSON.stringify(cuerpo)
+      });
+    } else {
+      await pedir("/vuelos", {
+        method: "POST",
+        body: JSON.stringify(cuerpo)
+      });
+    }
+    cerrarModal();
+    await cargarVuelos();
+  } catch (error) {
+    mostrarError(error.message);
   }
-
-  cerrarModal();
-  aplicarFiltros();
 }
 
 // ===== Acciones de fila =====
-function manejarAccion(e) {
+async function manejarAccion(e) {
   const boton = e.target.closest("[data-accion]");
   if (!boton) return;
 
@@ -323,8 +316,12 @@ function manejarAccion(e) {
 
   if (accion === "eliminar") {
     if (confirm(`¿Eliminar el vuelo ${vuelo.numeroVuelo}?`)) {
-      vuelos.splice(vuelos.findIndex(v => v._id === id), 1);
-      aplicarFiltros();
+      try {
+        await pedir(`/vuelos/${id}`, { method: "DELETE" });
+        await cargarVuelos();
+      } catch (error) {
+        alert("No se pudo eliminar: " + error.message);
+      }
     }
   }
 }
@@ -352,5 +349,5 @@ document.addEventListener("keydown", e => {
 });
 
 // ===== Inicio =====
-llenarSelects();
-renderTabla(vuelos);
+cargarCatalogos();
+cargarVuelos();

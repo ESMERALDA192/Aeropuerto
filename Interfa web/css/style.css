@@ -679,6 +679,86 @@ body {
   flex-direction: column;
   gap: 2px;
 }
+/* ===== Login ===== */
+.cuerpo-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--azul-noche);
+  padding: 20px;
+}
+
+.tarjeta-login {
+  background: var(--superficie);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .3);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.marca-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--azul-noche);
+}
+
+.marca-login .marca-icono {
+  color: var(--azul-medio);
+  font-size: 30px;
+}
+
+.subtitulo-login {
+  text-align: center;
+  color: var(--texto-tenue);
+  font-size: 14px;
+  margin: 8px 0 32px;
+}
+
+.tarjeta-login .campo {
+  margin-bottom: 18px;
+}
+
+.tarjeta-login .campo input {
+  width: 100%;
+  min-width: 0;
+}
+
+.boton-login {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+  font-size: 15px;
+}
+
+/* ===== Botón salir (barra superior) ===== */
+.usuario-sesion {
+  color: var(--azul-claro);
+  font-size: 14px;
+  margin-left: auto;
+  padding: 0 12px;
+}
+
+.boton-salir {
+  background: transparent;
+  border: 1px solid var(--azul-medio);
+  color: var(--azul-claro);
+  padding: 6px 14px;
+  border-radius: var(--radio);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.boton-salir:hover {
+  background: var(--azul-medio);
+  color: var(--blanco-hueso);
+}
 
 /* ===== Responsivo ===== */
 @media (max-width: 900px) {

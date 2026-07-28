@@ -25,7 +25,7 @@ router.get("/:id", verificarToken, async (req, res, next) => {
 });
 
 // POST /pasajeros — administrador o agente (registro en mostrador)
-router.post("/", verificarToken, verificarRol("administrador", "agente"), async (req, res, next) => {
+router.post("/", verificarToken, verificarRol("administrador", "agente", "pasajero"), async (req, res, next) => {
     try {
         const { nombre, apellido, documento, correo, telefono } = req.body;
 

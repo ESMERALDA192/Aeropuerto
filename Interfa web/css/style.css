@@ -712,6 +712,9 @@ body {
   color: var(--azul-medio);
   font-size: 30px;
 }
+.marca-login .marca-nombre {
+  color: var(--azul-noche);
+}
 
 .subtitulo-login {
   text-align: center;

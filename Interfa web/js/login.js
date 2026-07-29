@@ -19,6 +19,7 @@ const campoRegNombre          = document.getElementById("campoRegNombre");
 const campoRegApellidoP       = document.getElementById("campoRegApellidoP");
 const campoRegApellidoM       = document.getElementById("campoRegApellidoM");
 const campoRegCorreo          = document.getElementById("campoRegCorreo");
+const campoRegDocumento       = document.getElementById("campoRegDocumento");
 const campoRegFechaNacimiento = document.getElementById("campoRegFechaNacimiento");
 const campoRegTelefono        = document.getElementById("campoRegTelefono");
 const campoRegGenero          = document.getElementById("campoRegGenero");
@@ -35,7 +36,7 @@ function redirigirSegunRol(rol) {
   if (rol === "pasajero") {
     window.location.href = "pasajero.html";
   } else if (rol === "agente") {
-  window.location.href = "agente.html";
+    window.location.href = "agente.html";
   } else {
     window.location.href = "index.html";
   }
@@ -93,7 +94,8 @@ formularioLogin.addEventListener("submit", async (e) => {
     localStorage.setItem("rol", datos.usuario.rol);
     localStorage.setItem("nombre", datos.usuario.nombre);
     localStorage.setItem("correo", datos.usuario.correo);
-   if (datos.usuario.pasajero) {
+
+    if (datos.usuario.pasajero) {
       localStorage.setItem("pasajeroId", datos.usuario.pasajero._id);
       localStorage.setItem("pasajeroDocumento", datos.usuario.pasajero.documento);
     } else {
@@ -121,23 +123,17 @@ formularioRegistro.addEventListener("submit", async (e) => {
     apellidoPaterno: campoRegApellidoP.value.trim(),
     apellidoMaterno: campoRegApellidoM.value.trim(),
     correo: campoRegCorreo.value.trim(),
+    documento: campoRegDocumento.value.trim(),
     fechaNacimiento: campoRegFechaNacimiento.value,
     telefono: campoRegTelefono.value.trim(),
     genero: campoRegGenero.value,
     password: campoRegPassword.value
-   
   };
 
   if (!datosRegistro.nombre || !datosRegistro.apellidoPaterno || !datosRegistro.apellidoMaterno ||
-      !datosRegistro.correo || !datosRegistro.fechaNacimiento || !datosRegistro.telefono ||
-      !datosRegistro.genero || !datosRegistro.password) {
+      !datosRegistro.correo || !datosRegistro.documento || !datosRegistro.fechaNacimiento ||
+      !datosRegistro.telefono || !datosRegistro.genero || !datosRegistro.password) {
     errorRegistro.textContent = "Completa todos los campos del registro.";
-    errorRegistro.classList.remove("oculto");
-    return;
-  }
-
-  if (!datosRegistro.aceptoTerminos) {
-    errorRegistro.textContent = "Debes aceptar los términos y condiciones.";
     errorRegistro.classList.remove("oculto");
     return;
   }
@@ -152,6 +148,11 @@ formularioRegistro.addEventListener("submit", async (e) => {
     localStorage.setItem("rol", datos.usuario.rol);
     localStorage.setItem("nombre", datos.usuario.nombre);
     localStorage.setItem("correo", datos.usuario.correo);
+
+    if (datos.usuario.pasajero) {
+      localStorage.setItem("pasajeroId", datos.usuario.pasajero._id);
+      localStorage.setItem("pasajeroDocumento", datos.usuario.pasajero.documento);
+    }
 
     redirigirSegunRol(datos.usuario.rol);
 

@@ -99,6 +99,10 @@
             <div class="campo"><label for="campoDestino">Destino *</label><select id="campoDestino" name="destino" required></select></div>
             <div class="campo"><label for="campoSalida">Hora de salida *</label><input type="datetime-local" id="campoSalida" name="horaSalida" required></div>
             <div class="campo"><label for="campoLlegada">Hora de llegada *</label><input type="datetime-local" id="campoLlegada" name="horaLlegada" required></div>
+            <div class="campo">
+            <label for="campoPrecio">Precio (MXN) *</label>
+            <input type="number" id="campoPrecio" name="precio" min="0" step="0.01" placeholder="1500" required>
+            </div>
             <div class="campo campo-completo"><label for="campoEstado">Estado *</label><select id="campoEstado" name="estado" required><option value="programado">Programado</option><option value="retrasado">Retrasado</option><option value="abordando">Abordando</option><option value="despegado">Despegado</option><option value="cancelado">Cancelado</option></select></div>
           </div><p class="error-formulario oculto" id="errorFormulario"></p></div>
           <div class="pie-modal"><button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button><button type="submit" class="boton boton-principal">Guardar vuelo</button></div>

@@ -46,7 +46,7 @@ const campoDestino     = document.getElementById("campoDestino");
 const campoSalida      = document.getElementById("campoSalida");
 const campoLlegada     = document.getElementById("campoLlegada");
 const campoEstado      = document.getElementById("campoEstado");
-
+const campoPrecio    = document.getElementById("campoPrecio");
 
 // ===== Usuario =====
 if (usuarioSesion) {
@@ -433,6 +433,9 @@ function abrirModal(vuelo) {
     campoEstado.value =
       vuelo.estado;
 
+    campoPrecio.value =      
+    vuelo.precio;
+
 
 
   } else {
@@ -465,8 +468,6 @@ function abrirModal(vuelo) {
     if(listaAeropuertos[1])
       campoDestino.value =
         listaAeropuertos[1]._id;
-
-
 
     campoEstado.value =
       "programado";
@@ -551,6 +552,11 @@ async function guardar(evento) {
     );
 
 
+    if (!campoPrecio.value || Number(campoPrecio.value) < 0)
+      return mostrarError(
+        "El precio es obligatorio y debe ser mayor o igual a 0."
+      );
+
 
   const vuelo = {
 
@@ -570,6 +576,9 @@ async function guardar(evento) {
 
     horaLlegada:
       campoLlegada.value,
+
+     precio:                    
+      campoPrecio.value,
 
     estado:
       campoEstado.value

@@ -610,13 +610,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: .5;.login-toggle
+  opacity: .5;
   background-image:
     linear-gradient(rgba(116, 160, 202, .045) 1px, transparent 1px),
     linear-gradient(90deg, rgba(116, 160, 202, .045) 1px, transparent 1px);
   background-size: 52px 52px;
   mask-image: linear-gradient(90deg, #000 0%, rgba(0,0,0,.75) 58%, transparent 100%);
 }
+
 .login-halo {
   position: absolute;
   border-radius: 50%;

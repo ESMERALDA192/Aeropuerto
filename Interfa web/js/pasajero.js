@@ -63,6 +63,11 @@ const campoClase         = document.getElementById("campoClase");
 const btnCerrar          = document.getElementById("btnCerrar");
 const btnCancelar        = document.getElementById("btnCancelar");
 
+// Modal de itinerario
+const fondoModalDetalle  = document.getElementById("fondoModalDetalle");
+const btnCerrarDetalle   = document.getElementById("btnCerrarDetalle");
+const btnCerrarDetalle2  = document.getElementById("btnCerrarDetalle2");
+
 // ===== Usuario / cerrar sesión =====
 if (usuarioSesion) {
   usuarioSesion.textContent = localStorage.getItem("nombre") || rol || "";
@@ -320,6 +325,8 @@ function renderTablaReservas() {
 
   misReservas.forEach(r => {
     const fila = document.createElement("tr");
+    fila.className = "fila-clicable";
+    fila.dataset.id = r._id;
     fila.innerHTML = `
       <td><span class="numero-vuelo">${r.vuelo.numeroVuelo}</span></td>
       <td><span class="hora">${formatearHora(r.vuelo.horaSalida)}</span><span class="ciudad">${formatearFecha(r.vuelo.horaSalida)}</span></td>
@@ -330,6 +337,13 @@ function renderTablaReservas() {
     cuerpoTablaReservas.appendChild(fila);
   });
 }
+
+cuerpoTablaReservas.addEventListener("click", (e) => {
+  const fila = e.target.closest("tr[data-id]");
+  if (!fila) return;
+  const reserva = misReservas.find(r => r._id === fila.dataset.id);
+  if (reserva) abrirModalDetalle(reserva);
+});
 
 // ===== Configuración del mapa de asientos =====
 const COLUMNAS = ["A", "B", "C", "D", "E", "F"];
@@ -595,15 +609,6 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape" && !fondoModal.classList.contains("oculto")) cerrarModal();
 });
 
-// ===== Eventos del modal =====
-btnCerrar.addEventListener("click", cerrarModal);
-btnCancelar.addEventListener("click", cerrarModal);
-fondoModal.addEventListener("click", e => {
-  if (e.target === fondoModal) cerrarModal();
-});
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape" && !fondoModal.classList.contains("oculto")) cerrarModal();
-});
 
 // ===== Inicio =====
 (async function iniciar() {
@@ -624,3 +629,52 @@ document.addEventListener("keydown", e => {
   await cargarVuelos();
   if (pasajeroActual) await cargarMisReservas();
 })();
+
+// ===== Modal de detalle de reserva =====
+function abrirModalDetalle(reserva) {
+  const vuelo = vuelos.find(v => v._id === reserva.vuelo.id) || reserva.vuelo;
+
+  const imagenDestino = vuelo.destino?.imagenUrl || vuelo.origen?.imagenUrl || IMAGEN_RESPALDO;
+  document.getElementById("detalleImagen").style.backgroundImage = `url('${imagenDestino}')`;
+
+  document.getElementById("detalleEstadoVuelo").textContent = reserva.vuelo.estado || "programado";
+
+  document.getElementById("detalleEstadoVuelo").textContent = reserva.vuelo.estado || "programado";
+  document.getElementById("detalleEstadoVuelo").className = `etiqueta-estado estado-${reserva.vuelo.estado || "programado"}`;
+
+  document.getElementById("detalleEstadoCheckin").textContent = reserva.registrado ? "Registrado" : "Pendiente de check-in";
+  document.getElementById("detalleEstadoCheckin").className = `etiqueta-estado ${reserva.registrado ? "estado-abordando" : "estado-retrasado"}`;
+
+  document.getElementById("detalleOrigenCodigo").textContent = vuelo.origen?.codigoIata || "";
+  document.getElementById("detalleOrigenCiudad").textContent = vuelo.origen?.ciudad || "";
+  document.getElementById("detalleOrigenHora").textContent = formatearHora(reserva.vuelo.horaSalida);
+
+  document.getElementById("detalleDestinoCodigo").textContent = vuelo.destino?.codigoIata || "";
+  document.getElementById("detalleDestinoCiudad").textContent = vuelo.destino?.ciudad || "";
+  document.getElementById("detalleDestinoHora").textContent = formatearHora(reserva.vuelo.horaLlegada || reserva.vuelo.horaSalida);
+
+  document.getElementById("detalleNumeroVuelo").textContent = reserva.vuelo.numeroVuelo;
+  document.getElementById("detalleAerolinea").textContent = vuelo.aerolinea?.nombre || "—";
+  document.getElementById("detalleFecha").textContent = formatearFecha(reserva.vuelo.horaSalida);
+  document.getElementById("detalleAsiento").textContent = reserva.asiento;
+  document.getElementById("detalleClase").textContent = nombresClase[reserva.clase];
+  document.getElementById("detallePasajero").textContent = reserva.pasajero.nombreCompleto || `${pasajeroActual?.nombre || ""} ${pasajeroActual?.apellido || ""}`;
+  document.getElementById("detalleDocumento").textContent = reserva.pasajero.documento || pasajeroActual?.documento || "—";
+  document.getElementById("detallePrecio").textContent = vuelo.precio ? `$${vuelo.precio.toLocaleString("es-MX")} MXN` : "—";
+  document.getElementById("detalleCodigoReserva").textContent = `Código de reserva: ${reserva._id}`;
+
+  fondoModalDetalle.classList.remove("oculto");
+}
+
+function cerrarModalDetalle() {
+  fondoModalDetalle.classList.add("oculto");
+}
+
+btnCerrarDetalle.addEventListener("click", cerrarModalDetalle);
+btnCerrarDetalle2.addEventListener("click", cerrarModalDetalle);
+fondoModalDetalle.addEventListener("click", e => {
+  if (e.target === fondoModalDetalle) cerrarModalDetalle();
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !fondoModalDetalle.classList.contains("oculto")) cerrarModalDetalle();
+});

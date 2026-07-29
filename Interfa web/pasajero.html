@@ -227,6 +227,59 @@
       </form>
     </div>
   </div>
+  <div class="fondo-modal oculto" id="fondoModalDetalle" role="dialog" aria-modal="true" aria-labelledby="tituloModalDetalle">
+    <div class="modal modal-detalle">
+      <div class="modal-acento"></div>
+      <div class="encabezado-modal">
+        <div>
+          <span class="modal-eyebrow">Detalle de tu viaje</span>
+          <h2 class="titulo-modal" id="tituloModalDetalle">Reserva</h2>
+        </div>
+        <button type="button" class="cerrar-modal" id="btnCerrarDetalle" aria-label="Cerrar">
+          <svg class="ui-icon"><use href="assets/icons.svg#icon-close"></use></svg>
+        </button>
+      </div>
+
+      <div class="cuerpo-modal">
+        <div class="detalle-imagen" id="detalleImagen"></div>
+        <div class="detalle-estado">
+          <span class="etiqueta-estado" id="detalleEstadoVuelo"></span>
+          <span class="etiqueta-estado" id="detalleEstadoCheckin"></span>
+        </div>
+
+        <div class="detalle-ruta">
+          <div class="detalle-punto">
+            <span class="codigo-iata" id="detalleOrigenCodigo"></span>
+            <span class="ciudad" id="detalleOrigenCiudad"></span>
+            <span class="hora" id="detalleOrigenHora"></span>
+          </div>
+          <span class="tarjeta-vuelo-flecha">→</span>
+          <div class="detalle-punto">
+            <span class="codigo-iata" id="detalleDestinoCodigo"></span>
+            <span class="ciudad" id="detalleDestinoCiudad"></span>
+            <span class="hora" id="detalleDestinoHora"></span>
+          </div>
+        </div>
+
+        <div class="detalle-rejilla">
+          <div class="detalle-dato"><span>Vuelo</span><strong id="detalleNumeroVuelo"></strong></div>
+          <div class="detalle-dato"><span>Aerolínea</span><strong id="detalleAerolinea"></strong></div>
+          <div class="detalle-dato"><span>Fecha</span><strong id="detalleFecha"></strong></div>
+          <div class="detalle-dato"><span>Asiento</span><strong id="detalleAsiento"></strong></div>
+          <div class="detalle-dato"><span>Clase</span><strong id="detalleClase"></strong></div>
+          <div class="detalle-dato"><span>Pasajero</span><strong id="detallePasajero"></strong></div>
+          <div class="detalle-dato"><span>Documento</span><strong id="detalleDocumento"></strong></div>
+          <div class="detalle-dato"><span>Precio pagado</span><strong id="detallePrecio"></strong></div>
+        </div>
+
+        <p class="asiento-elegido" id="detalleCodigoReserva"></p>
+      </div>
+
+      <div class="pie-modal">
+        <button type="button" class="boton boton-fantasma" id="btnCerrarDetalle2">Cerrar</button>
+      </div>
+    </div>
+  </div>
   </main>
   <script src="js/api.js"></script><script src="js/pasajero.js"></script>
 </body>

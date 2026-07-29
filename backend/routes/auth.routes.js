@@ -18,7 +18,6 @@ router.post("/register", async (req, res, next) => {
             fechaNacimiento,
             telefono,
             genero,
-            aceptoTerminos,
             documento
         } = req.body;
 
@@ -32,9 +31,7 @@ router.post("/register", async (req, res, next) => {
             return res.status(400).json({ mensaje: `El género debe ser uno de: ${GENEROS_VALIDOS.join(", ")}` });
         }
 
-        if (!aceptoTerminos) {
-            return res.status(400).json({ mensaje: "Debes aceptar los términos y condiciones para crear una cuenta" });
-        }
+     
 
         if (password.length < 6) {
             return res.status(400).json({ mensaje: "La contraseña debe tener al menos 6 caracteres" });
@@ -69,7 +66,6 @@ router.post("/register", async (req, res, next) => {
             fechaNacimiento,
             telefono,
             genero,
-            aceptoTerminos: true,
             rol: "pasajero",
             pasajero: nuevoPasajero._id
         });

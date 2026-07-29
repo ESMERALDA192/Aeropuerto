@@ -2,159 +2,66 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>SkyPort — Tablero</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071326">
+  <meta name="description" content="SkyPort, sistema profesional de gestión aeroportuaria">
+  <title>SkyPort — Centro de control</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23071326'/%3E%3Cpath d='M10 34l18-4 12-18 5 2-7 17 12 5c3 1 5 4 4 7l-1 2-17-5-8 13-4-1 2-15-12-1z' fill='%235ee7f7'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
-
-<body>
-
-<header class="barra-superior">
-
-  <div class="marca">
-    <span class="marca-icono">✈</span>
-    <span class="marca-nombre">SkyPort</span>
+<body class="pagina-app pagina-tablero">
+  <div class="ambiente" aria-hidden="true">
+    <span class="orbita orbita-1"></span><span class="orbita orbita-2"></span><span class="rejilla-fondo"></span>
   </div>
-
-
-  <nav class="navegacion">
-
-    <a href="index.html" class="enlace-nav">
-      Vuelos
+  <header class="barra-superior">
+    <a class="marca" href="tablero.html" aria-label="Ir al inicio de SkyPort">
+      <span class="marca-icono" aria-hidden="true"><svg class="ui-icon ui-icon-mark"><use href="assets/icons.svg#icon-mark"></use></svg></span>
+      <span class="marca-texto">
+        <span class="marca-nombre">SkyPort</span>
+        <span class="marca-subtitulo">Operaciones aeroportuarias</span>
+      </span>
     </a>
-
-    <a href="reservas.html" class="enlace-nav">
-      Reservas
-    </a>
-
-    <a href="catalogos.html" class="enlace-nav">
-      Catálogos
-    </a>
-
-    <a href="empleados.html" class="enlace-nav">
-      Empleados
-    </a>
-
-    <a href="tablero.html" class="enlace-nav activo">
-      Tablero
-    </a>
-<span class="usuario-sesion" id="usuarioSesion"></span>
-<button class="boton-salir" id="btnSalir">Salir</button>
-  </nav>
-
-
- 
-
-
-</header>
-
-
-
-<main class="contenedor">
-
-
-  <div class="encabezado-pagina">
-
-    <div>
-
-      <h1 class="titulo-pagina">
-        Tablero general
-      </h1>
-
-      <p class="subtitulo-pagina">
-        Resumen de operaciones del día
-      </p>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- Tarjetas de resumen -->
-
-  <section 
-    class="rejilla-tarjetas" 
-    id="rejillaTarjetas">
-
-  </section>
-
-
-
-
-
-  <!-- Gráficas -->
-
-  <section class="rejilla-paneles">
-
-
-    <div class="panel">
-
-      <h2 class="titulo-panel">
-        Vuelos por estado
-      </h2>
-
-
-      <div 
-        class="grafica-barras" 
-        id="graficaEstados">
+    <nav class="navegacion" aria-label="Navegación principal">
+      <a href="index.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-plane"></use></svg></span><span>Vuelos</span>
+      </a>
+      <a href="reservas.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-ticket"></use></svg></span><span>Reservas</span>
+      </a>
+      <a href="catalogos.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-catalog"></use></svg></span><span>Catálogos</span>
+      </a>
+      <a href="empleados.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-users"></use></svg></span><span>Empleados</span>
+      </a>
+      <a href="tablero.html" class="enlace-nav activo">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-dashboard"></use></svg></span><span>Tablero</span>
+      </a>
+      <div class="sesion">
+        <span class="estado-sistema" title="Servicios operativos"><span class="punto-vivo"></span>En línea</span>
+        <span class="usuario-sesion" id="usuarioSesion"></span>
+        <button class="boton-salir" id="btnSalir" type="button" aria-label="Cerrar sesión">
+          <span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-logout"></use></svg></span><span>Salir</span>
+        </button>
       </div>
-
-
-    </div>
-
-
-
-
-
-    <div class="panel">
-
-      <h2 class="titulo-panel">
-        Reservas por aerolínea
-      </h2>
-
-
-      <div 
-        class="grafica-barras" 
-        id="graficaAerolineas">
+    </nav>
+  </header>
+  <main class="contenedor">
+    <div class="encabezado-pagina">
+      <div class="bloque-titulo">
+        <span class="sobrelinea"><span class="punto-vivo"></span>Operations Intelligence</span>
+        <h1 class="titulo-pagina">Centro de <span>control</span></h1>
+        <p class="subtitulo-pagina">Indicadores clave y panorama operativo del aeropuerto en tiempo real.</p>
       </div>
-
-
+      <div class="acciones-encabezado"><div class="reloj-operativo"><span class="punto-vivo"></span><div><strong>Operación activa</strong><small>Datos en vivo</small></div></div></div>
     </div>
-
-
-
-  </section>
-
-
-
-
-
-  <!-- Próximas salidas -->
-
-
-  <section class="panel">
-
-
-    <h2 class="titulo-panel">
-      Próximas salidas
-    </h2>
-
-
-
-    <div 
-      class="lista-salidas" 
-      id="listaSalidas">
-    </div>
-
-
-
-  </section>
-
-
-
-</main>
-
-  <script src="js/api.js"></script>
-  <script src="js/tablero.js"></script>
+    <section class="rejilla-tarjetas" id="rejillaTarjetas" aria-label="Indicadores principales"></section>
+    <section class="rejilla-paneles">
+      <div class="panel"><div class="panel-encabezado"><div><span class="panel-kicker">Estado de vuelos</span><h2 class="titulo-panel">Vuelos por estado</h2></div><span class="panel-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-chart"></use></svg></span></div><div class="grafica-barras" id="graficaEstados"></div></div>
+      <div class="panel"><div class="panel-encabezado"><div><span class="panel-kicker">Distribución por aerolínea</span><h2 class="titulo-panel">Reservas por aerolínea</h2></div><span class="panel-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-bars"></use></svg></span></div><div class="grafica-barras" id="graficaAerolineas"></div></div>
+    </section>
+    <section class="panel panel-salidas"><div class="panel-encabezado"><div><span class="panel-kicker">Panel de salidas</span><h2 class="titulo-panel">Próximas salidas</h2></div><span class="insignia-live"><span class="punto-vivo"></span>Actualizando</span></div><div class="lista-salidas" id="listaSalidas"></div></section>
+  </main>
+  <script src="js/api.js"></script><script src="js/tablero.js"></script>
 </body>
 </html>

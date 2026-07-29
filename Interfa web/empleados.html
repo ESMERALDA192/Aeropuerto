@@ -2,149 +2,89 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>SkyPort — Empleados</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071326">
+  <meta name="description" content="SkyPort, sistema profesional de gestión aeroportuaria">
+  <title>SkyPort — Personal aeroportuario</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23071326'/%3E%3Cpath d='M10 34l18-4 12-18 5 2-7 17 12 5c3 1 5 4 4 7l-1 2-17-5-8 13-4-1 2-15-12-1z' fill='%235ee7f7'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-
+<body class="pagina-app pagina-empleados">
+  <div class="ambiente" aria-hidden="true">
+    <span class="orbita orbita-1"></span><span class="orbita orbita-2"></span><span class="rejilla-fondo"></span>
+  </div>
   <header class="barra-superior">
-    <div class="marca">
-      <span class="marca-icono">✈</span>
-      <span class="marca-nombre">SkyPort</span>
-    </div>
-    <nav class="navegacion">
-      <a href="index.html" class="enlace-nav">Vuelos</a>
-      <a href="reservas.html" class="enlace-nav">Reservas</a>
-      <a href="catalogos.html" class="enlace-nav">Catálogos</a>
-      <a href="empleados.html" class="enlace-nav activo">Empleados</a>
-      <a href="tablero.html" class="enlace-nav">Tablero</a>
-      <span class="usuario-sesion" id="usuarioSesion"></span>
-      <button class="boton-salir" id="btnSalir">Salir</button>
+    <a class="marca" href="tablero.html" aria-label="Ir al inicio de SkyPort">
+      <span class="marca-icono" aria-hidden="true"><svg class="ui-icon ui-icon-mark"><use href="assets/icons.svg#icon-mark"></use></svg></span>
+      <span class="marca-texto">
+        <span class="marca-nombre">SkyPort</span>
+        <span class="marca-subtitulo">Operaciones aeroportuarias</span>
+      </span>
+    </a>
+    <nav class="navegacion" aria-label="Navegación principal">
+      <a href="index.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-plane"></use></svg></span><span>Vuelos</span>
+      </a>
+      <a href="reservas.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-ticket"></use></svg></span><span>Reservas</span>
+      </a>
+      <a href="catalogos.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-catalog"></use></svg></span><span>Catálogos</span>
+      </a>
+      <a href="empleados.html" class="enlace-nav activo">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-users"></use></svg></span><span>Empleados</span>
+      </a>
+      <a href="tablero.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-dashboard"></use></svg></span><span>Tablero</span>
+      </a>
+      <div class="sesion">
+        <span class="estado-sistema" title="Servicios operativos"><span class="punto-vivo"></span>En línea</span>
+        <span class="usuario-sesion" id="usuarioSesion"></span>
+        <button class="boton-salir" id="btnSalir" type="button" aria-label="Cerrar sesión">
+          <span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-logout"></use></svg></span><span>Salir</span>
+        </button>
+      </div>
     </nav>
   </header>
-
   <main class="contenedor">
-
     <div class="encabezado-pagina">
-      <div>
-        <h1 class="titulo-pagina">Empleados</h1>
-        <p class="subtitulo-pagina">Personal de vuelo y operaciones en tierra</p>
+      <div class="bloque-titulo">
+        <span class="sobrelinea"><span class="punto-vivo"></span>Workforce Control</span>
+        <h1 class="titulo-pagina">Personal <span>aeroportuario</span></h1>
+        <p class="subtitulo-pagina">Gestiona tripulaciones, seguridad y operaciones en tierra.</p>
       </div>
-      <button class="boton boton-principal" id="btnNuevo">+ Nuevo empleado</button>
+      <div class="acciones-encabezado"><button class="boton boton-principal" id="btnNuevo" type="button"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-plus"></use></svg></span> Nuevo empleado</button></div>
     </div>
-
     <section class="filtros">
-      <div class="campo">
-        <label for="filtroNombre">Nombre</label>
-        <input type="text" id="filtroNombre" placeholder="Nombre o apellido">
+      <div class="filtros-cabecera">
+        <span class="filtros-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-search"></use></svg></span>
+        <div><strong>Directorio de personal</strong><small>Filtra por identidad, puesto o aerolínea</small></div>
       </div>
-      <div class="campo">
-        <label for="filtroNumero">N° empleado</label>
-        <input type="text" id="filtroNumero" placeholder="EMP001">
-      </div>
-      <div class="campo">
-        <label for="filtroPuesto">Puesto</label>
-        <select id="filtroPuesto">
-          <option value="">Todos</option>
-          <option value="piloto">Piloto</option>
-          <option value="copiloto">Copiloto</option>
-          <option value="sobrecargo">Sobrecargo</option>
-          <option value="personal_tierra">Personal de tierra</option>
-          <option value="seguridad">Seguridad</option>
-        </select>
-      </div>
-      <div class="campo">
-        <label for="filtroAerolinea">Aerolínea</label>
-        <select id="filtroAerolinea">
-          <option value="">Todas</option>
-        </select>
-      </div>
-      <button class="boton boton-fantasma" id="btnLimpiar">Limpiar</button>
+      <div class="campo"><label for="filtroNombre">Nombre</label><input type="text" id="filtroNombre" placeholder="Nombre o apellido" autocomplete="off"></div>
+      <div class="campo"><label for="filtroNumero">N° empleado</label><input type="text" id="filtroNumero" placeholder="EMP001" autocomplete="off"></div>
+      <div class="campo"><label for="filtroPuesto">Puesto</label><select id="filtroPuesto"><option value="">Todos</option><option value="piloto">Piloto</option><option value="copiloto">Copiloto</option><option value="sobrecargo">Sobrecargo</option><option value="personal_tierra">Personal de tierra</option><option value="seguridad">Seguridad</option></select></div>
+      <div class="campo"><label for="filtroAerolinea">Aerolínea</label><select id="filtroAerolinea"><option value="">Todas</option></select></div>
+      <button class="boton boton-fantasma" id="btnLimpiar" type="button"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-refresh"></use></svg></span> Limpiar</button>
     </section>
-
     <section class="contenedor-tabla">
-      <table class="tabla">
-        <thead>
-          <tr>
-            <th>N° empleado</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Puesto</th>
-            <th>Aerolínea</th>
-            <th class="columna-acciones">Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="cuerpoTablaEmpleados"></tbody>
-      </table>
-
-      <div class="mensaje-vacio oculto" id="mensajeVacio">
-        No hay empleados que coincidan con los filtros.
+      <div class="tabla-cabecera">
+        <div><h2>Plantilla operativa</h2><p>Personal autorizado y asignaciones vigentes</p></div>
+        <span class="insignia-live"><span class="punto-vivo"></span>En vivo</span>
       </div>
+      <div class="tabla-scroll"><table class="tabla"><thead><tr><th>N° empleado</th><th>Nombre</th><th>Apellido</th><th>Puesto</th><th>Aerolínea</th><th class="columna-acciones">Acciones</th></tr></thead><tbody id="cuerpoTablaEmpleados"></tbody></table></div>
+      <div class="mensaje-vacio oculto" id="mensajeVacio"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-users"></use></svg></span><strong>Sin empleados</strong><p>No hay empleados que coincidan con los filtros.</p></div>
     </section>
-
-    <!-- ===== Modal ===== -->
-    <div class="fondo-modal oculto" id="fondoModal">
-      <div class="modal">
-
-        <div class="encabezado-modal">
-          <h2 class="titulo-modal" id="tituloModal">Nuevo empleado</h2>
-          <button type="button" class="cerrar-modal" id="btnCerrar">&times;</button>
-        </div>
-
-        <form id="formularioEmpleado" novalidate>
-          <div class="cuerpo-modal">
-            <div class="rejilla-formulario">
-
-              <div class="campo">
-                <label for="campoNumero">N° empleado *</label>
-                <input type="text" id="campoNumero" placeholder="EMP001" required>
-              </div>
-
-              <div class="campo">
-                <label for="campoPuesto">Puesto *</label>
-                <select id="campoPuesto" required>
-                  <option value="piloto">Piloto</option>
-                  <option value="copiloto">Copiloto</option>
-                  <option value="sobrecargo">Sobrecargo</option>
-                  <option value="personal_tierra">Personal de tierra</option>
-                  <option value="seguridad">Seguridad</option>
-                </select>
-              </div>
-
-              <div class="campo">
-                <label for="campoNombre">Nombre *</label>
-                <input type="text" id="campoNombre" placeholder="Carlos" required>
-              </div>
-
-              <div class="campo">
-                <label for="campoApellido">Apellido *</label>
-                <input type="text" id="campoApellido" placeholder="Ramírez" required>
-              </div>
-
-              <div class="campo campo-completo">
-                <label for="campoAerolinea">Aerolínea</label>
-                <select id="campoAerolinea">
-                  <option value="">Sin aerolínea</option>
-                </select>
-              </div>
-
-            </div>
-
-            <p class="error-formulario oculto" id="errorFormulario"></p>
-          </div>
-
-          <div class="pie-modal">
-            <button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button>
-            <button type="submit" class="boton boton-principal">Guardar</button>
-          </div>
-        </form>
-
-      </div>
-    </div>
-
+    <div class="fondo-modal oculto" id="fondoModal" role="dialog" aria-modal="true" aria-labelledby="tituloModal"><div class="modal"><div class="modal-acento"></div>
+      <div class="encabezado-modal"><div><span class="modal-eyebrow">Editor de personal</span><h2 class="titulo-modal" id="tituloModal">Nuevo empleado</h2></div><button type="button" class="cerrar-modal" id="btnCerrar" aria-label="Cerrar"><svg class="ui-icon"><use href="assets/icons.svg#icon-close"></use></svg></button></div>
+      <form id="formularioEmpleado" novalidate><div class="cuerpo-modal"><div class="rejilla-formulario">
+        <div class="campo"><label for="campoNumero">N° empleado *</label><input type="text" id="campoNumero" placeholder="EMP001" required></div>
+        <div class="campo"><label for="campoPuesto">Puesto *</label><select id="campoPuesto" required><option value="piloto">Piloto</option><option value="copiloto">Copiloto</option><option value="sobrecargo">Sobrecargo</option><option value="personal_tierra">Personal de tierra</option><option value="seguridad">Seguridad</option></select></div>
+        <div class="campo"><label for="campoNombre">Nombre *</label><input type="text" id="campoNombre" placeholder="Carlos" required></div>
+        <div class="campo"><label for="campoApellido">Apellido *</label><input type="text" id="campoApellido" placeholder="Ramírez" required></div>
+        <div class="campo campo-completo"><label for="campoAerolinea">Aerolínea</label><select id="campoAerolinea"><option value="">Sin aerolínea</option></select></div>
+      </div><p class="error-formulario oculto" id="errorFormulario"></p></div><div class="pie-modal"><button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button><button type="submit" class="boton boton-principal">Guardar empleado</button></div></form>
+    </div></div>
   </main>
-
-  <script src="js/api.js"></script>
-  <script src="js/empleados.js"></script>
+  <script src="js/api.js"></script><script src="js/empleados.js"></script>
 </body>
 </html>

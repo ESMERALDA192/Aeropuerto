@@ -2,76 +2,64 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071326">
+  <meta name="description" content="SkyPort, sistema profesional de gestión aeroportuaria">
   <title>SkyPort — Check-in de pasajeros</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23071326'/%3E%3Cpath d='M10 34l18-4 12-18 5 2-7 17 12 5c3 1 5 4 4 7l-1 2-17-5-8 13-4-1 2-15-12-1z' fill='%235ee7f7'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-
+<body class="pagina-app pagina-agente">
+  <div class="ambiente" aria-hidden="true">
+    <span class="orbita orbita-1"></span><span class="orbita orbita-2"></span><span class="rejilla-fondo"></span>
+  </div>
   <header class="barra-superior">
-    <div class="marca">
-      <span class="marca-icono">✈</span>
-      <span class="marca-nombre">SkyPort</span>
-    </div>
-    <nav class="navegacion">
-      <span class="usuario-sesion" id="usuarioSesion"></span>
-      <button class="boton-salir" id="btnSalir">Salir</button>
+    <a class="marca" href="agente.html" aria-label="Ir al inicio de SkyPort">
+      <span class="marca-icono" aria-hidden="true"><svg class="ui-icon ui-icon-mark"><use href="assets/icons.svg#icon-mark"></use></svg></span>
+      <span class="marca-texto">
+        <span class="marca-nombre">SkyPort</span>
+        <span class="marca-subtitulo">Operaciones aeroportuarias</span>
+      </span>
+    </a>
+    <nav class="navegacion" aria-label="Navegación principal">
+      <span class="rol-modulo"><span class="punto-vivo"></span>Módulo de agente</span>
+      <div class="sesion">
+        <span class="estado-sistema" title="Servicios operativos"><span class="punto-vivo"></span>En línea</span>
+        <span class="usuario-sesion" id="usuarioSesion"></span>
+        <button class="boton-salir" id="btnSalir" type="button" aria-label="Cerrar sesión">
+          <span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-logout"></use></svg></span><span>Salir</span>
+        </button>
+      </div>
     </nav>
   </header>
-
   <main class="contenedor">
-
     <div class="encabezado-pagina">
-      <div>
-        <h1 class="titulo-pagina">Check-in de pasajeros</h1>
-        <p class="subtitulo-pagina">Registra el check-in de las reservas</p>
+      <div class="bloque-titulo">
+        <span class="sobrelinea"><span class="punto-vivo"></span>Gate Services</span>
+        <h1 class="titulo-pagina">Check-in de <span>pasajeros</span></h1>
+        <p class="subtitulo-pagina">Valida reservas y prepara a cada pasajero para abordar.</p>
       </div>
+      
     </div>
-
     <section class="filtros">
-      <div class="campo">
-        <label for="filtroVuelo">Vuelo</label>
-        <input type="text" id="filtroVuelo" placeholder="AM452">
+      <div class="filtros-cabecera">
+        <span class="filtros-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-search"></use></svg></span>
+        <div><strong>Control de abordaje</strong><small>Ubica reservas y confirma el check-in</small></div>
       </div>
-      <div class="campo">
-        <label for="filtroPasajero">Pasajero</label>
-        <input type="text" id="filtroPasajero" placeholder="Nombre o documento">
-      </div>
-      <div class="campo">
-        <label for="filtroRegistrado">Check-in</label>
-        <select id="filtroRegistrado">
-          <option value="">Todos</option>
-          <option value="true">Registrado</option>
-          <option value="false">Pendiente</option>
-        </select>
-      </div>
-      <button class="boton boton-fantasma" id="btnLimpiar">Limpiar</button>
+      <div class="campo"><label for="filtroVuelo">Vuelo</label><input type="text" id="filtroVuelo" placeholder="AM452" autocomplete="off"></div>
+      <div class="campo"><label for="filtroPasajero">Pasajero</label><input type="text" id="filtroPasajero" placeholder="Nombre o documento" autocomplete="off"></div>
+      <div class="campo"><label for="filtroRegistrado">Check-in</label><select id="filtroRegistrado"><option value="">Todos</option><option value="true">Registrado</option><option value="false">Pendiente</option></select></div>
+      <button class="boton boton-fantasma" id="btnLimpiar" type="button"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-refresh"></use></svg></span> Limpiar</button>
     </section>
-
     <section class="contenedor-tabla">
-      <table class="tabla">
-        <thead>
-          <tr>
-            <th>Pasajero</th>
-            <th>Documento</th>
-            <th>Vuelo</th>
-            <th>Salida</th>
-            <th>Asiento</th>
-            <th>Clase</th>
-            <th>Check-in</th>
-            <th class="columna-acciones">Acción</th>
-          </tr>
-        </thead>
-        <tbody id="cuerpoTablaReservas"></tbody>
-      </table>
-
-      <div class="mensaje-vacio oculto" id="mensajeVacio">
-        No hay reservas que coincidan con los filtros.
+      <div class="tabla-cabecera">
+        <div><h2>Cola de check-in</h2><p>Reservas disponibles para registro</p></div>
+        <span class="insignia-live"><span class="punto-vivo"></span>En vivo</span>
       </div>
+      <div class="tabla-scroll"><table class="tabla"><thead><tr><th>Pasajero</th><th>Documento</th><th>Vuelo</th><th>Salida</th><th>Asiento</th><th>Clase</th><th>Check-in</th><th class="columna-acciones">Acción</th></tr></thead><tbody id="cuerpoTablaReservas"></tbody></table></div>
+      <div class="mensaje-vacio oculto" id="mensajeVacio"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-check"></use></svg></span><strong>Cola despejada</strong><p>No hay reservas que coincidan con los filtros.</p></div>
     </section>
-
   </main>
-
-  <script src="js/api.js"></script>
-  <script src="js/agente.js"></script>
+  <script src="js/api.js"></script><script src="js/agente.js"></script>
 </body>
 </html>

@@ -2,90 +2,81 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>SkyPort — Catálogos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071326">
+  <meta name="description" content="SkyPort, sistema profesional de gestión aeroportuaria">
+  <title>SkyPort — Catálogos operativos</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23071326'/%3E%3Cpath d='M10 34l18-4 12-18 5 2-7 17 12 5c3 1 5 4 4 7l-1 2-17-5-8 13-4-1 2-15-12-1z' fill='%235ee7f7'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-
+<body class="pagina-app pagina-catalogos">
+  <div class="ambiente" aria-hidden="true">
+    <span class="orbita orbita-1"></span><span class="orbita orbita-2"></span><span class="rejilla-fondo"></span>
+  </div>
   <header class="barra-superior">
-    <div class="marca">
-      <span class="marca-icono">✈</span>
-      <span class="marca-nombre">SkyPort</span>
-    </div>
-    <nav class="navegacion">
-      <a href="index.html" class="enlace-nav">Vuelos</a>
-      <a href="reservas.html" class="enlace-nav">Reservas</a>
-      <a href="catalogos.html" class="enlace-nav activo">Catálogos</a>
-      <a href="empleados.html" class="enlace-nav">Empleados</a>
-      <a href="tablero.html" class="enlace-nav">Tablero</a>
-      <span class="usuario-sesion" id="usuarioSesion"></span>
-      <button class="boton-salir" id="btnSalir">Salir</button>
+    <a class="marca" href="tablero.html" aria-label="Ir al inicio de SkyPort">
+      <span class="marca-icono" aria-hidden="true"><svg class="ui-icon ui-icon-mark"><use href="assets/icons.svg#icon-mark"></use></svg></span>
+      <span class="marca-texto">
+        <span class="marca-nombre">SkyPort</span>
+        <span class="marca-subtitulo">Operaciones aeroportuarias</span>
+      </span>
+    </a>
+    <nav class="navegacion" aria-label="Navegación principal">
+      <a href="index.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-plane"></use></svg></span><span>Vuelos</span>
+      </a>
+      <a href="reservas.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-ticket"></use></svg></span><span>Reservas</span>
+      </a>
+      <a href="catalogos.html" class="enlace-nav activo">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-catalog"></use></svg></span><span>Catálogos</span>
+      </a>
+      <a href="empleados.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-users"></use></svg></span><span>Empleados</span>
+      </a>
+      <a href="tablero.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-dashboard"></use></svg></span><span>Tablero</span>
+      </a>
+      <div class="sesion">
+        <span class="estado-sistema" title="Servicios operativos"><span class="punto-vivo"></span>En línea</span>
+        <span class="usuario-sesion" id="usuarioSesion"></span>
+        <button class="boton-salir" id="btnSalir" type="button" aria-label="Cerrar sesión">
+          <span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-logout"></use></svg></span><span>Salir</span>
+        </button>
+      </div>
     </nav>
   </header>
-
   <main class="contenedor">
-
     <div class="encabezado-pagina">
-      <div>
-        <h1 class="titulo-pagina">Catálogos</h1>
-        <p class="subtitulo-pagina">Aerolíneas, aeropuertos y puertas de embarque</p>
+      <div class="bloque-titulo">
+        <span class="sobrelinea"><span class="punto-vivo"></span>Master Data</span>
+        <h1 class="titulo-pagina">Catálogos <span>operativos</span></h1>
+        <p class="subtitulo-pagina">Configura aerolíneas, aeropuertos y puertas de embarque.</p>
       </div>
-      <button class="boton boton-principal" id="btnNuevo">+ Nuevo registro</button>
+      <div class="acciones-encabezado"><button class="boton boton-principal" id="btnNuevo" type="button"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-plus"></use></svg></span> Nuevo registro</button></div>
     </div>
-
-    <nav class="pestanas">
-      <button class="pestana activa" data-catalogo="aerolineas">Aerolíneas</button>
-      <button class="pestana" data-catalogo="aeropuertos">Aeropuertos</button>
-      <button class="pestana" data-catalogo="puertas">Puertas</button>
-    </nav>
-
+    <nav class="pestanas" aria-label="Tipos de catálogo"><button class="pestana activa" data-catalogo="aerolineas">Aerolíneas</button><button class="pestana" data-catalogo="aeropuertos">Aeropuertos</button><button class="pestana" data-catalogo="puertas">Puertas</button></nav>
     <section class="filtros">
-      <div class="campo">
-        <label for="filtroBusqueda">Buscar</label>
-        <input type="text" id="filtroBusqueda" placeholder="Nombre o código">
+      <div class="filtros-cabecera">
+        <span class="filtros-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-search"></use></svg></span>
+        <div><strong>Búsqueda en catálogos</strong><small>Consulta por nombre o código de operación</small></div>
       </div>
-      <button class="boton boton-fantasma" id="btnLimpiar">Limpiar</button>
+      <div class="campo campo-busqueda"><label for="filtroBusqueda">Buscar</label><input type="text" id="filtroBusqueda" placeholder="Nombre o código" autocomplete="off"></div>
+      <button class="boton boton-fantasma" id="btnLimpiar" type="button"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-refresh"></use></svg></span> Limpiar</button>
     </section>
-
     <section class="contenedor-tabla">
-      <table class="tabla">
-        <thead id="encabezadoTabla"></thead>
-        <tbody id="cuerpoTablaCatalogo"></tbody>
-      </table>
-
-      <div class="mensaje-vacio oculto" id="mensajeVacio">
-        No hay registros que coincidan con la búsqueda.
+      <div class="tabla-cabecera">
+        <div><h2>Directorio maestro</h2><p>Información base del ecosistema aeroportuario</p></div>
+        <span class="insignia-live"><span class="punto-vivo"></span>En vivo</span>
       </div>
+      <div class="tabla-scroll"><table class="tabla"><thead id="encabezadoTabla"></thead><tbody id="cuerpoTablaCatalogo"></tbody></table></div>
+      <div class="mensaje-vacio oculto" id="mensajeVacio"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-building"></use></svg></span><strong>Sin registros</strong><p>No hay registros que coincidan con la búsqueda.</p></div>
     </section>
-
-    <!-- ===== Modal ===== -->
-    <div class="fondo-modal oculto" id="fondoModal">
-      <div class="modal">
-
-        <div class="encabezado-modal">
-          <h2 class="titulo-modal" id="tituloModal">Nuevo registro</h2>
-          <button type="button" class="cerrar-modal" id="btnCerrar">&times;</button>
-        </div>
-
-        <form id="formularioCatalogo" novalidate>
-          <div class="cuerpo-modal">
-            <!-- Los campos se generan según la pestaña activa -->
-            <div class="rejilla-formulario" id="camposFormulario"></div>
-            <p class="error-formulario oculto" id="errorFormulario"></p>
-          </div>
-
-          <div class="pie-modal">
-            <button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button>
-            <button type="submit" class="boton boton-principal">Guardar</button>
-          </div>
-        </form>
-
-      </div>
-    </div>
-
+    <div class="fondo-modal oculto" id="fondoModal" role="dialog" aria-modal="true" aria-labelledby="tituloModal"><div class="modal"><div class="modal-acento"></div>
+      <div class="encabezado-modal"><div><span class="modal-eyebrow">Editor de catálogo</span><h2 class="titulo-modal" id="tituloModal">Nuevo registro</h2></div><button type="button" class="cerrar-modal" id="btnCerrar" aria-label="Cerrar"><svg class="ui-icon"><use href="assets/icons.svg#icon-close"></use></svg></button></div>
+      <form id="formularioCatalogo" novalidate><div class="cuerpo-modal"><div class="rejilla-formulario" id="camposFormulario"></div><p class="error-formulario oculto" id="errorFormulario"></p></div><div class="pie-modal"><button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button><button type="submit" class="boton boton-principal">Guardar registro</button></div></form>
+    </div></div>
   </main>
-
-  <script src="js/api.js"></script>
-<script src="js/catalogos.js"></script>
+  <script src="js/api.js"></script><script src="js/catalogos.js"></script>
 </body>
 </html>

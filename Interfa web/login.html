@@ -2,37 +2,153 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>SkyPort — Iniciar sesión</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#061326">
+  <meta name="description" content="SkyPort, sistema profesional de gestión aeroportuaria">
+  <title>SkyPort — Acceso al sistema</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23061326'/%3E%3Cpath d='M11 36 52 21c3-1 5 2 3 4L39 34l-7 16-5 2 2-14-12 3z' fill='none' stroke='%236ad9ed' stroke-width='4' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="cuerpo-login">
+<body class="cuerpo-login login-v2">
+  <main class="login-shell login-shell-v2">
+    <section class="login-visual login-visual-v2" aria-label="Centro de operaciones SkyPort">
+      <div class="login-grid-tecnico" aria-hidden="true"></div>
+      <div class="login-halo halo-a" aria-hidden="true"></div>
+      <div class="login-halo halo-b" aria-hidden="true"></div>
 
-  <div class="tarjeta-login">
-    <div class="marca-login">
-      <span class="marca-icono">✈</span>
-      <span class="marca-nombre">SkyPort</span>
-    </div>
-    <p class="subtitulo-login">Sistema de gestión aeroportuaria</p>
+      <header class="login-masthead">
+        <div class="marca-login marca-login-inversa">
+          <span class="marca-icono" aria-hidden="true">
+            <svg class="ui-icon ui-icon-mark"><use href="assets/icons.svg#icon-mark"></use></svg>
+          </span>
+          <span class="marca-texto">
+            <span class="marca-nombre">SkyPort</span>
+            <span class="marca-subtitulo">Operaciones aeroportuarias</span>
+          </span>
+        </div>
+        <div class="estado-operativo"><span class="punto-vivo"></span><span>Sistema operativo</span></div>
+      </header>
 
-    <form id="formularioLogin" novalidate>
-      <div class="campo">
-        <label for="campoCorreo">Correo</label>
-        <input type="email" id="campoCorreo" placeholder="admin@aeropuerto.com" required>
+      <div class="login-visual-contenido login-visual-contenido-v2">
+        <div class="hero-login-grid">
+          <div class="hero-login-copy">
+            <span class="sobrelinea sobrelinea-clara">Plataforma operativa aeroportuaria</span>
+            <h1>Todo el aeropuerto<br>en una sola cabina.</h1>
+            <p>Coordina vuelos, pasajeros y personal desde un entorno diseñado para trabajar con rapidez, claridad y control.</p>
+            <div class="hero-metricas" aria-label="Capacidades principales">
+              <div><strong>24/7</strong><span>Operación continua</span></div>
+              <div><strong>01</strong><span>Panel central</span></div>
+              <div><strong>Live</strong><span>Datos en tiempo real</span></div>
+            </div>
+          </div>
+
+          <div class="avion-escena" aria-hidden="true">
+            <span class="ruta-avion ruta-avion-a"></span>
+            <span class="ruta-avion ruta-avion-b"></span>
+            <span class="baliza baliza-1"></span>
+            <span class="baliza baliza-2"></span>
+            <div class="avion-sombra"></div>
+            <svg class="avion-hero" viewBox="0 0 820 300" role="img">
+              <defs>
+                <linearGradient id="fuselaje" x1="0" x2="1">
+                  <stop offset="0" stop-color="#c8d9e8"/>
+                  <stop offset="0.45" stop-color="#ffffff"/>
+                  <stop offset="1" stop-color="#9fb8ce"/>
+                </linearGradient>
+                <linearGradient id="ala" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#dceaf5"/>
+                  <stop offset="1" stop-color="#8ca8bf"/>
+                </linearGradient>
+                <linearGradient id="cola" x1="0" x2="1">
+                  <stop offset="0" stop-color="#1d70d6"/>
+                  <stop offset="1" stop-color="#55d6ec"/>
+                </linearGradient>
+                <filter id="sombraAvion" x="-20%" y="-30%" width="140%" height="180%">
+                  <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000b1d" flood-opacity=".38"/>
+                </filter>
+              </defs>
+              <g filter="url(#sombraAvion)">
+                <path class="avion-fuselaje" d="M72 145c76-19 191-31 392-31h133l86-27c32-10 71-7 98 8 16 9 23 22 17 33-5 10-22 18-46 22l-161 18c-180 19-353 24-482 12l-47-5c-17-2-23-9-18-17 4-6 13-10 28-13Z" fill="url(#fuselaje)"/>
+                <path d="M509 118 604 35c12-10 29-9 39 2l10 11-71 74Z" fill="url(#ala)"/>
+                <path d="m519 166 112 82c11 8 28 6 36-5l8-11-93-71Z" fill="url(#ala)"/>
+                <path d="m650 101 61-65c8-9 23-7 29 3l15 50-71 18Z" fill="url(#cola)"/>
+                <path d="m672 154 78 29c12 4 23 0 28-10l3-7-75-23Z" fill="url(#ala)"/>
+                <path d="M477 165c20 0 38 8 47 21l-19 21c-10 7-31 6-43-3l-13-18 28-21Z" fill="#8ca9bf"/>
+                <path d="M480 170c15 0 28 5 36 13l-15 17c-9 5-25 4-34-3l-9-12 22-15Z" fill="#253f5c"/>
+                <path d="M184 136c66-8 160-13 281-14" fill="none" stroke="#7f9ab2" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+                <g fill="#23425e">
+                  <circle cx="246" cy="132" r="3.2"/><circle cx="265" cy="130" r="3.2"/><circle cx="284" cy="128" r="3.2"/><circle cx="303" cy="127" r="3.2"/><circle cx="322" cy="125" r="3.2"/><circle cx="341" cy="124" r="3.2"/><circle cx="360" cy="123" r="3.2"/><circle cx="379" cy="122" r="3.2"/><circle cx="398" cy="121" r="3.2"/>
+                </g>
+                <path d="M169 141c18-4 37-6 56-8l-8 14-47 4Z" fill="#5f7c96"/>
+                <path d="M658 101c24-7 51-13 77-18l8 8-63 18Z" fill="#66d8ed" opacity=".8"/>
+                <circle cx="751" cy="121" r="4" fill="#5ee7f7" class="luz-avion"/>
+                <circle cx="468" cy="178" r="3" fill="#ff596d" class="luz-avion luz-avion-roja"/>
+              </g>
+            </svg>
+            <div class="etiqueta-ruta etiqueta-origen"><strong>GDL</strong><span>Origen</span></div>
+            <div class="etiqueta-ruta etiqueta-destino"><strong>MEX</strong><span>Destino</span></div>
+          </div>
+        </div>
+
+        <div class="mini-tablero mini-tablero-v2">
+          <div class="mini-top"><span>OPERACIONES EN VIVO</span><span class="mini-status"><i></i>EN LÍNEA</span></div>
+          <div class="mini-flight"><strong>SP 408</strong><span><b>GDL</b><i></i><b>MEX</b></span><em>ABORDANDO</em></div>
+          <div class="mini-flight"><strong>SP 221</strong><span><b>MTY</b><i></i><b>CUN</b></span><em>A TIEMPO</em></div>
+          <div class="mini-flight"><strong>SP 715</strong><span><b>TIJ</b><i></i><b>GDL</b></span><em>PUERTA 12</em></div>
+        </div>
       </div>
 
-      <div class="campo">
-        <label for="campoPassword">Contraseña</label>
-        <input type="password" id="campoPassword" placeholder="••••••••" required>
+      <footer class="login-pie-visual"><span>SkyPort OS 1.0</span><span>Centro de control aeroportuario</span></footer>
+    </section>
+
+    <section class="login-panel login-panel-v2">
+      <div class="login-panel-contenido">
+        <div class="login-cabecera-movil marca-login">
+          <span class="marca-icono" aria-hidden="true"><svg class="ui-icon ui-icon-mark"><use href="assets/icons.svg#icon-mark"></use></svg></span>
+          <span class="marca-texto"><span class="marca-nombre">SkyPort</span><span class="marca-subtitulo">Operaciones aeroportuarias</span></span>
+        </div>
+
+        <div class="login-panel-cabecera">
+          <span class="login-kicker">Acceso del personal</span>
+          <h2>Iniciar sesión</h2>
+          <p class="subtitulo-login">Ingresa tus credenciales para entrar al centro de operaciones.</p>
+        </div>
+
+        <form id="formularioLogin" novalidate>
+          <div class="campo campo-login">
+            <label for="campoCorreo">Correo electrónico</label>
+            <div class="control-con-icono">
+              <span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-mail"></use></svg></span>
+              <input type="email" id="campoCorreo" placeholder="admin@aeropuerto.com" autocomplete="email" required>
+            </div>
+          </div>
+
+          <div class="campo campo-login">
+            <label for="campoPassword">Contraseña</label>
+            <div class="control-con-icono">
+              <span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-lock"></use></svg></span>
+              <input type="password" id="campoPassword" placeholder="••••••••" autocomplete="current-password" required>
+            </div>
+          </div>
+
+          <p class="error-formulario oculto" id="errorLogin"></p>
+
+          <button type="submit" class="boton boton-principal boton-login" id="btnEntrar">
+            <span>Entrar al sistema</span>
+            <span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-arrow-right"></use></svg></span>
+          </button>
+        </form>
+
+        <div class="login-seguridad">
+          <span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-shield-check"></use></svg></span>
+          <p><strong>Acceso protegido</strong><br>Uso exclusivo para personal autorizado.</p>
+        </div>
+
+        <div class="login-soporte"><span>¿Problemas para acceder?</span><strong>Contacta al administrador del sistema</strong></div>
       </div>
-
-      <p class="error-formulario oculto" id="errorLogin"></p>
-
-      <button type="submit" class="boton boton-principal boton-login" id="btnEntrar">
-        Iniciar sesión
-      </button>
-    </form>
-  </div>
-
+      <p class="login-copyright">© 2026 SkyPort · Sistema de gestión aeroportuaria</p>
+    </section>
+  </main>
   <script src="js/api.js"></script>
   <script src="js/login.js"></script>
 </body>

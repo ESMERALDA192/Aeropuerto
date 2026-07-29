@@ -2,151 +2,90 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>SkyPort — Reservas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071326">
+  <meta name="description" content="SkyPort, sistema profesional de gestión aeroportuaria">
+  <title>SkyPort — Gestión de reservas</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23071326'/%3E%3Cpath d='M10 34l18-4 12-18 5 2-7 17 12 5c3 1 5 4 4 7l-1 2-17-5-8 13-4-1 2-15-12-1z' fill='%235ee7f7'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-
+<body class="pagina-app pagina-reservas">
+  <div class="ambiente" aria-hidden="true">
+    <span class="orbita orbita-1"></span><span class="orbita orbita-2"></span><span class="rejilla-fondo"></span>
+  </div>
   <header class="barra-superior">
-    <div class="marca">
-      <span class="marca-icono">✈</span>
-      <span class="marca-nombre">SkyPort</span>
-    </div>
-    <nav class="navegacion">
-      <a href="index.html" class="enlace-nav">Vuelos</a>
-      <a href="reservas.html" class="enlace-nav activo">Reservas</a>
-      <a href="catalogos.html" class="enlace-nav">Catálogos</a>
-      <a href="empleados.html" class="enlace-nav">Empleados</a>
-      <a href="tablero.html" class="enlace-nav">Tablero</a>
-      <span class="usuario-sesion" id="usuarioSesion"></span>
-      <button class="boton-salir" id="btnSalir">Salir</button>
+    <a class="marca" href="tablero.html" aria-label="Ir al inicio de SkyPort">
+      <span class="marca-icono" aria-hidden="true"><svg class="ui-icon ui-icon-mark"><use href="assets/icons.svg#icon-mark"></use></svg></span>
+      <span class="marca-texto">
+        <span class="marca-nombre">SkyPort</span>
+        <span class="marca-subtitulo">Operaciones aeroportuarias</span>
+      </span>
+    </a>
+    <nav class="navegacion" aria-label="Navegación principal">
+      <a href="index.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-plane"></use></svg></span><span>Vuelos</span>
+      </a>
+      <a href="reservas.html" class="enlace-nav activo">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-ticket"></use></svg></span><span>Reservas</span>
+      </a>
+      <a href="catalogos.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-catalog"></use></svg></span><span>Catálogos</span>
+      </a>
+      <a href="empleados.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-users"></use></svg></span><span>Empleados</span>
+      </a>
+      <a href="tablero.html" class="enlace-nav">
+        <span class="nav-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-dashboard"></use></svg></span><span>Tablero</span>
+      </a>
+      <div class="sesion">
+        <span class="estado-sistema" title="Servicios operativos"><span class="punto-vivo"></span>En línea</span>
+        <span class="usuario-sesion" id="usuarioSesion"></span>
+        <button class="boton-salir" id="btnSalir" type="button" aria-label="Cerrar sesión">
+          <span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-logout"></use></svg></span><span>Salir</span>
+        </button>
+      </div>
     </nav>
   </header>
-
   <main class="contenedor">
-
     <div class="encabezado-pagina">
-      <div>
-        <h1 class="titulo-pagina">Reservas</h1>
-        <p class="subtitulo-pagina">Gestión de reservas y registro de pasajeros</p>
+      <div class="bloque-titulo">
+        <span class="sobrelinea"><span class="punto-vivo"></span>Passenger Services</span>
+        <h1 class="titulo-pagina">Gestión de <span>reservas</span></h1>
+        <p class="subtitulo-pagina">Centraliza pasajeros, asientos, clases y estatus de check-in.</p>
       </div>
-      <button class="boton boton-principal" id="btnNueva">+ Nueva reserva</button>
+      <div class="acciones-encabezado"><button class="boton boton-principal" id="btnNueva" type="button"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-plus"></use></svg></span> Nueva reserva</button></div>
     </div>
-
-    <section class="filtros">
-      <div class="campo">
-        <label for="filtroVuelo">Vuelo</label>
-        <input type="text" id="filtroVuelo" placeholder="AM452">
+    <section class="filtros" aria-label="Filtros de reservas">
+      <div class="filtros-cabecera">
+        <span class="filtros-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-search"></use></svg></span>
+        <div><strong>Localizador de reservas</strong><small>Encuentra pasajeros y vuelos en segundos</small></div>
       </div>
-      <div class="campo">
-        <label for="filtroPasajero">Pasajero</label>
-        <input type="text" id="filtroPasajero" placeholder="Nombre o documento">
-      </div>
-      <div class="campo">
-        <label for="filtroClase">Clase</label>
-        <select id="filtroClase">
-          <option value="">Todas</option>
-          <option value="economica">Económica</option>
-          <option value="ejecutiva">Ejecutiva</option>
-          <option value="primera">Primera</option>
-        </select>
-      </div>
-      <div class="campo">
-        <label for="filtroRegistrado">Check-in</label>
-        <select id="filtroRegistrado">
-          <option value="">Todos</option>
-          <option value="true">Registrado</option>
-          <option value="false">Pendiente</option>
-        </select>
-      </div>
-      <button class="boton boton-fantasma" id="btnLimpiar">Limpiar</button>
+      <div class="campo"><label for="filtroVuelo">Vuelo</label><input type="text" id="filtroVuelo" placeholder="AM452" autocomplete="off"></div>
+      <div class="campo"><label for="filtroPasajero">Pasajero</label><input type="text" id="filtroPasajero" placeholder="Nombre o documento" autocomplete="off"></div>
+      <div class="campo"><label for="filtroClase">Clase</label><select id="filtroClase"><option value="">Todas</option><option value="economica">Económica</option><option value="ejecutiva">Ejecutiva</option><option value="primera">Primera</option></select></div>
+      <div class="campo"><label for="filtroRegistrado">Check-in</label><select id="filtroRegistrado"><option value="">Todos</option><option value="true">Registrado</option><option value="false">Pendiente</option></select></div>
+      <button class="boton boton-fantasma" id="btnLimpiar" type="button"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-refresh"></use></svg></span> Limpiar</button>
     </section>
-
     <section class="contenedor-tabla">
-      <table class="tabla">
-        <thead>
-          <tr>
-            <th>Pasajero</th>
-            <th>Documento</th>
-            <th>Vuelo</th>
-            <th>Salida</th>
-            <th>Asiento</th>
-            <th>Clase</th>
-            <th>Check-in</th>
-            <th class="columna-acciones">Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="cuerpoTablaReservas"></tbody>
-      </table>
-
-      <div class="mensaje-vacio oculto" id="mensajeVacio">
-        No hay reservas que coincidan con los filtros.
+      <div class="tabla-cabecera">
+        <div><h2>Registro de pasajeros</h2><p>Reservas activas y control de abordaje</p></div>
+        <span class="insignia-live"><span class="punto-vivo"></span>En vivo</span>
       </div>
+      <div class="tabla-scroll"><table class="tabla"><thead><tr><th>Pasajero</th><th>Documento</th><th>Vuelo</th><th>Salida</th><th>Asiento</th><th>Clase</th><th>Check-in</th><th class="columna-acciones">Acciones</th></tr></thead><tbody id="cuerpoTablaReservas"></tbody></table></div>
+      <div class="mensaje-vacio oculto" id="mensajeVacio"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-ticket"></use></svg></span><strong>Sin reservas</strong><p>No hay reservas que coincidan con los filtros.</p></div>
     </section>
-
-    <!-- ===== Modal con formulario ===== -->
-    <div class="fondo-modal oculto" id="fondoModal">
-      <div class="modal">
-
-        <div class="encabezado-modal">
-          <h2 class="titulo-modal" id="tituloModal">Nueva reserva</h2>
-          <button type="button" class="cerrar-modal" id="btnCerrar">&times;</button>
-        </div>
-
-        <form id="formularioReserva" novalidate>
-
-          <div class="cuerpo-modal">
-            <div class="rejilla-formulario">
-
-              <div class="campo campo-completo">
-                <label for="campoPasajero">Pasajero *</label>
-                <select id="campoPasajero" name="pasajero" required></select>
-              </div>
-
-              <div class="campo campo-completo">
-                <label for="campoVuelo">Vuelo *</label>
-                <select id="campoVuelo" name="vuelo" required></select>
-              </div>
-
-              <div class="campo">
-                <label for="campoAsiento">Asiento *</label>
-                <input type="text" id="campoAsiento" name="asiento" placeholder="12A" required>
-              </div>
-
-              <div class="campo">
-                <label for="campoClase">Clase *</label>
-                <select id="campoClase" name="clase" required>
-                  <option value="economica">Económica</option>
-                  <option value="ejecutiva">Ejecutiva</option>
-                  <option value="primera">Primera</option>
-                </select>
-              </div>
-
-              <div class="campo campo-completo">
-                <label for="campoRegistrado">Estado de check-in</label>
-                <select id="campoRegistrado" name="registrado">
-                  <option value="false">Pendiente</option>
-                  <option value="true">Registrado</option>
-                </select>
-              </div>
-
-            </div>
-
-            <p class="error-formulario oculto" id="errorFormulario"></p>
-          </div>
-
-          <div class="pie-modal">
-            <button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button>
-            <button type="submit" class="boton boton-principal">Guardar</button>
-          </div>
-
-        </form>
-
-      </div>
-    </div>
-
+    <div class="fondo-modal oculto" id="fondoModal" role="dialog" aria-modal="true" aria-labelledby="tituloModal"><div class="modal"><div class="modal-acento"></div>
+      <div class="encabezado-modal"><div><span class="modal-eyebrow">Editor de reserva</span><h2 class="titulo-modal" id="tituloModal">Nueva reserva</h2></div><button type="button" class="cerrar-modal" id="btnCerrar" aria-label="Cerrar"><svg class="ui-icon"><use href="assets/icons.svg#icon-close"></use></svg></button></div>
+      <form id="formularioReserva" novalidate><div class="cuerpo-modal"><div class="rejilla-formulario">
+        <div class="campo campo-completo"><label for="campoPasajero">Pasajero *</label><select id="campoPasajero" name="pasajero" required></select></div>
+        <div class="campo campo-completo"><label for="campoVuelo">Vuelo *</label><select id="campoVuelo" name="vuelo" required></select></div>
+        <div class="campo"><label for="campoAsiento">Asiento *</label><input type="text" id="campoAsiento" name="asiento" placeholder="12A" required></div>
+        <div class="campo"><label for="campoClase">Clase *</label><select id="campoClase" name="clase" required><option value="economica">Económica</option><option value="ejecutiva">Ejecutiva</option><option value="primera">Primera</option></select></div>
+        <div class="campo campo-completo"><label for="campoRegistrado">Estado de check-in</label><select id="campoRegistrado" name="registrado"><option value="false">Pendiente</option><option value="true">Registrado</option></select></div>
+      </div><p class="error-formulario oculto" id="errorFormulario"></p></div>
+      <div class="pie-modal"><button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button><button type="submit" class="boton boton-principal">Guardar reserva</button></div></form>
+    </div></div>
   </main>
-<script src="js/api.js"></script>
-<script src="js/reservas.js"></script>
+  <script src="js/api.js"></script><script src="js/reservas.js"></script>
 </body>
 </html>

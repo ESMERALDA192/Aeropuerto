@@ -997,3 +997,82 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .login-panel-v2 h2 { font-size: 34px; }
   .login-panel-v2 .login-cabecera-movil { margin-bottom: 40px; }
 }
+
+/* ===== Tarjetas de vuelo (portal de pasajero) ===== */
+.rejilla-vuelos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 18px;
+}
+.tarjeta-vuelo {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  box-shadow: var(--sombra-sm);
+  transition: var(--transicion);
+}
+.tarjeta-vuelo:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sombra);
+}
+.tarjeta-vuelo-imagen {
+  height: 130px;
+  padding: 10px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.tarjeta-vuelo-imagen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.35));
+}
+.tarjeta-vuelo-imagen .etiqueta-estado {
+  position: relative;
+  z-index: 1;
+  background: rgba(255,255,255,.92);
+}
+.tarjeta-vuelo-cuerpo {
+  padding: 14px 16px 16px;
+}
+.tarjeta-vuelo-ruta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.tarjeta-vuelo-ruta > div {
+  display: flex;
+  flex-direction: column;
+}
+.tarjeta-vuelo-flecha {
+  color: var(--azul-500);
+  font-size: 16px;
+}
+.tarjeta-vuelo-detalle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--borde);
+}
+.tarjeta-vuelo-horarios {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.tarjeta-vuelo-horarios > div {
+  display: flex;
+  flex-direction: column;
+}
+.tarjeta-vuelo-boton {
+  width: 100%;
+}

@@ -17,14 +17,6 @@ let vueloSeleccionado = null;
 const usuarioSesion = document.getElementById("usuarioSesion");
 const btnSalir       = document.getElementById("btnSalir");
 
-const panelPerfil     = document.getElementById("panelPerfil");
-const perfilNombre    = document.getElementById("perfilNombre");
-const perfilApellido  = document.getElementById("perfilApellido");
-const perfilDocumento = document.getElementById("perfilDocumento");
-const perfilTelefono  = document.getElementById("perfilTelefono");
-const btnGuardarPerfil = document.getElementById("btnGuardarPerfil");
-const errorPerfil     = document.getElementById("errorPerfil");
-
 const panelBusqueda  = document.getElementById("panelBusqueda");
 const panelResultados = document.getElementById("panelResultados");
 
@@ -33,8 +25,8 @@ const filtroDestino = document.getElementById("filtroDestino");
 const filtroFecha   = document.getElementById("filtroFecha");
 const btnLimpiar    = document.getElementById("btnLimpiar");
 
-const cuerpoTablaVuelos    = document.getElementById("cuerpoTablaVuelos");
-const mensajeVacioVuelos   = document.getElementById("mensajeVacioVuelos");
+const rejillaVuelos       = document.getElementById("rejillaVuelos");
+const mensajeVacioVuelos  = document.getElementById("mensajeVacioVuelos");
 
 const cuerpoTablaReservas  = document.getElementById("cuerpoTablaReservas");
 const mensajeVacioReservas = document.getElementById("mensajeVacioReservas");
@@ -70,49 +62,8 @@ function soloFecha(iso) {
 }
 const nombresClase = { economica: "Económica", ejecutiva: "Ejecutiva", primera: "Primera" };
 
-// ===== Guardar / identificar pasajero por documento =====
-btnGuardarPerfil.addEventListener("click", async () => {
-  errorPerfil.classList.add("oculto");
-
-  const nombre    = perfilNombre.value.trim();
-  const apellido  = perfilApellido.value.trim();
-  const documento = perfilDocumento.value.trim();
-  const telefono  = perfilTelefono.value.trim();
-
-  if (!nombre || !apellido || !documento) {
-    errorPerfil.textContent = "Nombre, apellido y documento son obligatorios.";
-    errorPerfil.classList.remove("oculto");
-    return;
-  }
-
-  try {
-    // Buscar si ya existe un pasajero con ese documento
-    const todos = await obtenerPasajeros();
-    pasajeroActual = todos.find(p => p.documento === documento);
-
-    // Si no existe, lo creamos
-    if (!pasajeroActual) {
-      const respuesta = await agregarPasajero({
-        nombre, apellido, documento,
-        correo: `${documento}@pasajero.com`,
-        telefono
-      });
-      pasajeroActual = respuesta.pasajero;
-    }
-
-    // Mostrar buscador y resultados, ocultar el panel de datos
-    panelPerfil.classList.add("oculto");
-    panelBusqueda.classList.remove("oculto");
-    panelResultados.classList.remove("oculto");
-
-    await cargarVuelos();
-    await cargarMisReservas();
-
-  } catch (error) {
-    errorPerfil.textContent = error.message;
-    errorPerfil.classList.remove("oculto");
-  }
-});
+// Imagen de respaldo si el aeropuerto no tiene imagenUrl cargada por el admin
+const IMAGEN_RESPALDO = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=60";
 
 // ===== Cargar vuelos =====
 async function cargarVuelos() {
@@ -120,7 +71,7 @@ async function cargarVuelos() {
     vuelos = await obtenerVuelos();
     aplicarFiltros();
   } catch (error) {
-    cuerpoTablaVuelos.innerHTML = "";
+    rejillaVuelos.innerHTML = "";
     mensajeVacioVuelos.classList.remove("oculto");
     mensajeVacioVuelos.textContent = "Error al cargar vuelos: " + error.message;
   }
@@ -138,11 +89,11 @@ function aplicarFiltros() {
     return true;
   });
 
-  renderTablaVuelos(filtrados);
+  renderTarjetasVuelos(filtrados);
 }
 
-function renderTablaVuelos(lista) {
-  cuerpoTablaVuelos.innerHTML = "";
+function renderTarjetasVuelos(lista) {
+  rejillaVuelos.innerHTML = "";
 
   if (lista.length === 0) {
     mensajeVacioVuelos.classList.remove("oculto");
@@ -153,20 +104,40 @@ function renderTablaVuelos(lista) {
 
   lista.forEach(v => {
     const noDisponible = v.estado === "cancelado" || v.estado === "despegado";
-    const fila = document.createElement("tr");
-    fila.innerHTML = `
-      <td><span class="numero-vuelo">${v.numeroVuelo}</span></td>
-      <td>${v.aerolinea.nombre}<span class="ciudad">${v.aerolinea.codigoIata}</span></td>
-      <td><span class="codigo-iata">${v.origen.codigoIata}</span><span class="ciudad">${v.origen.ciudad}</span></td>
-      <td><span class="codigo-iata">${v.destino.codigoIata}</span><span class="ciudad">${v.destino.ciudad}</span></td>
-      <td><span class="hora">${formatearHora(v.horaSalida)}</span><span class="ciudad">${formatearFecha(v.horaSalida)}</span></td>
-      <td><span class="hora">${formatearHora(v.horaLlegada)}</span><span class="ciudad">${formatearFecha(v.horaLlegada)}</span></td>
-      <td><span class="etiqueta-estado estado-${v.estado}">${v.estado}</span></td>
-      <td class="columna-acciones">
-        <button class="boton-icono" data-id="${v._id}" ${noDisponible ? "disabled" : ""}>Reservar</button>
-      </td>
+    const imagen = v.destino.imagenUrl || v.origen.imagenUrl || IMAGEN_RESPALDO;
+
+    const tarjeta = document.createElement("article");
+    tarjeta.className = "tarjeta-vuelo";
+    tarjeta.innerHTML = `
+      <div class="tarjeta-vuelo-imagen" style="background-image:url('${imagen}')">
+        <span class="etiqueta-estado estado-${v.estado}">${v.estado}</span>
+      </div>
+      <div class="tarjeta-vuelo-cuerpo">
+        <div class="tarjeta-vuelo-ruta">
+          <div>
+            <span class="codigo-iata">${v.origen.codigoIata}</span>
+            <span class="ciudad">${v.origen.ciudad}</span>
+          </div>
+          <span class="tarjeta-vuelo-flecha" aria-hidden="true">→</span>
+          <div>
+            <span class="codigo-iata">${v.destino.codigoIata}</span>
+            <span class="ciudad">${v.destino.ciudad}</span>
+          </div>
+        </div>
+        <div class="tarjeta-vuelo-detalle">
+          <span class="numero-vuelo">${v.numeroVuelo}</span>
+          <span class="ciudad">${v.aerolinea.nombre}</span>
+        </div>
+        <div class="tarjeta-vuelo-horarios">
+          <div><span class="hora">${formatearHora(v.horaSalida)}</span><span class="ciudad">${formatearFecha(v.horaSalida)}</span></div>
+          <div><span class="hora">${formatearHora(v.horaLlegada)}</span><span class="ciudad">${formatearFecha(v.horaLlegada)}</span></div>
+        </div>
+        <button class="boton boton-principal tarjeta-vuelo-boton" data-id="${v._id}" ${noDisponible ? "disabled" : ""}>
+          ${noDisponible ? "No disponible" : "Reservar"}
+        </button>
+      </div>
     `;
-    cuerpoTablaVuelos.appendChild(fila);
+    rejillaVuelos.appendChild(tarjeta);
   });
 }
 
@@ -174,7 +145,7 @@ function limpiarFiltros() {
   filtroOrigen.value = "";
   filtroDestino.value = "";
   filtroFecha.value = "";
-  renderTablaVuelos(vuelos);
+  renderTarjetasVuelos(vuelos);
 }
 
 // ===== Cargar mis reservas =====
@@ -229,7 +200,7 @@ function mostrarError(mensaje) {
   errorFormulario.classList.remove("oculto");
 }
 
-cuerpoTablaVuelos.addEventListener("click", (e) => {
+rejillaVuelos.addEventListener("click", (e) => {
   const boton = e.target.closest("button[data-id]");
   if (!boton || boton.disabled) return;
   const vuelo = vuelos.find(v => v._id === boton.dataset.id);
@@ -249,7 +220,6 @@ formularioReserva.addEventListener("submit", async (e) => {
     return mostrarError("Formato de asiento inválido. Usa por ejemplo 12A.");
   }
 
-  // Validar que el asiento no esté ocupado por OTRO pasajero en ese vuelo
   const asientoOcupado = todasLasReservas.find(r =>
     String(r.vuelo.id) === String(vueloSeleccionado._id) &&
     r.asiento.toUpperCase() === asiento
@@ -258,7 +228,6 @@ formularioReserva.addEventListener("submit", async (e) => {
     return mostrarError(`El asiento ${asiento} ya está ocupado en este vuelo. Elige otro.`);
   }
 
-  // Validar si YO ya reservé este vuelo
   const reservaExistente = misReservas.find(r =>
     String(r.vuelo.id) === String(vueloSeleccionado._id)
   );
@@ -296,30 +265,22 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape" && !fondoModal.classList.contains("oculto")) cerrarModal();
 });
 
-// ===== Inicio: siempre pide datos primero =====
-// (no carga nada hasta que el pasajero ingrese sus datos)
-// ===== Inicio: si el usuario ya tiene pasajero vinculado, saltamos el formulario =====
+// ===== Inicio =====
 (async function iniciar() {
   const pasajeroIdGuardado = localStorage.getItem("pasajeroId");
+
+  panelBusqueda.classList.remove("oculto");
+  panelResultados.classList.remove("oculto");
 
   if (pasajeroIdGuardado) {
     try {
       const todos = await obtenerPasajeros();
-      pasajeroActual = todos.find(p => p._id === pasajeroIdGuardado);
-
-      if (pasajeroActual) {
-        panelPerfil.classList.add("oculto");
-        panelBusqueda.classList.remove("oculto");
-        panelResultados.classList.remove("oculto");
-
-        await cargarVuelos();
-        await cargarMisReservas();
-        return;
-      }
+      pasajeroActual = todos.find(p => p._id === pasajeroIdGuardado) || null;
     } catch (error) {
       console.error("No se pudo cargar el pasajero vinculado:", error.message);
     }
   }
 
-  // Si no hay pasajero vinculado, se queda mostrando panelPerfil (comportamiento actual)
+  await cargarVuelos();
+  if (pasajeroActual) await cargarMisReservas();
 })();

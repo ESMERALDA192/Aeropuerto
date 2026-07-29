@@ -68,6 +68,14 @@ const fondoModalDetalle  = document.getElementById("fondoModalDetalle");
 const btnCerrarDetalle   = document.getElementById("btnCerrarDetalle");
 const btnCerrarDetalle2  = document.getElementById("btnCerrarDetalle2");
 
+// Modal de boleto
+const btnVerBoleto     = document.getElementById("btnVerBoleto");
+const fondoModalBoleto = document.getElementById("fondoModalBoleto");
+const btnCerrarBoleto  = document.getElementById("btnCerrarBoleto");
+const btnCerrarBoleto2 = document.getElementById("btnCerrarBoleto2");
+
+let reservaDetalleActual = null;
+
 // ===== Usuario / cerrar sesión =====
 if (usuarioSesion) {
   usuarioSesion.textContent = localStorage.getItem("nombre") || rol || "";
@@ -632,6 +640,14 @@ document.addEventListener("keydown", e => {
 
 // ===== Modal de detalle de reserva =====
 function abrirModalDetalle(reserva) {
+  reservaDetalleActual = reserva;
+
+  if (reserva.registrado) {
+    btnVerBoleto.classList.remove("oculto");
+  } else {
+    btnVerBoleto.classList.add("oculto");
+  }
+
   const vuelo = vuelos.find(v => v._id === reserva.vuelo.id) || reserva.vuelo;
 
   const imagenDestino = vuelo.destino?.imagenUrl || vuelo.origen?.imagenUrl || IMAGEN_RESPALDO;
@@ -677,4 +693,46 @@ fondoModalDetalle.addEventListener("click", e => {
 });
 document.addEventListener("keydown", e => {
   if (e.key === "Escape" && !fondoModalDetalle.classList.contains("oculto")) cerrarModalDetalle();
+});
+
+// ===== Modal del boleto (pasajero) =====
+function abrirModalBoleto(reserva) {
+  const vuelo = vuelos.find(v => v._id === reserva.vuelo.id);
+
+  document.getElementById("boletoCodigo").textContent = reserva.codigoBoleto || "—";
+  document.getElementById("boletoOrigen").textContent = vuelo?.origen?.codigoIata || "—";
+  document.getElementById("boletoOrigenCiudad").textContent = vuelo?.origen?.ciudad || "";
+  document.getElementById("boletoDestino").textContent = vuelo?.destino?.codigoIata || "—";
+  document.getElementById("boletoDestinoCiudad").textContent = vuelo?.destino?.ciudad || "";
+  document.getElementById("boletoPasajero").textContent = reserva.pasajero.nombreCompleto || `${pasajeroActual?.nombre || ""} ${pasajeroActual?.apellido || ""}`;
+  document.getElementById("boletoVuelo").textContent = reserva.vuelo.numeroVuelo;
+  document.getElementById("boletoFecha").textContent = formatearFecha(reserva.vuelo.horaSalida);
+  document.getElementById("boletoHora").textContent = formatearHora(reserva.vuelo.horaSalida);
+  document.getElementById("boletoAsiento").textContent = reserva.asiento;
+  document.getElementById("boletoClase").textContent = nombresClase[reserva.clase];
+  document.getElementById("boletoPuerta").textContent = reserva.puertaEmbarque || "Por asignar";
+  document.getElementById("boletoEquipajeMano").textContent = reserva.equipaje?.equipajeMano ? "Sí" : "No";
+
+  const maletas = reserva.equipaje?.maletasDocumentadas || [];
+  document.getElementById("boletoMaletas").innerHTML = maletas.length
+    ? `<strong>Maletas documentadas:</strong> ` + maletas.map(m => `#${m.numero} (${m.pesoKg} kg)`).join(" · ")
+    : `<strong>Maletas documentadas:</strong> Ninguna`;
+
+  fondoModalBoleto.classList.remove("oculto");
+}
+
+function cerrarModalBoleto() {
+  fondoModalBoleto.classList.add("oculto");
+}
+
+btnVerBoleto.addEventListener("click", () => {
+  if (reservaDetalleActual) abrirModalBoleto(reservaDetalleActual);
+});
+btnCerrarBoleto.addEventListener("click", cerrarModalBoleto);
+btnCerrarBoleto2.addEventListener("click", cerrarModalBoleto);
+fondoModalBoleto.addEventListener("click", e => {
+  if (e.target === fondoModalBoleto) cerrarModalBoleto();
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !fondoModalBoleto.classList.contains("oculto")) cerrarModalBoleto();
 });

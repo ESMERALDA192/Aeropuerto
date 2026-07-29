@@ -39,7 +39,6 @@
         <h1 class="titulo-pagina">Check-in de <span>pasajeros</span></h1>
         <p class="subtitulo-pagina">Valida reservas y prepara a cada pasajero para abordar.</p>
       </div>
-      
     </div>
     <section class="filtros">
       <div class="filtros-cabecera">
@@ -59,6 +58,95 @@
       <div class="tabla-scroll"><table class="tabla"><thead><tr><th>Pasajero</th><th>Documento</th><th>Vuelo</th><th>Salida</th><th>Asiento</th><th>Clase</th><th>Check-in</th><th class="columna-acciones">Acción</th></tr></thead><tbody id="cuerpoTablaReservas"></tbody></table></div>
       <div class="mensaje-vacio oculto" id="mensajeVacio"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-check"></use></svg></span><strong>Cola despejada</strong><p>No hay reservas que coincidan con los filtros.</p></div>
     </section>
+
+    <!-- ===== Modal de check-in con equipaje ===== -->
+    <div class="fondo-modal oculto" id="fondoModalCheckin" role="dialog" aria-modal="true" aria-labelledby="tituloModalCheckin">
+      <div class="modal">
+        <div class="modal-acento"></div>
+        <div class="encabezado-modal">
+          <div>
+            <span class="modal-eyebrow">Registro de equipaje</span>
+            <h2 class="titulo-modal" id="tituloModalCheckin">Check-in</h2>
+          </div>
+          <button type="button" class="cerrar-modal" id="btnCerrarCheckin" aria-label="Cerrar">
+            <svg class="ui-icon"><use href="assets/icons.svg#icon-close"></use></svg>
+          </button>
+        </div>
+
+        <form id="formularioCheckin" novalidate>
+          <div class="cuerpo-modal">
+            <div class="resumen-reserva" id="resumenPasajeroCheckin"></div>
+
+            <label class="campo-checkbox">
+              <input type="checkbox" id="campoEquipajeMano" checked>
+              Lleva equipaje de mano
+            </label>
+
+            <div class="maletas-cabecera">
+              <label>Maletas documentadas</label>
+              <button type="button" class="boton boton-fantasma boton-chico" id="btnAgregarMaleta">+ Agregar maleta</button>
+            </div>
+            <div id="listaMaletas"></div>
+
+            <p class="error-formulario oculto" id="errorCheckin"></p>
+          </div>
+          <div class="pie-modal">
+            <button type="button" class="boton boton-fantasma" id="btnCancelarCheckin">Cancelar</button>
+            <button type="submit" class="boton boton-principal">Confirmar check-in</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== Modal del boleto (boarding pass) ===== -->
+    <div class="fondo-modal oculto" id="fondoModalBoleto" role="dialog" aria-modal="true" aria-labelledby="tituloModalBoleto">
+      <div class="modal modal-boleto">
+        <div class="modal-acento"></div>
+        <div class="encabezado-modal">
+          <div>
+            <span class="modal-eyebrow">Boarding Pass</span>
+            <h2 class="titulo-modal" id="tituloModalBoleto">Pase de abordar</h2>
+          </div>
+          <button type="button" class="cerrar-modal" id="btnCerrarBoleto" aria-label="Cerrar">
+            <svg class="ui-icon"><use href="assets/icons.svg#icon-close"></use></svg>
+          </button>
+        </div>
+        <div class="cuerpo-modal">
+          <div class="boleto">
+            <div class="boleto-encabezado">
+              <span class="marca-nombre">SkyPort</span>
+              <span class="boleto-codigo" id="boletoCodigo"></span>
+            </div>
+            <div class="boleto-ruta">
+              <div>
+                <span class="codigo-iata" id="boletoOrigen"></span>
+                <span class="ciudad" id="boletoOrigenCiudad"></span>
+              </div>
+              <span class="tarjeta-vuelo-flecha">✈</span>
+              <div>
+                <span class="codigo-iata" id="boletoDestino"></span>
+                <span class="ciudad" id="boletoDestinoCiudad"></span>
+              </div>
+            </div>
+            <div class="boleto-rejilla">
+              <div><span>Pasajero</span><strong id="boletoPasajero"></strong></div>
+              <div><span>Vuelo</span><strong id="boletoVuelo"></strong></div>
+              <div><span>Fecha</span><strong id="boletoFecha"></strong></div>
+              <div><span>Salida</span><strong id="boletoHora"></strong></div>
+              <div><span>Asiento</span><strong id="boletoAsiento"></strong></div>
+              <div><span>Clase</span><strong id="boletoClase"></strong></div>
+              <div><span>Puerta</span><strong id="boletoPuerta"></strong></div>
+              <div><span>Equipaje mano</span><strong id="boletoEquipajeMano"></strong></div>
+            </div>
+            <div class="boleto-maletas" id="boletoMaletas"></div>
+            <div class="boleto-barras" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="pie-modal">
+          <button type="button" class="boton boton-fantasma" id="btnCerrarBoleto2">Cerrar</button>
+        </div>
+      </div>
+    </div>
   </main>
   <script src="js/api.js"></script><script src="js/agente.js"></script>
 </body>

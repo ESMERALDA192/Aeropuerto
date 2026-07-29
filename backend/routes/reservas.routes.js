@@ -8,7 +8,7 @@ const { verificarToken, verificarRol } = require("../middlewares/auth");
 const CLASES_VALIDAS = ["economica", "ejecutiva", "primera"];
 
 async function construirDatosReserva(body) {
-    const { pasajeroId, vueloId, asiento, clase, registrado } = body;
+    const { pasajeroId, vueloId, asiento, clase, registrado, equipaje, puertaEmbarque } = body;
 
     if (!pasajeroId || !vueloId || !asiento || !clase) {
         return { error: "Faltan datos de la reserva (pasajeroId, vueloId, asiento, clase)" };
@@ -26,23 +26,40 @@ async function construirDatosReserva(body) {
     if (!pasajero) return { error: "La pasajeroId proporcionada no existe" };
     if (!vuelo) return { error: "La vueloId proporcionada no existe" };
 
-    return {
-        datos: {
-            pasajero: {
-                id: pasajero._id,
-                nombreCompleto: `${pasajero.nombre} ${pasajero.apellido}`,
-                documento: pasajero.documento
-            },
-            vuelo: {
-                id: vuelo._id,
-                numeroVuelo: vuelo.numeroVuelo,
-                horaSalida: vuelo.horaSalida
-            },
-            asiento,
-            clase,
-            registrado
-        }
+    const datos = {
+        pasajero: {
+            id: pasajero._id,
+            nombreCompleto: `${pasajero.nombre} ${pasajero.apellido}`,
+            documento: pasajero.documento
+        },
+        vuelo: {
+            id: vuelo._id,
+            numeroVuelo: vuelo.numeroVuelo,
+            horaSalida: vuelo.horaSalida
+        },
+        asiento,
+        clase,
+        registrado
     };
+
+    // Solo actualiza equipaje si viene en el body (evita borrarlo en updates que no lo tocan)
+    if (equipaje) {
+        datos.equipaje = {
+            maletasDocumentadas: Array.isArray(equipaje.maletasDocumentadas) ? equipaje.maletasDocumentadas : [],
+            equipajeMano: equipaje.equipajeMano !== undefined ? equipaje.equipajeMano : true
+        };
+    }
+
+    if (puertaEmbarque !== undefined) {
+        datos.puertaEmbarque = puertaEmbarque;
+    }
+
+    // Genera un código de boleto la primera vez que se hace check-in
+    if (registrado) {
+        datos.codigoBoleto = "SKY" + Math.random().toString(36).slice(2, 8).toUpperCase();
+    }
+
+    return { datos };
 }
 
 // GET /reservas — cualquiera con sesión iniciada puede ver

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const reservaSchema = new mongoose.Schema({
     pasajero: {
         id: { type: mongoose.Schema.Types.ObjectId, ref: "Pasajero", required: true },
@@ -12,6 +13,16 @@ const reservaSchema = new mongoose.Schema({
     },
     asiento: { type: String, required: true },
     clase: { type: String, enum: ["economica", "ejecutiva", "primera"], required: true },
-    registrado: { type: Boolean, default: false }
+    registrado: { type: Boolean, default: false },
+    equipaje: {
+        maletasDocumentadas: [{
+            numero: { type: Number, required: true },
+            pesoKg: { type: Number, required: true, min: 0 }
+        }],
+        equipajeMano: { type: Boolean, default: true }
+    },
+    puertaEmbarque: { type: String, default: "" },
+    codigoBoleto: { type: String, default: "" }
 }, { timestamps: true, versionKey: false });
+
 module.exports = mongoose.model("Reserva", reservaSchema, "reservas");

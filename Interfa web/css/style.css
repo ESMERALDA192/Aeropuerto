@@ -1310,3 +1310,55 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   background-position: center;
   margin-bottom: 16px;
 }
+
+.campo-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-transform: none;
+  font-weight: 400;
+  margin-top: 14px;
+  margin-bottom: 4px;
+}
+
+.campo-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  flex-shrink: 0;
+  accent-color: #5ee7f7;
+  margin: 0;
+}
+.modal {
+  overflow: hidden;
+}
+
+.maletas-cabecera { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; margin-bottom: 8px; }
+.boton-chico { padding: 6px 12px; font-size: 0.75rem; }
+.maleta-fila { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.maleta-numero { font-size: 0.75rem; opacity: 0.6; width: 24px; }
+.campo-peso-maleta { flex: 1; padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(7,19,38,0.15); background: rgba(7,19,38,0.03); color: inherit; }
+.boton-quitar-maleta { width: 30px; height: 30px; border-radius: 8px; }
+
+.modal-boleto { max-width: 420px; }
+.boleto {
+  background: linear-gradient(160deg, rgba(94,231,247,0.15), rgba(255,255,255,1));
+  border: 1px solid rgba(94,231,247,0.5);
+  border-radius: 16px;
+  padding: 20px;
+  color: #071326;
+}
+.boleto-encabezado { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.boleto-encabezado .marca-nombre { color: #071326; font-weight: 700; }
+.boleto-codigo { font-family: monospace; font-size: 0.85rem; color: #071326; opacity: 0.6; }
+.boleto-ruta { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px dashed rgba(7,19,38,0.25); }
+.boleto-ruta .codigo-iata { color: #071326; }
+.boleto-ruta .ciudad { color: #071326; opacity: 0.7; }
+.boleto-rejilla { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.boleto-rejilla div { display: flex; flex-direction: column; gap: 2px; }
+.boleto-rejilla span { font-size: 0.65rem; color: #071326; opacity: 0.55; text-transform: uppercase; }
+.boleto-rejilla strong { font-size: 0.9rem; color: #071326; }
+.boleto-maletas { font-size: 0.78rem; color: #071326; opacity: 0.8; border-top: 1px dashed rgba(7,19,38,0.25); padding-top: 10px; margin-top: 6px; }
+.boleto-barras { height: 40px; margin-top: 14px; background: repeating-linear-gradient(90deg, #071326 0 2px, transparent 2px 5px); opacity: 0.6; }

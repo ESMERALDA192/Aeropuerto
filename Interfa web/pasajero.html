@@ -277,9 +277,59 @@
 
       <div class="pie-modal">
         <button type="button" class="boton boton-fantasma" id="btnCerrarDetalle2">Cerrar</button>
+        <button type="button" class="boton boton-principal oculto" id="btnVerBoleto">Ver boleto</button>
       </div>
     </div>
   </div>
+      <!-- ===== Modal del boleto (boarding pass) ===== -->
+    <div class="fondo-modal oculto" id="fondoModalBoleto" role="dialog" aria-modal="true" aria-labelledby="tituloModalBoleto">
+      <div class="modal modal-boleto">
+        <div class="modal-acento"></div>
+        <div class="encabezado-modal">
+          <div>
+            <span class="modal-eyebrow">Boarding Pass</span>
+            <h2 class="titulo-modal" id="tituloModalBoleto">Pase de abordar</h2>
+          </div>
+          <button type="button" class="cerrar-modal" id="btnCerrarBoleto" aria-label="Cerrar">
+            <svg class="ui-icon"><use href="assets/icons.svg#icon-close"></use></svg>
+          </button>
+        </div>
+        <div class="cuerpo-modal">
+          <div class="boleto">
+            <div class="boleto-encabezado">
+              <span class="marca-nombre">SkyPort</span>
+              <span class="boleto-codigo" id="boletoCodigo"></span>
+            </div>
+            <div class="boleto-ruta">
+              <div>
+                <span class="codigo-iata" id="boletoOrigen"></span>
+                <span class="ciudad" id="boletoOrigenCiudad"></span>
+              </div>
+              <span class="tarjeta-vuelo-flecha">✈</span>
+              <div>
+                <span class="codigo-iata" id="boletoDestino"></span>
+                <span class="ciudad" id="boletoDestinoCiudad"></span>
+              </div>
+            </div>
+            <div class="boleto-rejilla">
+              <div><span>Pasajero</span><strong id="boletoPasajero"></strong></div>
+              <div><span>Vuelo</span><strong id="boletoVuelo"></strong></div>
+              <div><span>Fecha</span><strong id="boletoFecha"></strong></div>
+              <div><span>Salida</span><strong id="boletoHora"></strong></div>
+              <div><span>Asiento</span><strong id="boletoAsiento"></strong></div>
+              <div><span>Clase</span><strong id="boletoClase"></strong></div>
+              <div><span>Puerta</span><strong id="boletoPuerta"></strong></div>
+              <div><span>Equipaje mano</span><strong id="boletoEquipajeMano"></strong></div>
+            </div>
+            <div class="boleto-maletas" id="boletoMaletas"></div>
+            <div class="boleto-barras" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="pie-modal">
+          <button type="button" class="boton boton-fantasma" id="btnCerrarBoleto2">Cerrar</button>
+        </div>
+      </div>
+    </div>
   </main>
   <script src="js/api.js"></script><script src="js/pasajero.js"></script>
 </body>

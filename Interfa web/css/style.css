@@ -544,6 +544,47 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .cerrar-modal:hover { transform: none; }
 .mensaje-vacio > span { border-radius: 12px; }
 
+/* ===== Toggle Login / Registro ===== */
+
+.login-toggle {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: #eaf0f6;
+  border: 1px solid #dce5ee;
+  border-radius: 8px;
+  z-index: 10;
+}
+.toggle-btn {
+  min-height: 26px;
+  padding: 0 9px;
+  color: #5c7996;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .1px;
+  transition: var(--transicion);
+}
+.toggle-btn:hover {
+  color: var(--azul-600);
+  background: rgba(255, 255, 255, .6);
+}
+.toggle-btn.activo {
+  color: #fff;
+  background: #166fcf;
+  box-shadow: 0 3px 8px rgba(22, 111, 207, .22);
+}
+
+.login-panel-cabecera {
+  padding-top: 30px;
+}
+
 /* ===== Login V2 ===== */
 .login-v2 {
   min-height: 100svh;
@@ -569,7 +610,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: .5;
+  opacity: .5;.login-toggle
   background-image:
     linear-gradient(rgba(116, 160, 202, .045) 1px, transparent 1px),
     linear-gradient(90deg, rgba(116, 160, 202, .045) 1px, transparent 1px);

@@ -60,12 +60,12 @@
       <div class="campo"><label for="filtroFecha">Fecha</label><input type="date" id="filtroFecha"></div>
       <button class="boton boton-fantasma" id="btnLimpiar" type="button"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-refresh"></use></svg></span> Limpiar</button>
     </section>
-    <section class="contenedor-tabla oculto" id="panelResultados">
+    <section class="contenedor-vuelos oculto" id="panelResultados">
       <div class="tabla-cabecera">
         <div><h2>Vuelos disponibles</h2><p>Selecciona la mejor opción para tu viaje</p></div>
         <span class="insignia-live"><span class="punto-vivo"></span>En vivo</span>
       </div>
-      <div class="tabla-scroll"><table class="tabla"><thead><tr><th>Vuelo</th><th>Aerolínea</th><th>Origen</th><th>Destino</th><th>Salida</th><th>Llegada</th><th>Estado</th><th class="columna-acciones">Acciones</th></tr></thead><tbody id="cuerpoTablaVuelos"></tbody></table></div>
+      <div class="rejilla-vuelos" id="rejillaVuelos"></div>
       <div class="mensaje-vacio oculto" id="mensajeVacioVuelos"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-search"></use></svg></span><strong>No encontramos vuelos</strong><p>Prueba con otra ruta o fecha.</p></div>
     </section>
     <div class="encabezado-seccion"><div><span class="sobrelinea">My Trips</span><h2>Mis reservas</h2></div><span class="chip-seccion">Viajes activos</span></div>

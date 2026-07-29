@@ -3,9 +3,15 @@ const bcrypt = require("bcryptjs");
 
 const usuarioSchema = new mongoose.Schema({
     nombre: { type: String, required: true, trim: true },
+    apellidoPaterno: { type: String, trim: true, default: "" },
+    apellidoMaterno: { type: String, trim: true, default: "" },
     correo: { type: String, required: true, unique: true, trim: true, lowercase: true },
     password: { type: String, required: true },
-    rol: { type: String, enum: ["pasajero", "agente", "administrador"], required: true }
+    fechaNacimiento: { type: Date },
+    telefono: { type: String, trim: true, default: "" },
+    genero: { type: String, enum: ["femenino", "masculino", "otro", "prefiero_no_decir"], default: "prefiero_no_decir" },
+    aceptoTerminos: { type: Boolean, default: false },
+    rol: { type: String, enum: ["pasajero", "agente", "administrador"], required: true, default: "pasajero" }
 }, { timestamps: true, versionKey: false });
 
 // Antes de guardar, si el password cambió, lo hashea automáticamente

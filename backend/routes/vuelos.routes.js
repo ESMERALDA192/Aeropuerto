@@ -9,10 +9,14 @@ const ESTADOS_VALIDOS = ["programado", "retrasado", "abordando", "despegado", "c
 
 // Arma el objeto del vuelo buscando y validando las 3 relaciones (aerolinea, origen, destino)
 async function construirDatosVuelo(body) {
-    const { numeroVuelo, aerolineaId, origenId, destinoId, horaSalida, horaLlegada, estado } = body;
+    const { numeroVuelo, aerolineaId, origenId, destinoId, horaSalida, horaLlegada, precio, estado } = body;
 
-    if (!numeroVuelo || !aerolineaId || !origenId || !destinoId || !horaSalida || !horaLlegada) {
-        return { error: "Faltan datos del vuelo (numeroVuelo, aerolineaId, origenId, destinoId, horaSalida, horaLlegada)" };
+    if (!numeroVuelo || !aerolineaId || !origenId || !destinoId || !horaSalida || !horaLlegada || precio === undefined || precio === null || precio === "") {
+        return { error: "Faltan datos del vuelo (numeroVuelo, aerolineaId, origenId, destinoId, horaSalida, horaLlegada, precio)" };
+    }
+
+    if (isNaN(Number(precio)) || Number(precio) < 0) {
+        return { error: "El precio debe ser un número mayor o igual a 0" };
     }
 
     if (origenId === destinoId) {
@@ -41,6 +45,7 @@ async function construirDatosVuelo(body) {
             destino: { id: destino._id, codigoIata: destino.codigoIata, ciudad: destino.ciudad },
             horaSalida,
             horaLlegada,
+            precio: Number(precio),
             estado
         }
     };

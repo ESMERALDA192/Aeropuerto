@@ -108,12 +108,18 @@
           <span class="marca-texto"><span class="marca-nombre">SkyPort</span><span class="marca-subtitulo">Operaciones aeroportuarias</span></span>
         </div>
 
-        <div class="login-panel-cabecera">
-          <span class="login-kicker">Acceso del personal</span>
-          <h2>Iniciar sesión</h2>
-          <p class="subtitulo-login">Ingresa tus credenciales para entrar al centro de operaciones.</p>
+        <div class="login-toggle" role="tablist" aria-label="Selecciona acceso o registro">
+          <button type="button" class="toggle-btn activo" id="btnMostrarLogin" role="tab" aria-selected="true">Iniciar sesión</button>
+          <button type="button" class="toggle-btn" id="btnMostrarRegistro" role="tab" aria-selected="false">Crear cuenta</button>
         </div>
 
+        <div class="login-panel-cabecera">
+          <span class="login-kicker" id="loginKicker">Acceso del personal</span>
+          <h2 id="loginTitulo">Iniciar sesión</h2>
+          <p class="subtitulo-login" id="loginSubtitulo">Ingresa tus credenciales para entrar al centro de operaciones.</p>
+        </div>
+
+        <div id="vistaLogin">
         <form id="formularioLogin" novalidate>
           <div class="campo campo-login">
             <label for="campoCorreo">Correo electrónico</label>
@@ -138,6 +144,64 @@
             <span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-arrow-right"></use></svg></span>
           </button>
         </form>
+        </div>
+
+        <div id="vistaRegistro" class="oculto">
+        <form id="formularioRegistro" novalidate>
+          <div class="rejilla-formulario">
+            <div class="campo campo-completo">
+              <label for="campoRegNombre">Nombre</label>
+              <input type="text" id="campoRegNombre" placeholder="Ana" autocomplete="given-name" required>
+            </div>
+            <div class="campo">
+              <label for="campoRegApellidoP">Apellido paterno</label>
+              <input type="text" id="campoRegApellidoP" placeholder="López" autocomplete="family-name" required>
+            </div>
+            <div class="campo">
+              <label for="campoRegApellidoM">Apellido materno</label>
+              <input type="text" id="campoRegApellidoM" placeholder="García" autocomplete="additional-name" required>
+            </div>
+            <div class="campo campo-completo">
+              <label for="campoRegCorreo">Correo electrónico</label>
+              <input type="email" id="campoRegCorreo" placeholder="tucorreo@correo.com" autocomplete="email" required>
+            </div>
+            <div class="campo">
+              <label for="campoRegFechaNacimiento">Fecha de nacimiento</label>
+              <input type="date" id="campoRegFechaNacimiento" required>
+            </div>
+            <div class="campo">
+              <label for="campoRegTelefono">Teléfono</label>
+              <input type="tel" id="campoRegTelefono" placeholder="3121234567" autocomplete="tel" required>
+            </div>
+            <div class="campo">
+              <label for="campoRegGenero">Género</label>
+              <select id="campoRegGenero" required>
+                <option value="">Selecciona una opción</option>
+                <option value="femenino">Femenino</option>
+                <option value="masculino">Masculino</option>
+                <option value="otro">Otro</option>
+                <option value="prefiero_no_decir">Prefiero no decir</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label for="campoRegPassword">Contraseña</label>
+              <input type="password" id="campoRegPassword" placeholder="••••••••" autocomplete="new-password" required>
+            </div>
+          </div>
+
+          <label class="campo-check">
+            <input type="checkbox" id="campoRegTerminos" required>
+            <span>He leído y acepto los <a href="#" target="_blank" rel="noopener">términos y condiciones</a>.</span>
+          </label>
+
+          <p class="error-formulario oculto" id="errorRegistro"></p>
+
+          <button type="submit" class="boton boton-principal boton-login" id="btnRegistrar">
+            <span>Crear cuenta</span>
+            <span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-arrow-right"></use></svg></span>
+          </button>
+        </form>
+        </div>
 
         <div class="login-seguridad">
           <span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-shield-check"></use></svg></span>

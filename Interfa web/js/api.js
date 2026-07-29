@@ -22,6 +22,17 @@ async function login(correo, password) {
   return datos;
 }
 
+async function registrar(datosUsuario) {
+  const respuesta = await fetch(`${API_URL}/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datosUsuario)
+  });
+  const datos = await respuesta.json();
+  if (!respuesta.ok) throw new Error(datos.mensaje || "No se pudo crear la cuenta");
+  return datos;
+}
+
 // ===== VUELOS =====
 async function obtenerVuelos() {
   const respuesta = await fetch(`${API_URL}/vuelos`, { headers: headersConToken() });
@@ -217,3 +228,4 @@ async function eliminarEmpleado(id) {
   if (!respuesta.ok) throw new Error("Error al eliminar el empleado");
   return await respuesta.json();
 }
+

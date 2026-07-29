@@ -27,13 +27,13 @@ router.get("/:id", verificarToken, async (req, res, next) => {
 // POST /aeropuertos — solo administrador
 router.post("/", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
-        const { nombre, codigoIata, ciudad, pais, terminales } = req.body;
+        const { nombre, codigoIata, ciudad, pais, terminales, imagenUrl } = req.body;
 
         if (!nombre || !codigoIata || !ciudad || !pais) {
             return res.status(400).json({ mensaje: "Faltan datos del aeropuerto (nombre, codigoIata, ciudad, pais)" });
         }
 
-        const nuevoAeropuerto = new Aeropuerto({ nombre, codigoIata, ciudad, pais, terminales });
+        const nuevoAeropuerto = new Aeropuerto({ nombre, codigoIata, ciudad, pais, terminales, imagenUrl });
         const aeropuertoGuardado = await nuevoAeropuerto.save();
 
         res.status(201).json({ mensaje: "Aeropuerto registrado correctamente", aeropuerto: aeropuertoGuardado });
@@ -45,7 +45,7 @@ router.post("/", verificarToken, verificarRol("administrador"), async (req, res,
 // PUT /aeropuertos/:id — solo administrador
 router.put("/:id", verificarToken, verificarRol("administrador"), async (req, res, next) => {
     try {
-        const { nombre, codigoIata, ciudad, pais, terminales } = req.body;
+        const { nombre, codigoIata, ciudad, pais, terminales, imagenUrl } = req.body;
 
         if (!nombre || !codigoIata || !ciudad || !pais) {
             return res.status(400).json({ mensaje: "Faltan datos del aeropuerto (nombre, codigoIata, ciudad, pais)" });
@@ -53,7 +53,7 @@ router.put("/:id", verificarToken, verificarRol("administrador"), async (req, re
 
         const aeropuertoActualizado = await Aeropuerto.findByIdAndUpdate(
             req.params.id,
-            { nombre, codigoIata, ciudad, pais, terminales },
+            { nombre, codigoIata, ciudad, pais, terminales, imagenUrl },
             { new: true, runValidators: true }
         );
 

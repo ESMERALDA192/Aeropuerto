@@ -4,6 +4,7 @@ const aeropuertoSchema = new mongoose.Schema({
     codigoIata: { type: String, required: true, unique: true, trim: true, uppercase: true },
     ciudad: { type: String, required: true, trim: true },
     pais: { type: String, required: true, trim: true },
-    terminales: { type: Number, default: 1 }
+    terminales: { type: Number, default: 1 },
+    imagenUrl: { type: String, trim: true, default: "" }
 }, { timestamps: true, versionKey: false });
 module.exports = mongoose.model("Aeropuerto", aeropuertoSchema, "aeropuertos");

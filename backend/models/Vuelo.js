@@ -18,6 +18,7 @@ const vueloSchema = new mongoose.Schema({
     },
     horaSalida: { type: Date, required: true },
     horaLlegada: { type: Date, required: true },
+    precio: { type: Number, required: true, min: 0 },
     estado: { type: String, enum: ["programado", "retrasado", "abordando", "despegado", "cancelado"], default: "programado" }
 }, { timestamps: true, versionKey: false });
 module.exports = mongoose.model("Vuelo", vueloSchema, "vuelos");

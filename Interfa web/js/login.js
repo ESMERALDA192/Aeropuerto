@@ -23,7 +23,6 @@ const campoRegFechaNacimiento = document.getElementById("campoRegFechaNacimiento
 const campoRegTelefono        = document.getElementById("campoRegTelefono");
 const campoRegGenero          = document.getElementById("campoRegGenero");
 const campoRegPassword        = document.getElementById("campoRegPassword");
-const campoRegTerminos        = document.getElementById("campoRegTerminos");
 const errorRegistro           = document.getElementById("errorRegistro");
 const btnRegistrar            = document.getElementById("btnRegistrar");
 
@@ -125,8 +124,8 @@ formularioRegistro.addEventListener("submit", async (e) => {
     fechaNacimiento: campoRegFechaNacimiento.value,
     telefono: campoRegTelefono.value.trim(),
     genero: campoRegGenero.value,
-    password: campoRegPassword.value,
-    aceptoTerminos: campoRegTerminos.checked
+    password: campoRegPassword.value
+   
   };
 
   if (!datosRegistro.nombre || !datosRegistro.apellidoPaterno || !datosRegistro.apellidoMaterno ||

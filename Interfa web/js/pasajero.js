@@ -266,6 +266,7 @@ function renderTarjetasVuelos(lista) {
         <div class="tarjeta-vuelo-detalle">
           <span class="numero-vuelo">${v.numeroVuelo}</span>
           <span class="ciudad">${v.aerolinea.nombre}</span>
+          <span class="hora">$${v.precio.toLocaleString("es-MX")} MXN</span>
         </div>
 
         <div class="tarjeta-vuelo-horarios">

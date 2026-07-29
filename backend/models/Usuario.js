@@ -11,17 +11,16 @@ const usuarioSchema = new mongoose.Schema({
     telefono: { type: String, trim: true, default: "" },
     genero: { type: String, enum: ["femenino", "masculino", "otro", "prefiero_no_decir"], default: "prefiero_no_decir" },
     aceptoTerminos: { type: Boolean, default: false },
-    rol: { type: String, enum: ["pasajero", "agente", "administrador"], required: true, default: "pasajero" }
+    rol: { type: String, enum: ["pasajero", "agente", "administrador"], required: true, default: "pasajero" },
+    pasajero: { type: mongoose.Schema.Types.ObjectId, ref: "Pasajero", default: null }
 }, { timestamps: true, versionKey: false });
 
-// Antes de guardar, si el password cambió, lo hashea automáticamente
 usuarioSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
     this.password = await bcrypt.hash(this.password, 10);
     next();
 });
 
-// Método para comparar el password que mandan en login vs el hasheado en la BD
 usuarioSchema.methods.compararPassword = function (passwordIngresado) {
     return bcrypt.compare(passwordIngresado, this.password);
 };

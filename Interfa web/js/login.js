@@ -94,6 +94,13 @@ formularioLogin.addEventListener("submit", async (e) => {
     localStorage.setItem("rol", datos.usuario.rol);
     localStorage.setItem("nombre", datos.usuario.nombre);
     localStorage.setItem("correo", datos.usuario.correo);
+    if (data.usuario.pasajero) {
+      localStorage.setItem("pasajeroId", data.usuario.pasajero._id);
+      localStorage.setItem("pasajeroDocumento", data.usuario.pasajero.documento);
+    } else {
+      localStorage.removeItem("pasajeroId");
+      localStorage.removeItem("pasajeroDocumento");
+    }
 
     redirigirSegunRol(datos.usuario.rol);
 

@@ -9,12 +9,14 @@ const vueloSchema = new mongoose.Schema({
     origen: {
         id: { type: mongoose.Schema.Types.ObjectId, ref: "Aeropuerto", required: true },
         codigoIata: { type: String, required: true },
-        ciudad: { type: String, required: true }
+        ciudad: { type: String, required: true },
+        imagenUrl: { type: String, trim: true, default: "" }
     },
     destino: {
         id: { type: mongoose.Schema.Types.ObjectId, ref: "Aeropuerto", required: true },
         codigoIata: { type: String, required: true },
-        ciudad: { type: String, required: true }
+        ciudad: { type: String, required: true },
+        imagenUrl: { type: String, trim: true, default: "" }
     },
     horaSalida: { type: Date, required: true },
     horaLlegada: { type: Date, required: true },

@@ -298,3 +298,28 @@ document.addEventListener("keydown", e => {
 
 // ===== Inicio: siempre pide datos primero =====
 // (no carga nada hasta que el pasajero ingrese sus datos)
+// ===== Inicio: si el usuario ya tiene pasajero vinculado, saltamos el formulario =====
+(async function iniciar() {
+  const pasajeroIdGuardado = localStorage.getItem("pasajeroId");
+
+  if (pasajeroIdGuardado) {
+    try {
+      const todos = await obtenerPasajeros();
+      pasajeroActual = todos.find(p => p._id === pasajeroIdGuardado);
+
+      if (pasajeroActual) {
+        panelPerfil.classList.add("oculto");
+        panelBusqueda.classList.remove("oculto");
+        panelResultados.classList.remove("oculto");
+
+        await cargarVuelos();
+        await cargarMisReservas();
+        return;
+      }
+    } catch (error) {
+      console.error("No se pudo cargar el pasajero vinculado:", error.message);
+    }
+  }
+
+  // Si no hay pasajero vinculado, se queda mostrando panelPerfil (comportamiento actual)
+})();

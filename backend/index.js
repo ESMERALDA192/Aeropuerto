@@ -1,5 +1,12 @@
+const dns = require("node:dns");
+
+dns.setServers([
+    "8.8.8.8",
+    "1.1.1.1"
+]);
 require("dotenv").config();
-console.log("JWT_SECRET cargado:", process.env.JWT_SECRET);
+console.log("JWT_SECRET cargado:", process.env.JWT_SECRET ? "Sí" : "No");
+
 
 const express = require("express");
 const morgan = require("morgan");
@@ -19,8 +26,9 @@ const pasajerosRoutes = require("./routes/pasajeros.routes");
 const puertasRoutes = require("./routes/puertas.routes");   
 const reservasRoutes = require("./routes/reservas.routes");
 const vuelosRoutes = require("./routes/vuelos.routes");
+const consultasRoutes = require("./routes/consultas.routes");
 
-console.log("PASO 3: 7 rutas de recursos cargadas");
+console.log("PASO 3: rutas de recursos y consultas cargadas");
 
 const authRoutes = require("./routes/auth.routes");
 
@@ -53,6 +61,7 @@ app.use("/pasajeros", pasajerosRoutes);
 app.use("/puertas", puertasRoutes);
 app.use("/reservas", reservasRoutes);
 app.use("/vuelos", vuelosRoutes);
+app.use("/consultas", consultasRoutes);
 
 console.log("PASO 5: a punto de montar /auth");
 app.use("/auth", authRoutes);

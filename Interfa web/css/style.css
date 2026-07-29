@@ -1247,3 +1247,45 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .campo-pasajeros { flex-basis: auto; }
   .buscador-boton { width: 100%; }
 }
+
+.modal-reserva { max-width: 560px; }
+.cuerpo-modal-reserva { display: flex; flex-direction: column; gap: 24px; max-height: 70vh; overflow-y: auto; }
+.paso-titulo { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 1rem; }
+.paso-numero { width: 24px; height: 24px; border-radius: 50%; background: #5ee7f7; color: #071326; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+
+.clase-opciones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.clase-opcion { border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.03); border-radius: 12px; padding: 10px; cursor: pointer; color: inherit; text-align: left; display: flex; flex-direction: column; gap: 4px; }
+.clase-opcion span { font-size: 0.75rem; opacity: 0.7; }
+.clase-opcion.activo { border-color: #5ee7f7; background: rgba(94,231,247,0.1); }
+
+.mapa-leyenda { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.75rem; margin-bottom: 12px; opacity: 0.85; }
+.pastilla-leyenda { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 4px; vertical-align: middle; }
+.pastilla-leyenda.disponible { background: rgba(94,231,247,0.25); border: 1px solid #5ee7f7; }
+.pastilla-leyenda.seleccionado { background: #5ee7f7; }
+.pastilla-leyenda.ocupado { background: rgba(255,255,255,0.08); }
+.pastilla-leyenda.deshabilitado { background: rgba(255,255,255,0.04); opacity: 0.4; }
+
+.mapa-avion { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; }
+.mapa-nariz { text-align: center; font-size: 1.2rem; opacity: 0.5; margin-bottom: 10px; transform: rotate(90deg); }
+.mapa-filas { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+.mapa-fila { display: flex; gap: 6px; align-items: center; }
+.mapa-pasillo { width: 18px; }
+
+.asiento { width: 30px; height: 30px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); font-size: 0.7rem; cursor: pointer; color: inherit; background: transparent; }
+.asiento-disponible { background: rgba(94,231,247,0.15); border-color: #5ee7f7; }
+.asiento-disponible:hover { background: rgba(94,231,247,0.3); }
+.asiento-seleccionado { background: #5ee7f7 !important; color: #071326; font-weight: 700; }
+.asiento-ocupado { background: rgba(255,255,255,0.05); cursor: not-allowed; opacity: 0.4; }
+.asiento-deshabilitado { opacity: 0.25; cursor: not-allowed; }
+
+.asiento-elegido { margin-top: 10px; font-size: 0.85rem; opacity: 0.8; }
+
+.metodo-pago-opciones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+.metodo-pago-opcion { border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.03); border-radius: 12px; padding: 10px; cursor: pointer; color: inherit; font-size: 0.85rem; }
+.metodo-pago-opcion.activo { border-color: #5ee7f7; background: rgba(94,231,247,0.1); }
+
+.pago-info { font-size: 0.85rem; opacity: 0.8; line-height: 1.5; }
+
+.resumen-reserva { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+.resumen-linea { display: flex; justify-content: space-between; font-size: 0.85rem; opacity: 0.85; }
+.resumen-total { font-size: 1rem; font-weight: 700; opacity: 1; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; margin-top: 4px; }

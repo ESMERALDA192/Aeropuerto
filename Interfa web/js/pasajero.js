@@ -331,13 +331,176 @@ function renderTablaReservas() {
   });
 }
 
+// ===== Configuración del mapa de asientos =====
+const COLUMNAS = ["A", "B", "C", "D", "E", "F"];
+const FILAS_TOTALES = 30;
+
+function categoriaDeFila(fila) {
+  if (fila <= 2) return "primera";
+  if (fila <= 6) return "ejecutiva";
+  return "economica";
+}
+
+function generarAsientos() {
+  const asientos = [];
+  for (let fila = 1; fila <= FILAS_TOTALES; fila++) {
+    COLUMNAS.forEach(col => {
+      asientos.push({ id: `${fila}${col}`, fila, columna: col, categoria: categoriaDeFila(fila) });
+    });
+  }
+  return asientos;
+}
+const TODOS_LOS_ASIENTOS = generarAsientos();
+
+let asientosOcupados = new Set();
+let asientoElegido = null;
+
+// ===== Referencias nuevas del DOM =====
+const claseOpcionesBtns  = document.querySelectorAll("#claseOpciones .clase-opcion");
+const mapaFilas          = document.getElementById("mapaFilas");
+const textoAsientoElegido = document.getElementById("textoAsientoElegido");
+const metodoPagoBtns     = document.querySelectorAll("#metodoPagoOpciones .metodo-pago-opcion");
+const panelTarjeta       = document.getElementById("panelTarjeta");
+const panelOxxo          = document.getElementById("panelOxxo");
+const panelPaypal        = document.getElementById("panelPaypal");
+const campoNumTarjeta    = document.getElementById("campoNumTarjeta");
+const campoNombreTarjeta = document.getElementById("campoNombreTarjeta");
+const campoVigencia      = document.getElementById("campoVigencia");
+const campoCVV           = document.getElementById("campoCVV");
+const resumenReserva     = document.getElementById("resumenReserva");
+let metodoPagoElegido = "tarjeta";
+
+// ===== Selección de clase =====
+claseOpcionesBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    claseOpcionesBtns.forEach(b => b.classList.remove("activo"));
+    btn.classList.add("activo");
+    campoClase.value = btn.dataset.clase;
+    asientoElegido = null;
+    campoAsiento.value = "";
+    renderMapaAsientos();
+    actualizarResumen();
+  });
+});
+
+// ===== Selección de método de pago =====
+metodoPagoBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    metodoPagoBtns.forEach(b => b.classList.remove("activo"));
+    btn.classList.add("activo");
+    metodoPagoElegido = btn.dataset.metodo;
+
+    panelTarjeta.classList.add("oculto");
+    panelOxxo.classList.add("oculto");
+    panelPaypal.classList.add("oculto");
+
+    if (metodoPagoElegido === "tarjeta") panelTarjeta.classList.remove("oculto");
+    if (metodoPagoElegido === "oxxo") panelOxxo.classList.remove("oculto");
+    if (metodoPagoElegido === "paypal") panelPaypal.classList.remove("oculto");
+  });
+});
+
+// ===== Formateo amigable de campos de tarjeta =====
+campoNumTarjeta.addEventListener("input", () => {
+  campoNumTarjeta.value = campoNumTarjeta.value.replace(/\D/g, "").slice(0, 16).replace(/(\d{4})(?=\d)/g, "$1 ");
+});
+campoVigencia.addEventListener("input", () => {
+  let v = campoVigencia.value.replace(/\D/g, "").slice(0, 4);
+  if (v.length > 2) v = v.slice(0, 2) + "/" + v.slice(2);
+  campoVigencia.value = v;
+});
+campoCVV.addEventListener("input", () => {
+  campoCVV.value = campoCVV.value.replace(/\D/g, "").slice(0, 4);
+});
+
+// ===== Pintar mapa de asientos =====
+function renderMapaAsientos() {
+  mapaFilas.innerHTML = "";
+
+  for (let fila = 1; fila <= FILAS_TOTALES; fila++) {
+    const filaEl = document.createElement("div");
+    filaEl.className = "mapa-fila";
+
+    COLUMNAS.forEach((col, idx) => {
+      const idAsiento = `${fila}${col}`;
+      const categoria = categoriaDeFila(fila);
+      const ocupado = asientosOcupados.has(idAsiento);
+      const deshabilitado = categoria !== campoClase.value;
+
+      const btnAsiento = document.createElement("button");
+      btnAsiento.type = "button";
+      btnAsiento.className = "asiento";
+      btnAsiento.textContent = col;
+      btnAsiento.title = idAsiento;
+
+      if (ocupado) btnAsiento.classList.add("asiento-ocupado");
+      else if (deshabilitado) btnAsiento.classList.add("asiento-deshabilitado");
+      else btnAsiento.classList.add("asiento-disponible");
+
+      if (asientoElegido === idAsiento) btnAsiento.classList.add("asiento-seleccionado");
+
+      btnAsiento.disabled = ocupado || deshabilitado;
+
+      btnAsiento.addEventListener("click", () => {
+        asientoElegido = idAsiento;
+        campoAsiento.value = idAsiento;
+        renderMapaAsientos();
+        actualizarResumen();
+      });
+
+      filaEl.appendChild(btnAsiento);
+      if (idx === 2) {
+        const pasillo = document.createElement("span");
+        pasillo.className = "mapa-pasillo";
+        filaEl.appendChild(pasillo);
+      }
+    });
+
+    mapaFilas.appendChild(filaEl);
+  }
+
+  textoAsientoElegido.textContent = asientoElegido
+    ? `Asiento seleccionado: ${asientoElegido}`
+    : "Ningún asiento seleccionado";
+}
+
+function actualizarResumen() {
+  if (!vueloSeleccionado) return;
+  resumenReserva.innerHTML = `
+    <div class="resumen-linea"><span>Vuelo</span><strong>${vueloSeleccionado.numeroVuelo}</strong></div>
+    <div class="resumen-linea"><span>Clase</span><strong>${nombresClase[campoClase.value]}</strong></div>
+    <div class="resumen-linea"><span>Asiento</span><strong>${asientoElegido || "—"}</strong></div>
+    <div class="resumen-linea resumen-total"><span>Total</span><strong>$${vueloSeleccionado.precio.toLocaleString("es-MX")} MXN</strong></div>
+  `;
+}
+
 // ===== Modal de reserva =====
 function abrirModal(vuelo) {
   vueloSeleccionado = vuelo;
   errorFormulario.classList.add("oculto");
   formularioReserva.reset();
+
+  asientoElegido = null;
+  campoClase.value = "economica";
+  claseOpcionesBtns.forEach(b => b.classList.toggle("activo", b.dataset.clase === "economica"));
+
+  metodoPagoElegido = "tarjeta";
+  metodoPagoBtns.forEach(b => b.classList.toggle("activo", b.dataset.metodo === "tarjeta"));
+  panelTarjeta.classList.remove("oculto");
+  panelOxxo.classList.add("oculto");
+  panelPaypal.classList.add("oculto");
+
+  asientosOcupados = new Set(
+    todasLasReservas
+      .filter(r => String(r.vuelo.id) === String(vuelo._id))
+      .map(r => r.asiento.toUpperCase())
+  );
+
+  renderMapaAsientos();
+  actualizarResumen();
   fondoModal.classList.remove("oculto");
 }
+
 function cerrarModal() {
   fondoModal.classList.add("oculto");
   vueloSeleccionado = null;
@@ -345,6 +508,20 @@ function cerrarModal() {
 function mostrarError(mensaje) {
   errorFormulario.textContent = mensaje;
   errorFormulario.classList.remove("oculto");
+}
+
+// ===== Validación del método de pago =====
+function validarPago() {
+  if (metodoPagoElegido === "tarjeta") {
+    const numero = campoNumTarjeta.value.replace(/\s/g, "");
+    if (numero.length !== 16) return "El número de tarjeta debe tener 16 dígitos.";
+    if (!campoNombreTarjeta.value.trim()) return "Ingresa el nombre del titular.";
+    if (!/^\d{2}\/\d{2}$/.test(campoVigencia.value)) return "La vigencia debe tener el formato MM/AA.";
+    const [mes] = campoVigencia.value.split("/");
+    if (Number(mes) < 1 || Number(mes) > 12) return "El mes de vigencia no es válido.";
+    if (!/^\d{3,4}$/.test(campoCVV.value)) return "El CVV debe tener 3 o 4 dígitos.";
+  }
+  return null;
 }
 
 // ===== Confirmar reserva (con validaciones) =====
@@ -355,16 +532,13 @@ formularioReserva.addEventListener("submit", async (e) => {
     return mostrarError("No se encontró tu perfil de pasajero. Vuelve a iniciar sesión.");
   }
 
-  const asiento = campoAsiento.value.trim().toUpperCase();
-  const clase = campoClase.value;
-
-  if (!asiento) return mostrarError("El asiento es obligatorio.");
-
-  if (!/^\d{1,2}[A-F]$/.test(asiento)) {
-    return mostrarError("Formato de asiento inválido. Usa por ejemplo 12A.");
+  if (!asientoElegido) {
+    return mostrarError("Selecciona un asiento en el mapa.");
   }
 
-  // Validar que el asiento no esté ocupado por OTRO pasajero en ese vuelo
+  const asiento = asientoElegido;
+  const clase = campoClase.value;
+
   const asientoOcupado = todasLasReservas.find(r =>
     String(r.vuelo.id) === String(vueloSeleccionado._id) &&
     r.asiento.toUpperCase() === asiento
@@ -373,7 +547,6 @@ formularioReserva.addEventListener("submit", async (e) => {
     return mostrarError(`El asiento ${asiento} ya está ocupado en este vuelo. Elige otro.`);
   }
 
-  // Validar si YO ya reservé este vuelo
   const reservaExistente = misReservas.find(r =>
     String(r.vuelo.id) === String(vueloSeleccionado._id)
   );
@@ -381,6 +554,13 @@ formularioReserva.addEventListener("submit", async (e) => {
     const respuesta = confirm("Ya habías reservado este vuelo.\n\n¿Deseas reservarlo nuevamente?");
     if (!respuesta) return;
   }
+
+  const errorPago = validarPago();
+  if (errorPago) return mostrarError(errorPago);
+
+  const btnPagar = document.getElementById("btnConfirmarPago");
+  btnPagar.disabled = true;
+  btnPagar.textContent = "Procesando pago...";
 
   try {
     await agregarReserva({
@@ -390,11 +570,29 @@ formularioReserva.addEventListener("submit", async (e) => {
       clase,
       registrado: false
     });
+
     cerrarModal();
     await cargarMisReservas();
+
+    const referencia = "SKY-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+    alert(`✅ Pago aprobado.\nReferencia: ${referencia}\nAsiento: ${asiento} — ${nombresClase[clase]}`);
+
   } catch (error) {
     mostrarError(error.message);
+  } finally {
+    btnPagar.disabled = false;
+    btnPagar.textContent = "Pagar y confirmar";
   }
+});
+
+// ===== Eventos del modal =====
+btnCerrar.addEventListener("click", cerrarModal);
+btnCancelar.addEventListener("click", cerrarModal);
+fondoModal.addEventListener("click", e => {
+  if (e.target === fondoModal) cerrarModal();
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !fondoModal.classList.contains("oculto")) cerrarModal();
 });
 
 // ===== Eventos del modal =====

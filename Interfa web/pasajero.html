@@ -112,13 +112,121 @@
       <div class="tabla-scroll"><table class="tabla"><thead><tr><th>Vuelo</th><th>Salida</th><th>Asiento</th><th>Clase</th><th>Check-in</th></tr></thead><tbody id="cuerpoTablaReservas"></tbody></table></div>
       <div class="mensaje-vacio oculto" id="mensajeVacioReservas"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-ticket"></use></svg></span><strong>Tu itinerario está vacío</strong><p>Aún no tienes reservas.</p></div>
     </section>
-    <div class="fondo-modal oculto" id="fondoModal" role="dialog" aria-modal="true" aria-labelledby="tituloModal"><div class="modal"><div class="modal-acento"></div>
-      <div class="encabezado-modal"><div><span class="modal-eyebrow">Reserva de asiento</span><h2 class="titulo-modal" id="tituloModal">Reservar vuelo</h2></div><button type="button" class="cerrar-modal" id="btnCerrar" aria-label="Cerrar"><svg class="ui-icon"><use href="assets/icons.svg#icon-close"></use></svg></button></div>
-      <form id="formularioReserva" novalidate><div class="cuerpo-modal"><div class="rejilla-formulario">
-        <div class="campo campo-completo"><label for="campoAsiento">Asiento *</label><input type="text" id="campoAsiento" placeholder="12A" required></div>
-        <div class="campo campo-completo"><label for="campoClase">Clase *</label><select id="campoClase" required><option value="economica">Económica</option><option value="ejecutiva">Ejecutiva</option><option value="primera">Primera</option></select></div>
-      </div><p class="error-formulario oculto" id="errorFormulario"></p></div><div class="pie-modal"><button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button><button type="submit" class="boton boton-principal">Confirmar reserva</button></div></form>
-    </div></div>
+    <div class="fondo-modal oculto" id="fondoModal" role="dialog" aria-modal="true" aria-labelledby="tituloModal">
+    <div class="modal modal-reserva">
+      <div class="modal-acento"></div>
+      <div class="encabezado-modal">
+        <div>
+          <span class="modal-eyebrow">Reserva de asiento</span>
+          <h2 class="titulo-modal" id="tituloModal">Reservar vuelo</h2>
+        </div>
+        <button type="button" class="cerrar-modal" id="btnCerrar" aria-label="Cerrar">
+          <svg class="ui-icon"><use href="assets/icons.svg#icon-close"></use></svg>
+        </button>
+      </div>
+
+      <form id="formularioReserva" novalidate>
+        <div class="cuerpo-modal cuerpo-modal-reserva">
+
+          <!-- ===== PASO 1: Clase ===== -->
+          <section class="seccion-reserva">
+            <h3 class="paso-titulo"><span class="paso-numero">1</span> Elige tu clase</h3>
+            <div class="clase-opciones" id="claseOpciones">
+              <button type="button" class="clase-opcion" data-clase="economica">
+                <strong>Económica</strong><span>Asientos estándar</span>
+              </button>
+              <button type="button" class="clase-opcion" data-clase="ejecutiva">
+                <strong>Ejecutiva</strong><span>Más espacio para piernas</span>
+              </button>
+              <button type="button" class="clase-opcion" data-clase="primera">
+                <strong>Primera</strong><span>Abordaje prioritario</span>
+              </button>
+            </div>
+            <select id="campoClase" class="oculto" required>
+              <option value="economica">Económica</option>
+              <option value="ejecutiva">Ejecutiva</option>
+              <option value="primera">Primera</option>
+            </select>
+          </section>
+
+          <!-- ===== PASO 2: Mapa de asientos ===== -->
+          <section class="seccion-reserva">
+            <h3 class="paso-titulo"><span class="paso-numero">2</span> Elige tu asiento</h3>
+
+            <div class="mapa-leyenda">
+              <span><i class="pastilla-leyenda disponible"></i> Disponible</span>
+              <span><i class="pastilla-leyenda seleccionado"></i> Seleccionado</span>
+              <span><i class="pastilla-leyenda ocupado"></i> Ocupado</span>
+              <span><i class="pastilla-leyenda deshabilitado"></i> Otra clase</span>
+            </div>
+
+            <div class="mapa-avion" id="mapaAvion">
+              <div class="mapa-nariz">✈</div>
+              <div class="mapa-filas" id="mapaFilas"></div>
+            </div>
+
+            <input type="hidden" id="campoAsiento" required>
+            <p class="asiento-elegido" id="textoAsientoElegido">Ningún asiento seleccionado</p>
+          </section>
+
+          <!-- ===== PASO 3: Pago ===== -->
+          <section class="seccion-reserva">
+            <h3 class="paso-titulo"><span class="paso-numero">3</span> Método de pago</h3>
+
+            <div class="metodo-pago-opciones" id="metodoPagoOpciones">
+              <button type="button" class="metodo-pago-opcion activo" data-metodo="tarjeta">
+                <span aria-hidden="true">💳</span> Tarjeta
+              </button>
+              <button type="button" class="metodo-pago-opcion" data-metodo="oxxo">
+                <span aria-hidden="true">🏪</span> OXXO Pay
+              </button>
+              <button type="button" class="metodo-pago-opcion" data-metodo="paypal">
+                <span aria-hidden="true">🅿️</span> PayPal
+              </button>
+            </div>
+
+            <div class="pago-panel" id="panelTarjeta">
+              <div class="rejilla-formulario">
+                <div class="campo campo-completo">
+                  <label for="campoNumTarjeta">Número de tarjeta *</label>
+                  <input type="text" id="campoNumTarjeta" placeholder="4152 3130 xxxx xxxx" maxlength="19" inputmode="numeric">
+                </div>
+                <div class="campo campo-completo">
+                  <label for="campoNombreTarjeta">Nombre del titular *</label>
+                  <input type="text" id="campoNombreTarjeta" placeholder="Como aparece en la tarjeta">
+                </div>
+                <div class="campo">
+                  <label for="campoVigencia">Vigencia *</label>
+                  <input type="text" id="campoVigencia" placeholder="MM/AA" maxlength="5">
+                </div>
+                <div class="campo">
+                  <label for="campoCVV">CVV *</label>
+                  <input type="text" id="campoCVV" placeholder="123" maxlength="4" inputmode="numeric">
+                </div>
+              </div>
+            </div>
+
+            <div class="pago-panel oculto" id="panelOxxo">
+              <p class="pago-info">Al confirmar, generaremos una <strong>referencia de pago OXXO</strong>. Tendrás 24 horas para pagarla en cualquier tienda OXXO; tu asiento se apartará mientras tanto.</p>
+            </div>
+
+            <div class="pago-panel oculto" id="panelPaypal">
+              <p class="pago-info">Al confirmar tu reserva serás redirigido a <strong>PayPal</strong> para completar el pago de forma segura.</p>
+            </div>
+          </section>
+
+          <div class="resumen-reserva" id="resumenReserva"></div>
+
+          <p class="error-formulario oculto" id="errorFormulario"></p>
+        </div>
+
+        <div class="pie-modal">
+          <button type="button" class="boton boton-fantasma" id="btnCancelar">Cancelar</button>
+          <button type="submit" class="boton boton-principal" id="btnConfirmarPago">Pagar y confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
   </main>
   <script src="js/api.js"></script><script src="js/pasajero.js"></script>
 </body>

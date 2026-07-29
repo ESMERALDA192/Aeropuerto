@@ -49,6 +49,7 @@ const btnBuscarVuelos   = document.getElementById("btnBuscarVuelos");
 const panelResultados     = document.getElementById("panelResultados");
 const rejillaVuelos       = document.getElementById("rejillaVuelos");
 const mensajeVacioVuelos  = document.getElementById("mensajeVacioVuelos");
+const avisoFechaAlterna   = document.getElementById("avisoFechaAlterna");
 
 // ===== Referencias del DOM: mis reservas =====
 const cuerpoTablaReservas  = document.getElementById("cuerpoTablaReservas");
@@ -220,6 +221,22 @@ async function cargarVuelos() {
 }
 
 // ===== Buscar =====
+function coincideRuta(v, origenCod, destinoCod) {
+  if (origenCod && !v.origen.codigoIata.toUpperCase().includes(origenCod.replace(/[^A-Z]/g, ""))) return false;
+  if (destinoCod && !v.destino.codigoIata.toUpperCase().includes(destinoCod.replace(/[^A-Z]/g, ""))) return false;
+  return true;
+}
+
+// "YYYY-MM-DD" -> "YYYY-MM"
+function mesDe(fechaISO) {
+  return fechaISO.substring(0, 7);
+}
+
+function formatearMesLargo(fechaISO) {
+  const fechaBase = new Date(fechaISO + "T00:00:00");
+  return fechaBase.toLocaleDateString("es-MX", { month: "long", year: "numeric" });
+}
+
 btnBuscarVuelos.addEventListener("click", async () => {
   if (vuelos.length === 0) {
     await cargarVuelos();
@@ -229,15 +246,37 @@ btnBuscarVuelos.addEventListener("click", async () => {
   const destinoCod = destinoSeleccionado?.codigoIata || filtroDestino.value.trim().toUpperCase();
   const fecha = filtroSalida.value;
 
-  const filtrados = vuelos.filter(v => {
-    if (origenCod && !v.origen.codigoIata.toUpperCase().includes(origenCod.replace(/[^A-Z]/g, ""))) return false;
-    if (destinoCod && !v.destino.codigoIata.toUpperCase().includes(destinoCod.replace(/[^A-Z]/g, ""))) return false;
+  // 1) Coincidencia exacta de fecha
+  const exactos = vuelos.filter(v => {
+    if (!coincideRuta(v, origenCod, destinoCod)) return false;
     if (fecha && soloFecha(v.horaSalida) !== fecha) return false;
     return true;
   });
 
   panelResultados.classList.remove("oculto");
-  renderTarjetasVuelos(filtrados);
+
+  if (exactos.length > 0 || !fecha) {
+    // Hay vuelos ese día (o no se eligió fecha): comportamiento normal
+    avisoFechaAlterna.classList.add("oculto");
+    renderTarjetasVuelos(exactos);
+  } else {
+    // 2) No hay vuelos ese día puntual: buscar en el mismo mes/año
+    const delMismoMes = vuelos
+      .filter(v => coincideRuta(v, origenCod, destinoCod) && mesDe(soloFecha(v.horaSalida)) === mesDe(fecha))
+      .sort((a, b) => new Date(a.horaSalida) - new Date(b.horaSalida));
+
+    if (delMismoMes.length > 0) {
+      avisoFechaAlterna.innerHTML =
+        `No encontramos vuelos para el <strong>${fecha}</strong>, pero aquí tienes otras fechas disponibles en <strong>${formatearMesLargo(fecha)}</strong>:`;
+      avisoFechaAlterna.classList.remove("oculto");
+      renderTarjetasVuelos(delMismoMes);
+    } else {
+      // 3) Tampoco hay nada ese mes: estado vacío normal
+      avisoFechaAlterna.classList.add("oculto");
+      renderTarjetasVuelos([]);
+    }
+  }
+
   panelResultados.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 

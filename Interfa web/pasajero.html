@@ -41,15 +41,59 @@
       </div>
       
     </div>
-    <section class="filtros oculto" id="panelBusqueda">
-      <div class="filtros-cabecera">
-        <span class="filtros-icono" aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-search"></use></svg></span>
-        <div><strong>Encuentra tu vuelo</strong><small>Busca por origen, destino o fecha</small></div>
+    <section class="buscador-vuelos" id="panelBusqueda">
+      <div class="buscador-tipos" role="tablist">
+        <button type="button" class="tipo-btn activo" data-tipo="redondo">Redondo</button>
+        <button type="button" class="tipo-btn" data-tipo="sencillo">Sencillo</button>
+        <button type="button" class="tipo-btn" data-tipo="multidestino">Multidestino</button>
       </div>
-      <div class="campo"><label for="filtroOrigen">Origen</label><input type="text" id="filtroOrigen" placeholder="GDL" autocomplete="off"></div>
-      <div class="campo"><label for="filtroDestino">Destino</label><input type="text" id="filtroDestino" placeholder="MEX" autocomplete="off"></div>
-      <div class="campo"><label for="filtroFecha">Fecha</label><input type="date" id="filtroFecha"></div>
-      <button class="boton boton-fantasma" id="btnLimpiar" type="button"><span aria-hidden="true"><svg class="ui-icon"><use href="assets/icons.svg#icon-refresh"></use></svg></span> Limpiar</button>
+
+      <div class="buscador-campos">
+        <div class="campo-autocomplete" id="grupoOrigen">
+          <label for="filtroOrigen">Origen</label>
+          <input type="text" id="filtroOrigen" placeholder="¿De dónde sales?" autocomplete="off">
+          <div class="lista-sugerencias oculto" id="sugerenciasOrigen"></div>
+        </div>
+
+        <button type="button" class="boton-swap" id="btnIntercambiar" aria-label="Intercambiar origen y destino">
+          <svg class="ui-icon"><use href="assets/icons.svg#icon-refresh"></use></svg>
+        </button>
+
+        <div class="campo-autocomplete" id="grupoDestino">
+          <label for="filtroDestino">Destino</label>
+          <input type="text" id="filtroDestino" placeholder="¿A dónde vas?" autocomplete="off">
+          <div class="lista-sugerencias oculto" id="sugerenciasDestino"></div>
+        </div>
+
+        <div class="campo">
+          <label for="filtroSalida">Salida</label>
+          <input type="date" id="filtroSalida">
+        </div>
+
+        <div class="campo" id="grupoRegreso">
+          <label for="filtroRegreso">Regreso</label>
+          <input type="date" id="filtroRegreso">
+        </div>
+
+        <div class="campo-pasajeros">
+          <label>Pasajeros</label>
+          <button type="button" class="pasajeros-control" id="btnPasajeros">
+            <span id="textoPasajeros">1 pasajero</span>
+          </button>
+          <div class="pasajeros-popover oculto" id="popoverPasajeros">
+            <div class="pasajeros-fila">
+              <span>Pasajeros</span>
+              <div class="pasajeros-stepper">
+                <button type="button" id="btnMenosPasajeros">−</button>
+                <span id="numeroPasajeros">1</span>
+                <button type="button" id="btnMasPasajeros">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="boton boton-principal buscador-boton" id="btnBuscarVuelos" type="button">Buscar</button>
+      </div>
     </section>
     <section class="contenedor-vuelos oculto" id="panelResultados">
       <div class="tabla-cabecera">

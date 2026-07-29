@@ -41,8 +41,8 @@ async function construirDatosVuelo(body) {
         datos: {
             numeroVuelo,
             aerolinea: { id: aerolinea._id, nombre: aerolinea.nombre, codigoIata: aerolinea.codigoIata },
-            origen: { id: origen._id, codigoIata: origen.codigoIata, ciudad: origen.ciudad },
-            destino: { id: destino._id, codigoIata: destino.codigoIata, ciudad: destino.ciudad },
+            origen: { id: origen._id, codigoIata: origen.codigoIata, ciudad: origen.ciudad, imagenUrl: origen.imagenUrl || "" },
+            destino: { id: destino._id, codigoIata: destino.codigoIata, ciudad: destino.ciudad, imagenUrl: destino.imagenUrl || "" },
             horaSalida,
             horaLlegada,
             precio: Number(precio),

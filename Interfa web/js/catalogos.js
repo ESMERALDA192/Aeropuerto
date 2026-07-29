@@ -66,7 +66,8 @@ const config = {
       "Código IATA",
       "Ciudad",
       "País",
-      "Terminales"
+      "Terminales",
+      "Imagen"
     ],
 
     nombre: r => r.nombre,
@@ -80,6 +81,7 @@ const config = {
       <td>${r.ciudad}</td>
       <td>${r.pais}</td>
       <td>${r.terminales}</td>
+      <td>${r.imagenUrl ? '<span class="ciudad">✓ Con imagen</span>' : '<span class="ciudad">Sin imagen</span>'}</td>
     `,
 
     campos: [
@@ -108,6 +110,12 @@ const config = {
         id:"terminales",
         label:"Terminales",
         tipo:"number"
+      },
+      {
+        id:"imagenUrl",
+        label:"URL de imagen",
+        tipo:"text",
+        completo:true
       }
     ],
 
@@ -116,7 +124,8 @@ const config = {
       codigoIata:r.codigoIata,
       ciudad:r.ciudad,
       pais:r.pais,
-      terminales:Number(r.terminales)
+      terminales:Number(r.terminales),
+      imagenUrl:r.imagenUrl || ""
     })
   },
 

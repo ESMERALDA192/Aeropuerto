@@ -1398,3 +1398,186 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     border-radius: 8px;
   }
 }
+
+/* ===== Tarjetas de reserva (admin) ===== */
+.rejilla-reservas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 18px;
+}
+
+.tarjeta-reserva {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  box-shadow: var(--sombra-sm);
+  transition: var(--transicion);
+}
+.tarjeta-reserva:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sombra);
+}
+
+.tarjeta-reserva-cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(33,132,247,.06), rgba(94,231,247,.03));
+  border-bottom: 1px solid var(--borde);
+}
+.tarjeta-reserva-cabecera > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tarjeta-reserva-cuerpo {
+  padding: 14px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tarjeta-reserva-pasajero {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--borde);
+}
+.tarjeta-reserva-pasajero strong {
+  color: var(--noche-800);
+  font-size: 13px;
+}
+
+.tarjeta-reserva-detalle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.tarjeta-reserva-detalle > div:last-child {
+  grid-column: 1 / -1;
+}
+.tarjeta-reserva-detalle span:first-child {
+  display: block;
+  margin-bottom: 3px;
+  color: #8195ab;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+
+.tarjeta-reserva-acciones {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #f8fbfe;
+  border-top: 1px solid var(--borde);
+}
+.tarjeta-reserva-acciones .boton-icono {
+  flex: 1;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .rejilla-reservas { padding: 12px; gap: 12px; }
+}
+
+/* ===== Tarjetas de aeropuertos (catálogos) ===== */
+.rejilla-aeropuertos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  padding: 18px;
+}
+
+.tarjeta-aeropuerto {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  box-shadow: var(--sombra-sm);
+  transition: var(--transicion);
+}
+.tarjeta-aeropuerto:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sombra);
+}
+
+.tarjeta-aeropuerto-imagen {
+  height: 120px;
+  padding: 10px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  background-size: cover;
+  background-position: center;
+  background-color: #e9f0f7;
+  position: relative;
+}
+.tarjeta-aeropuerto-imagen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.35));
+}
+.codigo-iata-grande {
+  position: relative;
+  z-index: 1;
+  padding: 5px 10px;
+  color: var(--noche-800);
+  background: rgba(255,255,255,.92);
+  border-radius: 8px;
+  font-family: Consolas, monospace;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: .5px;
+}
+
+.tarjeta-aeropuerto-cuerpo {
+  padding: 14px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tarjeta-aeropuerto-cuerpo strong {
+  color: var(--noche-800);
+  font-size: 13px;
+}
+.tarjeta-aeropuerto-detalle {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--borde);
+  color: var(--texto-tenue);
+  font-size: 10px;
+}
+
+.tarjeta-aeropuerto-acciones {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #f8fbfe;
+  border-top: 1px solid var(--borde);
+}
+.tarjeta-aeropuerto-acciones .boton-icono {
+  flex: 1;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .rejilla-aeropuertos { padding: 12px; gap: 12px; }
+}

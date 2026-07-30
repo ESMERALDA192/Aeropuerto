@@ -135,7 +135,8 @@ function llenarSelects() {
 }
 
 
-// ===== Pintar tabla =====
+
+  // ===== Pintar tarjetas =====
 function renderTabla(lista) {
   cuerpoTabla.innerHTML = "";
 
@@ -149,80 +150,59 @@ function renderTabla(lista) {
   mensajeVacio.classList.add("oculto");
 
   lista.forEach(r => {
-    const fila = document.createElement("tr");
+    const tarjeta = document.createElement("article");
+    tarjeta.className = "tarjeta-reserva";
 
-    fila.innerHTML = `
-      <td>${r.pasajero.nombreCompleto}</td>
-
-      <td>
-        <span class="codigo-iata">
-          ${r.pasajero.documento}
-        </span>
-      </td>
-
-      <td>
-        <span class="numero-vuelo">
-          ${r.vuelo.numeroVuelo}
-        </span>
-      </td>
-
-      <td>
-        <span class="hora">
-          ${formatearHora(r.vuelo.horaSalida)}
-        </span>
-        <span class="ciudad">
-          ${formatearFecha(r.vuelo.horaSalida)}
-        </span>
-      </td>
-
-      <td>
-        <span class="codigo-iata">
-          ${r.asiento}
-        </span>
-      </td>
-
-      <td>
-        <span class="etiqueta-estado clase-${r.clase}">
-          ${nombresClase[r.clase]}
-        </span>
-      </td>
-
-      <td>
-        <span class="etiqueta-estado ${
-          r.registrado ? "estado-abordando" : "estado-retrasado"
-        }">
+    tarjeta.innerHTML = `
+      <div class="tarjeta-reserva-cabecera">
+        <div>
+          <span class="numero-vuelo">${r.vuelo.numeroVuelo}</span>
+          <span class="ciudad">${r.vuelo.aerolinea?.nombre || "—"}</span>
+        </div>
+        <span class="etiqueta-estado ${r.registrado ? "estado-abordando" : "estado-retrasado"}">
           ${r.registrado ? "Registrado" : "Pendiente"}
         </span>
-      </td>
+      </div>
 
-      <td class="columna-acciones">
-        <button
-          class="boton-icono"
-          data-accion="checkin"
-          data-id="${r._id}">
+      <div class="tarjeta-reserva-cuerpo">
+        <div class="tarjeta-reserva-pasajero">
+          <strong>${r.pasajero.nombreCompleto}</strong>
+          <span class="codigo-iata">${r.pasajero.documento}</span>
+        </div>
+
+        <div class="tarjeta-reserva-detalle">
+          <div>
+            <span>Salida</span>
+            <strong class="hora">${formatearHora(r.vuelo.horaSalida)}</strong>
+            <span class="ciudad">${formatearFecha(r.vuelo.horaSalida)}</span>
+          </div>
+          <div>
+            <span>Asiento</span>
+            <strong class="codigo-iata">${r.asiento}</strong>
+          </div>
+          <div>
+            <span>Clase</span>
+            <span class="etiqueta-estado clase-${r.clase}">${nombresClase[r.clase]}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tarjeta-reserva-acciones">
+        <button class="boton-icono" data-accion="checkin" data-id="${r._id}">
           ${r.registrado ? "Cancelar check-in" : "Check-in"}
         </button>
-
-        <button
-          class="boton-icono"
-          data-accion="editar"
-          data-id="${r._id}">
+        <button class="boton-icono" data-accion="editar" data-id="${r._id}">
           Editar
         </button>
-
-        <button
-          class="boton-icono peligro"
-          data-accion="eliminar"
-          data-id="${r._id}">
+        <button class="boton-icono peligro" data-accion="eliminar" data-id="${r._id}">
           Eliminar
         </button>
-      </td>
+      </div>
     `;
 
-    cuerpoTabla.appendChild(fila);
+    cuerpoTabla.appendChild(tarjeta);
   });
 }
-
 
 // ===== Filtros =====
 function aplicarFiltros() {

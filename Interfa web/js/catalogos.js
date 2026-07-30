@@ -259,6 +259,10 @@ const camposFormulario = document.getElementById("camposFormulario");
 const btnCerrar = document.getElementById("btnCerrar");
 const btnCancelar = document.getElementById("btnCancelar");
 
+const rejillaAeropuertos = document.getElementById("rejillaAeropuertos");
+const vistaTabla = document.getElementById("vistaTabla");
+
+const IMAGEN_RESPALDO = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=200&q=60";
 
 let idEditando = null;
 
@@ -365,13 +369,11 @@ async function cargarAeropuertos(){
 
 
 
-// ===== Encabezado tabla =====
 
+// ===== Encabezado tabla =====
 function renderEncabezado(){
 
-
   const cfg = config[catalogoActual];
-
 
   encabezadoTabla.innerHTML = `
 
@@ -395,14 +397,59 @@ function renderEncabezado(){
 
   `;
 
-
 }
 
+// ===== Pintar tarjetas de aeropuertos =====
+function renderTarjetasAeropuertos(lista) {
+
+  rejillaAeropuertos.innerHTML = "";
+
+  if (lista.length === 0) {
+    mensajeVacio.classList.remove("oculto");
+    mensajeVacio.textContent = "No hay registros que coincidan con la búsqueda.";
+    return;
+  }
+
+  mensajeVacio.classList.add("oculto");
+
+  lista.forEach(a => {
+    const tarjeta = document.createElement("article");
+    tarjeta.className = "tarjeta-aeropuerto";
+
+    tarjeta.innerHTML = `
+      <div class="tarjeta-aeropuerto-imagen" style="background-image:url('${a.imagenUrl || IMAGEN_RESPALDO}')">
+        <span class="codigo-iata-grande">${a.codigoIata}</span>
+      </div>
+
+      <div class="tarjeta-aeropuerto-cuerpo">
+        <strong>${a.nombre}</strong>
+        <span class="ciudad">${a.ciudad}, ${a.pais}</span>
+        <div class="tarjeta-aeropuerto-detalle">
+          <span>${a.terminales} terminal${a.terminales == 1 ? "" : "es"}</span>
+          <span>${a.imagenUrl ? "✓ Con imagen" : "Sin imagen"}</span>
+        </div>
+      </div>
+
+      <div class="tarjeta-aeropuerto-acciones">
+         <button class="boton-icono" data-accion="editar" data-id="${a._id}">Editar</button>
+        <button class="boton-icono peligro" data-accion="eliminar" data-id="${a._id}">Eliminar</button>
+      </div>
+    `;
+
+    rejillaAeropuertos.appendChild(tarjeta);
+  });
+}
 
 
 // ===== Pintar tabla =====
 
 function renderTabla(lista){
+
+
+  if (catalogoActual === "aeropuertos") {
+    renderTarjetasAeropuertos(lista);
+    return;
+  }
 
 
   cuerpoTabla.innerHTML = "";
@@ -541,43 +588,33 @@ function aplicarFiltro(){
 
 
 // ===== Cambiar pestaña =====
-
 function cambiarCatalogo(evento){
-
 
   const boton =
     evento.currentTarget;
 
-
-
   catalogoActual =
     boton.dataset.catalogo;
 
-
-
   pestanas.forEach(p => {
-
     p.classList.remove("activa");
-
   });
-
-
 
   boton.classList.add("activa");
 
-
-
   filtroBusqueda.value = "";
 
-
+  if (catalogoActual === "aeropuertos") {
+    vistaTabla.classList.add("oculto");
+    rejillaAeropuertos.classList.remove("oculto");
+  } else {
+    vistaTabla.classList.remove("oculto");
+    rejillaAeropuertos.classList.add("oculto");
+  }
 
   renderEncabezado();
 
-
   cargarDatos();
-
-
-
 
 }
 // ===== Generar campos del formulario =====
@@ -1134,6 +1171,7 @@ cuerpoTabla.addEventListener(
   manejarAccion
 );
 
+rejillaAeropuertos.addEventListener("click", manejarAccion);
 
 
 btnNuevo.addEventListener(

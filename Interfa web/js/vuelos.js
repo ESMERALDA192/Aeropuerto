@@ -48,6 +48,16 @@ const campoLlegada     = document.getElementById("campoLlegada");
 const campoEstado      = document.getElementById("campoEstado");
 const campoPrecio    = document.getElementById("campoPrecio");
 
+
+const IMAGEN_RESPALDO = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=200&q=60";
+
+const fondoModalDetalle       = document.getElementById("fondoModalDetalle");
+const btnCerrarDetalle        = document.getElementById("btnCerrarDetalle");
+const btnCerrarDetalle2       = document.getElementById("btnCerrarDetalle2");
+const btnEditarDesdeDetalle   = document.getElementById("btnEditarDesdeDetalle");
+
+let vueloDetalleActual = null;
+
 // ===== Usuario =====
 if (usuarioSesion) {
   usuarioSesion.textContent =
@@ -156,6 +166,8 @@ function renderTabla(lista) {
   lista.forEach(v => {
 
     const fila = document.createElement("tr");
+    fila.className = "fila-clicable";
+    fila.dataset.id = v._id;
 
 
     fila.innerHTML = `
@@ -635,74 +647,56 @@ async function guardar(evento) {
 // ===== Acciones de tabla =====
 async function manejarAccion(e){
 
-
   const boton =
     e.target.closest("[data-accion]");
 
 
+  if (boton) {
 
-  if(!boton)
-    return;
+    const id =
+      boton.dataset.id;
 
+    const accion =
+      boton.dataset.accion;
 
-
-  const id =
-    boton.dataset.id;
-
-
-
-  const accion =
-    boton.dataset.accion;
+    const vuelo =
+      vuelos.find(v => v._id === id);
 
 
-
-  const vuelo =
-    vuelos.find(v => v._id === id);
-
-
+    if(accion === "editar"){
+      abrirModal(vuelo);
+    }
 
 
-  if(accion === "editar"){
+    if(accion === "eliminar"){
 
+      if(confirm(
+        `¿Eliminar el vuelo ${vuelo.numeroVuelo}?`
+      )){
 
-    abrirModal(vuelo);
+        try{
+          await eliminarVuelo(id);
+          await cargarVuelos();
 
+        }catch(error){
+          alert(
+            "No se pudo eliminar: " +
+            error.message
+          );
+        }
+      }
+    }
 
+    return; // ya se manejó el clic en un botón, no seguir
   }
 
 
+  // No fue un botón: revisar si el clic fue en la fila
+  const fila = e.target.closest("tr[data-id]");
 
-  if(accion === "eliminar"){
-
-
-    if(confirm(
-      `¿Eliminar el vuelo ${vuelo.numeroVuelo}?`
-    )){
-
-
-      try{
-
-
-        await eliminarVuelo(id);
-
-
-        await cargarVuelos();
-
-
-
-      }catch(error){
-
-
-        alert(
-          "No se pudo eliminar: " +
-          error.message
-        );
-
-
-      }
-
-    }
-
+  if (fila) {
+    const vuelo = vuelos.find(v => v._id === fila.dataset.id);
+    if (vuelo) abrirModalDetalle(vuelo);
   }
 
 }
@@ -806,6 +800,55 @@ document.addEventListener(
 
   }
 );
+
+// ===== Modal de detalle de vuelo =====
+function abrirModalDetalle(vuelo) {
+  vueloDetalleActual = vuelo;
+
+  const imagenFondo = vuelo.destino.imagenUrl || vuelo.origen.imagenUrl || IMAGEN_RESPALDO;
+  document.getElementById("detalleImagen").style.backgroundImage = `url('${imagenFondo}')`;
+
+  document.getElementById("detalleEstadoVuelo").textContent = vuelo.estado;
+  document.getElementById("detalleEstadoVuelo").className = `etiqueta-estado estado-${vuelo.estado}`;
+
+  document.getElementById("detalleOrigenCodigo").textContent = vuelo.origen.codigoIata;
+  document.getElementById("detalleOrigenCiudad").textContent = vuelo.origen.ciudad;
+  document.getElementById("detalleOrigenHora").textContent = formatearHora(vuelo.horaSalida);
+
+  document.getElementById("detalleDestinoCodigo").textContent = vuelo.destino.codigoIata;
+  document.getElementById("detalleDestinoCiudad").textContent = vuelo.destino.ciudad;
+  document.getElementById("detalleDestinoHora").textContent = formatearHora(vuelo.horaLlegada);
+
+  document.getElementById("detalleNumeroVuelo").textContent = vuelo.numeroVuelo;
+  document.getElementById("detalleAerolinea").textContent = vuelo.aerolinea.nombre;
+  document.getElementById("detalleFecha").textContent = formatearFecha(vuelo.horaSalida);
+  document.getElementById("detallePrecio").textContent = vuelo.precio
+    ? `$${vuelo.precio.toLocaleString("es-MX")} MXN`
+    : "—";
+
+  fondoModalDetalle.classList.remove("oculto");
+}
+
+function cerrarModalDetalle() {
+  fondoModalDetalle.classList.add("oculto");
+  vueloDetalleActual = null;
+}
+
+btnCerrarDetalle.addEventListener("click", cerrarModalDetalle);
+btnCerrarDetalle2.addEventListener("click", cerrarModalDetalle);
+fondoModalDetalle.addEventListener("click", e => {
+  if (e.target === fondoModalDetalle) cerrarModalDetalle();
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !fondoModalDetalle.classList.contains("oculto")) {
+    cerrarModalDetalle();
+  }
+});
+
+btnEditarDesdeDetalle.addEventListener("click", () => {
+  cerrarModalDetalle();
+  abrirModal(vueloDetalleActual);
+});
 
 
 
